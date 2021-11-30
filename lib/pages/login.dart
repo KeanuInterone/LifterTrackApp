@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/models/exercises.dart';
 import 'package:lifter_track_app/models/user.dart';
 import 'package:lifter_track_app/pages/home.dart';
 import 'package:lifter_track_app/pages/sign_up.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/formField.dart';
+import 'package:lifter_track_app/models/api.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,11 +24,23 @@ class _LoginPage extends State<LoginPage> {
   String _errorMessage = '';
   bool _isLoading = false;
 
+  void validateAuthToken(BuildContext context) async {
+    await API.loadAuthtoken();
+    bool validAuthToken = await API.validateToken();
+    if (validAuthToken) {
+      Provider.of<Exercises>(context, listen: false).getExercises();
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return HomePage();
+      }));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    validateAuthToken(context);
     return GestureDetector(
       child: background(
-        context: context,
+        context,
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: SafeArea(
@@ -116,6 +131,24 @@ class _LoginPage extends State<LoginPage> {
     );
   }
 
+  Widget errorWidget() {
+    if (_errorMessage.length == 0 || _errorMessage == null) {
+      return Container(
+        height: 0.0,
+      );
+    } else {
+      return Text(
+        _errorMessage,
+        style: TextStyle(
+          fontSize: 13.0,
+          color: Colors.red,
+          height: 1.0,
+          fontWeight: FontWeight.w300,
+        ),
+      );
+    }
+  }
+
   Widget orWidget() {
     return Expanded(
       flex: 1,
@@ -161,23 +194,6 @@ class _LoginPage extends State<LoginPage> {
     );
   }
 
-  Widget errorWidget() {
-    if (_errorMessage.length == 0 || _errorMessage == null) {
-      return Container(
-        height: 0.0,
-      );
-    } else {
-      return Text(
-        _errorMessage,
-        style: TextStyle(
-          fontSize: 13.0,
-          color: Colors.red,
-          height: 1.0,
-          fontWeight: FontWeight.w300,
-        ),
-      );
-    }
-  }
 
   bool _validateAndSave() {
     final form = _formKey.currentState;

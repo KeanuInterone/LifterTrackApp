@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget background({context: BuildContext, child: Widget}) {
+Widget background(BuildContext context, {Widget child}) {
   return Container(
     decoration: BoxDecoration(
       gradient: LinearGradient(

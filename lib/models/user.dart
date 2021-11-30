@@ -1,3 +1,6 @@
+import 'dart:collection';
+
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:lifter_track_app/models/api.dart';
@@ -10,7 +13,6 @@ class User {
   String id;
   String firstName;
   String lastName;
-  List<Exercise> exercises;
 
   User({this.id, this.firstName, this.lastName});
 
@@ -41,6 +43,7 @@ class User {
     Map<String, dynamic> json = jsonDecode(response.body);
     currentUser = User();
     API.authToken = json['jwt'];
+    await API.saveAuthToken();
     return Response(true, null, true);
   }
 
@@ -75,27 +78,6 @@ class User {
     currentUser = User.fromJson(json);
     return  Response(true, null, currentUser);
   }
-
-  Future<Response> getExercises() async {
-    String url = "${API.baseURL}/exercises";
-    var response = await http.get(
-      url,
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${API.authToken}'
-      },
-    );
-    if (response.statusCode != 200) {
-      Map<String, dynamic> json = jsonDecode(response.body);
-      bool hasError = json != null && json.containsKey('error');
-      return Response(false, hasError ? json['error'] : "There was an error creating the user", null);
-    }
-
-    List<dynamic> json = jsonDecode(response.body);
-    exercises = [];
-    json.forEach((exerciseJson) { 
-      exercises.add(Exercise.fromJson(exerciseJson));
-    });
-    return  Response(true, null, exercises);
-  }  
 }
+
+

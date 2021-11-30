@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/navigator.dart';
+import 'package:lifter_track_app/models/workout_timer.dart';
 import 'package:lifter_track_app/pages/workout.dart';
 import 'package:lifter_track_app/models/user.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/components/button.dart';
+import 'package:lifter_track_app/pages/exercises.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,7 +20,7 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return background(
-      context: context,
+      context,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
@@ -25,35 +29,49 @@ class _HomePage extends State<HomePage> {
             children: [
               title(),
               startWorkoutButton(context),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-                        child: button(
-                          text: 'Workouts',
-                          color: Theme.of(context).primaryColor,
-                          height: 56,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-                        child: button(
-                          text: 'My Exercises',
-                          color: Theme.of(context).primaryColor,
-                          height: 56,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )
+              workoutAndExerciseButtons(context)
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Expanded workoutAndExerciseButtons(BuildContext context) {
+    return Expanded(
+      flex: 3,
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              child: button(
+                text: 'Workouts',
+                color: Theme.of(context).primaryColor,
+                height: 56,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              child: button(
+                text: 'My Exercises',
+                color: Theme.of(context).primaryColor,
+                height: 56,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ExercisesPage();
+                      },
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -67,6 +85,10 @@ class _HomePage extends State<HomePage> {
         child: button(
           text: 'Start Workout',
           color: Theme.of(context).focusColor,
+          onPressed: () {
+            Provider.of<WorkoutTimer>(context, listen: false).start();
+            navigateTo(WorkoutPage(), context);
+          }
         ),
       ),
     );
