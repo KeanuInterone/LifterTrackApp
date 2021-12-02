@@ -6,6 +6,7 @@ Widget formField(
     TextInputType keyboardType = TextInputType.text,
     String Function(String value) validator,
     Function(String) onSaved,
+    Function(String) onChanged,
     bool obscureText = false,
     bool required = false}
     ) {
@@ -30,5 +31,6 @@ Widget formField(
     ),
     validator: validator ?? (value) {return required && value.isEmpty ? 'value cannot be empty' : null;},
     onSaved: onSaved ?? (value) {},
+    onChanged: onChanged ?? (value) {}
   );
 }

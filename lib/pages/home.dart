@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/navigator.dart';
+import 'package:lifter_track_app/models/current_workout.dart';
+import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/workout_timer.dart';
 import 'package:lifter_track_app/pages/workout.dart';
 import 'package:lifter_track_app/models/user.dart';
@@ -32,6 +34,51 @@ class _HomePage extends State<HomePage> {
               workoutAndExerciseButtons(context)
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Expanded title() {
+    return Expanded(
+      flex: 3,
+      child: Container(
+        child: Center(
+          child: text(
+            "Lifter Track",
+            fontSize: 48,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Expanded startWorkoutButton(BuildContext context) {
+    return Expanded(
+      flex: 1,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+        child: Consumer2<CurrentWorkout, WorkoutTimer>(
+          builder: (context, currentWorkout, workoutTimer, child) {
+            if (currentWorkout.workout != null) {
+              return button(
+                text: 'Return to workout: ${workoutTimer.time}',
+                color: Theme.of(context).focusColor,
+                onPressed: () {
+                  navigateTo(WorkoutPage(), context);
+                },
+              );
+            } else {
+              return button(
+                text: 'Start Workout',
+                color: Theme.of(context).focusColor,
+                onPressed: () async {
+                  Response res = await currentWorkout.startWorkout(context);
+                  if (res.success) navigateTo(WorkoutPage(), context);
+                },
+              );
+            }
+          },
         ),
       ),
     );
@@ -72,37 +119,6 @@ class _HomePage extends State<HomePage> {
               ),
             )
           ],
-        ),
-      ),
-    );
-  }
-
-  Expanded startWorkoutButton(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-        child: button(
-          text: 'Start Workout',
-          color: Theme.of(context).focusColor,
-          onPressed: () {
-            Provider.of<WorkoutTimer>(context, listen: false).start();
-            navigateTo(WorkoutPage(), context);
-          }
-        ),
-      ),
-    );
-  }
-
-  Expanded title() {
-    return Expanded(
-      flex: 3,
-      child: Container(
-        child: Center(
-          child: text(
-            "Lifter Track",
-            fontSize: 48,
-          ),
         ),
       ),
     );

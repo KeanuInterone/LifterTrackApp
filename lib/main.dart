@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/models/current_workout.dart';
 import 'package:lifter_track_app/models/exercises.dart';
 import 'package:lifter_track_app/models/workout_timer.dart';
 import 'package:lifter_track_app/pages/login.dart';
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => Exercises()),
-        ChangeNotifierProvider(create: (context) => WorkoutTimer())
+        ChangeNotifierProvider(create: (context) => WorkoutTimer()),
+        ChangeNotifierProvider(create: (context) => CurrentWorkout())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

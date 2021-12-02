@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/background.dart';
+import 'package:lifter_track_app/components/formField.dart';
+import 'package:lifter_track_app/components/keyboardDefocuser.dart';
+import 'package:lifter_track_app/components/text.dart';
+import 'package:lifter_track_app/models/workout_timer.dart';
+import 'package:provider/provider.dart';
+import 'package:lifter_track_app/components/exercise_search_bar.dart';
+
+class SelectExercisePage extends StatefulWidget {
+  const SelectExercisePage({Key key}) : super(key: key);
+
+  @override
+  _SelectExercisePageState createState() => _SelectExercisePageState();
+}
+
+class _SelectExercisePageState extends State<SelectExercisePage> {
+  @override
+  Widget build(BuildContext context) {
+    return keyboardDefocuser(
+      context,
+      child: background(
+        context,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: Column(
+                children: [
+                  header(context),
+                  Expanded(
+                    flex: 7,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        ExerciseSearchBar()
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Expanded header(context) {
+    return Expanded(
+      flex: 1,
+      child: Container(
+        child: Stack(
+          children: [
+            Container(
+              constraints: BoxConstraints.expand(width: 24),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Center(
+              child: Consumer<WorkoutTimer>(
+                builder: (context, timer, child) {
+                  return text('${timer.time}', fontSize: 20);
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget exerciseSearchBar(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        formField(placeholder: 'Search'),
+        SizedBox(height: 10,),
+        Container(
+          color: Colors.white,
+          height: 100,
+        )
+      ],
+    );
+  }
+}

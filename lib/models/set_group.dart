@@ -1,26 +1,26 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 import 'package:lifter_track_app/models/api.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/set.dart';
-import 'package:lifter_track_app/models/set_group.dart';
+import 'package:http/http.dart' as http;
 
-class Workout {
+
+class SetGroup {
   String id;
-  List<SetGroup> setGroups;
+  List<Set> sets;
 
+  SetGroup({this.id, this.sets});
 
-  Workout({this.id, this.setGroups});
-
-  factory Workout.fromJson(Map<String, dynamic> json) {
-    return Workout(
+  factory SetGroup.fromJson(Map<String, dynamic> json) {
+    return SetGroup(
       id: json['_id'],
-      setGroups: []
+      sets: []
     );
   }
 
   static Future<Response> create() async {
-    String url = "${API.baseURL}/workouts/create";
+    String url = "${API.baseURL}/setgroups/create";
     var response = await http.post(
       url,
       headers: {
@@ -33,12 +33,12 @@ class Workout {
       bool hasError = json != null && json.containsKey('error');
       return Response(
           false,
-          hasError ? json['error'] : "There was an error creating the workout",
+          hasError ? json['error'] : "There was an error creating the set group",
           null);
     }
 
     Map<String, dynamic> json = jsonDecode(response.body);
-    Workout workout = Workout.fromJson(json);
-    return Response(true, null, workout);
-  }
+    SetGroup setGroup = SetGroup.fromJson(json);
+    return Response(true, null, setGroup);
+  }  
 }
