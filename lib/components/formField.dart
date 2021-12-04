@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 Widget formField(
     {String placeholder,
+    String initialValue,
     TextInputType keyboardType = TextInputType.text,
     String Function(String value) validator,
     Function(String) onSaved,
@@ -11,11 +12,13 @@ Widget formField(
     bool required = false}
     ) {
   return TextFormField(
+    initialValue: initialValue,
     maxLines: 1,
     autofocus: false,
     obscureText: obscureText,
     keyboardType: keyboardType,
     style: TextStyle(color: Colors.white),
+    cursorColor: Colors.white,
     decoration: InputDecoration(
       isDense: true,
       enabledBorder: OutlineInputBorder(

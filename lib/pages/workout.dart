@@ -37,15 +37,13 @@ class _WorkoutPage extends State<WorkoutPage> {
                       setGroups(),
                       SizedBox(height: 10),
                       button(
-                          text: 'Add set group',
-                          color: Theme.of(context).focusColor,
-                          height: 200,
-                          onPressed: () {
-                            navigateTo('select_exercise', context);
-                          }),
-                      SizedBox(height: 10),
-                      button(
-                          text: 'Finish workout', color: Colors.red, height: 48)
+                        text: 'Add set group',
+                        color: Theme.of(context).focusColor,
+                        height: 200,
+                        onPressed: () {
+                          navigateTo('select_exercise', context);
+                        },
+                      ),
                     ],
                   ),
                 ),

@@ -61,12 +61,20 @@ class _HomePage extends State<HomePage> {
         child: Consumer2<CurrentWorkout, WorkoutTimer>(
           builder: (context, currentWorkout, workoutTimer, child) {
             if (currentWorkout.workout != null) {
-              return button(
-                text: 'Return to workout: ${workoutTimer.time}',
-                color: Theme.of(context).focusColor,
-                onPressed: () {
-                  navigateTo('workout', context);
-                },
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  button(
+                    text: 'Return to workout: ${workoutTimer.time}',
+                    color: Theme.of(context).focusColor,
+                    onPressed: () {
+                      navigateTo('workout', context);
+                    },
+                    height: 48
+                  ),
+                  SizedBox(height: 10),
+                  button(text: 'Finish workout', color: Colors.red, height: 48)
+                ],
               );
             } else {
               return button(

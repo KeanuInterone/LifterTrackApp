@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/models/current_workout.dart';
+import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/exercises.dart';
 import 'package:lifter_track_app/models/set_group.dart';
+import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/workout_timer.dart';
 import 'package:lifter_track_app/pages/add_exercise.dart';
+import 'package:lifter_track_app/pages/add_set.dart';
 import 'package:lifter_track_app/pages/exercises.dart';
 import 'package:lifter_track_app/pages/login.dart';
 import 'package:lifter_track_app/pages/select_exercise.dart';
@@ -60,6 +63,12 @@ class MyApp extends StatelessWidget {
               page = SetGroupPage(
                 setGroup: setGroup,
               );
+              break;
+            case 'add_set':
+              Map<String, dynamic> argMap = settings.arguments;
+              void Function(Set) onSetCreated = argMap['onSetCreated'];
+              Exercise exercise = argMap['exercise'];
+              page = AddSetPage(onSetCreated: onSetCreated, exercise: exercise,);
               break;
             case 'exercises':
               page = ExercisesPage();

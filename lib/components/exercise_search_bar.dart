@@ -6,8 +6,9 @@ import 'package:lifter_track_app/models/exercises.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseSearchBar extends StatefulWidget {
-  void Function(Exercise) onExerciseSelected;
-  ExerciseSearchBar({Key key, this.onExerciseSelected}) : super(key: key);
+  final void Function(Exercise) onExerciseSelected;
+  final String initialValue;
+  ExerciseSearchBar({Key key, this.onExerciseSelected, this.initialValue}) : super(key: key);
 
   @override
   _ExerciseSearchBarState createState() => _ExerciseSearchBarState();
@@ -22,6 +23,7 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         formField(
+            initialValue: widget.initialValue,
             placeholder: 'Search',
             onChanged: (value) {
               searchExercises(context, value);

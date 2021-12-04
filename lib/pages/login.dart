@@ -24,6 +24,12 @@ class _LoginPage extends State<LoginPage> {
   String _errorMessage = '';
   bool _isLoading = false;
 
+  @override
+  void initState() {
+    super.initState();
+    validateAuthToken(context);
+  }
+
   void validateAuthToken(BuildContext context) async {
     await API.loadAuthtoken();
     bool validAuthToken = await API.validateToken();
@@ -35,12 +41,12 @@ class _LoginPage extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    validateAuthToken(context);
     return GestureDetector(
       child: background(
         context,
         child: Scaffold(
           backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

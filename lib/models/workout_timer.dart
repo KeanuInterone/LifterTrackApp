@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class WorkoutTimer extends ChangeNotifier {
-  int time = 0;
+  int timeSeconds = 0;
+  String time;
   Timer _timer;
   void start() {
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      time++;
+      timeSeconds++;
+      time = readableTimeFromSeconds(timeSeconds);
       notifyListeners();
     });
   }
@@ -17,8 +19,17 @@ class WorkoutTimer extends ChangeNotifier {
   } 
 
   void reset() {
-    time = 0;
+    timeSeconds = 0;
     notifyListeners();
+  }
+
+  String readableTimeFromSeconds(int totalSeconds) {
+    int hours = totalSeconds ~/ 3600;
+    int minutes = totalSeconds ~/ 60;
+    int seconds = totalSeconds % 60;
+
+    String hoursString = hours == 0 ? '' : '${hours}h:';
+    return '$hoursString${minutes}m:${seconds}s';
   }
   
 }
