@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:lifter_track_app/models/api.dart';
+import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/set.dart';
 import 'package:http/http.dart' as http;
@@ -8,13 +9,27 @@ import 'package:http/http.dart' as http;
 
 class SetGroup {
   String id;
+  String focusExerciseId;
+  Exercise focusExercise;
   List<Set> sets;
 
-  SetGroup({this.id, this.sets});
+  SetGroup({this.id, this.sets, this.focusExerciseId, this.focusExercise});
 
   factory SetGroup.fromJson(Map<String, dynamic> json) {
+
+    Exercise exercise;
+    String exerciseId;
+    if (json['focus_exercise'] is Map<String, dynamic>) {
+      exercise = Exercise.fromJson(json['focus_exercise']);
+      exerciseId = exercise.id; 
+    } else {
+      exerciseId = json['focus_exercise'];
+    }
+
     return SetGroup(
       id: json['_id'],
+      focusExerciseId: exerciseId,
+      focusExercise: exercise,
       sets: []
     );
   }

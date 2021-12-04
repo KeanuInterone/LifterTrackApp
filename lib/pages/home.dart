@@ -65,7 +65,7 @@ class _HomePage extends State<HomePage> {
                 text: 'Return to workout: ${workoutTimer.time}',
                 color: Theme.of(context).focusColor,
                 onPressed: () {
-                  navigateTo(WorkoutPage(), context);
+                  navigateTo('workout', context);
                 },
               );
             } else {
@@ -74,7 +74,7 @@ class _HomePage extends State<HomePage> {
                 color: Theme.of(context).focusColor,
                 onPressed: () async {
                   Response res = await currentWorkout.startWorkout(context);
-                  if (res.success) navigateTo(WorkoutPage(), context);
+                  if (res.success) navigateTo('workout', context);
                 },
               );
             }
@@ -107,14 +107,7 @@ class _HomePage extends State<HomePage> {
                 color: Theme.of(context).primaryColor,
                 height: 56,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return ExercisesPage();
-                      },
-                    ),
-                  );
+                  navigateTo('exercises', context);
                 },
               ),
             )

@@ -4,9 +4,11 @@ import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/current_workout.dart';
+import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/workout_timer.dart';
 import 'package:lifter_track_app/pages/select_exercise.dart';
 import 'package:provider/provider.dart';
+import 'package:lifter_track_app/pages/set_group.dart';
 
 class WorkoutPage extends StatefulWidget {
   @override
@@ -33,12 +35,13 @@ class _WorkoutPage extends State<WorkoutPage> {
                     physics: ClampingScrollPhysics(),
                     children: [
                       setGroups(),
+                      SizedBox(height: 10),
                       button(
                           text: 'Add set group',
                           color: Theme.of(context).focusColor,
                           height: 200,
                           onPressed: () {
-                            navigateTo(SelectExercisePage(), context);
+                            navigateTo('select_exercise', context);
                           }),
                       SizedBox(height: 10),
                       button(
@@ -88,14 +91,43 @@ class _WorkoutPage extends State<WorkoutPage> {
   Widget setGroups() {
     return Consumer<CurrentWorkout>(
       builder: (context, currentWorkout, child) {
-        return ListView.builder(
+        return ListView.separated(
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
           itemCount: currentWorkout.workout.setGroups.length,
           itemBuilder: (context, index) {
-            return text('I am a set group');
+            SetGroup setGroup = currentWorkout.workout.setGroups[index];
+            return setGroupWidget(context, setGroup);
+          },
+          separatorBuilder: (context, index) {
+            return SizedBox(height: 10);
           },
         );
+      },
+    );
+  }
+
+  Widget setGroupWidget(BuildContext context, SetGroup setGroup) {
+    return GestureDetector(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              text('${setGroup.focusExercise.name}'),
+            ],
+          ),
+        ),
+      ),
+      onTap: () {
+        navigateTo('set_group', context, parameters: {'setGroup': setGroup});
       },
     );
   }

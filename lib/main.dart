@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/models/current_workout.dart';
 import 'package:lifter_track_app/models/exercises.dart';
+import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/workout_timer.dart';
+import 'package:lifter_track_app/pages/add_exercise.dart';
+import 'package:lifter_track_app/pages/exercises.dart';
 import 'package:lifter_track_app/pages/login.dart';
+import 'package:lifter_track_app/pages/select_exercise.dart';
+import 'package:lifter_track_app/pages/set_group.dart';
+import 'package:lifter_track_app/pages/sign_up.dart';
+import 'package:lifter_track_app/pages/workout.dart';
 import 'package:provider/provider.dart';
 import 'models/api.dart';
 import 'pages/home.dart';
@@ -25,26 +32,46 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
-            //primarySwatch: Colors.blue,
             primaryColor: Color(0xff4cd0fa),
             backgroundColor: Color(0xff313342),
-            focusColor: Color(0xff15f410)
-
-            // This makes the visual density adapt to the platform that you run
-            // the app on. For desktop platforms, the controls will be smaller and
-            // closer together (more dense) than on mobile platforms.
-            //visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
+            focusColor: Color(0xff15f410)),
         home: LoginPage(),
+        onGenerateRoute: (settings) {
+          Widget page;
+          switch (settings.name) {
+            case 'login':
+              page = LoginPage();
+              break;
+            case 'sign_up':
+              page = SignUpPage();
+              break;
+            case 'home':
+              page = HomePage();
+              break;
+            case 'workout':
+              page = WorkoutPage();
+              break;
+            case 'select_exercise':
+              page = SelectExercisePage();
+              break;
+            case 'set_group':
+              Map<String, dynamic> argMap = settings.arguments;
+              SetGroup setGroup = argMap['setGroup'];
+              page = SetGroupPage(
+                setGroup: setGroup,
+              );
+              break;
+            case 'exercises':
+              page = ExercisesPage();
+              break;
+            case 'add_exercise':
+              page = AddExercisePage();
+              break;
+          }
+          return MaterialPageRoute(builder: (context) {
+            return page;
+          });
+        },
       ),
     );
   }

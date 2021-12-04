@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/models/user.dart';
 import 'package:lifter_track_app/pages/home.dart';
 import 'package:lifter_track_app/models/response.dart';
@@ -172,9 +173,7 @@ class _SignUpPage extends State<SignUpPage> {
       Response res =
           await User.signUp(_email, _password, _first_name, _last_name);
       if (res.success) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return HomePage();
-        }));
+        navigateTo('home', context);
       } else {
         _errorMessage = res.errMessage;
       }

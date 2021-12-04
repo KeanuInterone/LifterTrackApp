@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/models/exercises.dart';
 import 'package:lifter_track_app/models/user.dart';
 import 'package:lifter_track_app/pages/home.dart';
-import 'package:lifter_track_app/pages/sign_up.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:lifter_track_app/components/background.dart';
@@ -29,9 +29,7 @@ class _LoginPage extends State<LoginPage> {
     bool validAuthToken = await API.validateToken();
     if (validAuthToken) {
       Provider.of<Exercises>(context, listen: false).getExercises();
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return HomePage();
-      }));
+      navigateTo('home', context);
     }
   }
 
@@ -182,9 +180,7 @@ class _LoginPage extends State<LoginPage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return SignUpPage();
-                }));
+                navigateTo('sign_up', context);
               },
               child: Text('Create Account'),
             ),
@@ -213,9 +209,7 @@ class _LoginPage extends State<LoginPage> {
     if (_validateAndSave()) {
       Response res = await User.login(_email, _password);
       if (res.success) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return HomePage();
-        }));
+        navigateTo('home', context);
       } else {
         _errorMessage = res.errMessage;
       }

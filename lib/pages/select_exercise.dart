@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/formField.dart';
 import 'package:lifter_track_app/components/keyboardDefocuser.dart';
+import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
+import 'package:lifter_track_app/models/current_workout.dart';
+import 'package:lifter_track_app/models/exercise.dart';
+import 'package:lifter_track_app/models/response.dart';
+import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/workout_timer.dart';
+import 'package:lifter_track_app/pages/set_group.dart';
 import 'package:provider/provider.dart';
 import 'package:lifter_track_app/components/exercise_search_bar.dart';
 
@@ -34,7 +40,11 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        ExerciseSearchBar()
+                        ExerciseSearchBar(
+                          onExerciseSelected: (exercise) {
+                            createSetGroup(context, exercise);
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -83,12 +93,26 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         formField(placeholder: 'Search'),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Container(
           color: Colors.white,
           height: 100,
         )
       ],
     );
+  }
+
+  void createSetGroup(BuildContext context, Exercise exercise) async {
+    Response res = await Provider.of<CurrentWorkout>(context, listen: false)
+        .addSetGroup(exercise);
+    if (!res.success) {
+      print(res.errMessage);
+      return;
+    }
+    SetGroup setGroup = res.data;
+    setGroup.focusExercise = exercise;
+    replaceScreenWith('set_group', context, parameters: {'setGroup': setGroup});
   }
 }

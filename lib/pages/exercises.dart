@@ -67,7 +67,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               bottom: 0,
               child: IconButton(
                 onPressed: () {
-                  navigateTo(AddExercisePage(), context);
+                  navigateTo('add_exercise', context);
                 },
                 icon: Icon(
                   Icons.add,
