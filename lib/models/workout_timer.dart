@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class WorkoutTimer extends ChangeNotifier {
   int timeSeconds = 0;
-  String time;
+  String time = '0m:0s';
   Timer _timer;
   void start() {
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
@@ -25,7 +25,7 @@ class WorkoutTimer extends ChangeNotifier {
 
   String readableTimeFromSeconds(int totalSeconds) {
     int hours = totalSeconds ~/ 3600;
-    int minutes = totalSeconds ~/ 60;
+    int minutes = (totalSeconds - hours * 3600) ~/ 60;
     int seconds = totalSeconds % 60;
 
     String hoursString = hours == 0 ? '' : '${hours}h:';

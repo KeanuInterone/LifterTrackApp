@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/background.dart';
+import 'package:lifter_track_app/components/button.dart';
+import 'package:lifter_track_app/components/formField.dart';
+import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
+import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/user.dart';
-import 'package:lifter_track_app/pages/home.dart';
 import 'package:lifter_track_app/models/response.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -21,39 +25,45 @@ class _SignUpPage extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Sign up!'),
-        ),
-        body: ListView(
-          children: <Widget>[
-            signUpFormWidget(),
-            signUpButtonWidget(),
-            errorWidget(),
-          ],
-          physics: ClampingScrollPhysics(),
+    return keyboardDefocuser(
+      context,
+      child: background(
+        context,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).backgroundColor,
+            title: text('Sign up!'),
+          ),
+          body: ListView(
+            children: <Widget>[
+              signUpFormWidget(),
+              signUpButtonWidget(),
+              errorWidget(),
+            ],
+            physics: ClampingScrollPhysics(),
+          ),
         ),
       ),
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
     );
   }
 
   Widget signUpFormWidget() {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 20,
-          ),
-          _emailWidget(),
-          _passwordWidget(),
-          _firstNameWidget(),
-          _lastNameWidget()
-        ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 20,
+            ),
+            _emailWidget(),
+            _passwordWidget(),
+            _firstNameWidget(),
+            _lastNameWidget()
+          ],
+        ),
       ),
     );
   }
@@ -61,14 +71,12 @@ class _SignUpPage extends State<SignUpPage> {
   Widget _emailWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-      child: TextFormField(
-        maxLines: 1,
-        autofocus: false,
+      child: formField(
+        placeholder: 'Email',
+        autofocus: true,
+        autoCorrect: false,
+        textCapitalization: TextCapitalization.none,
         keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          hintText: 'Enter Email',
-          icon: Icon(Icons.mail, color: Colors.grey),
-        ),
         validator: (value) => value.isEmpty ? 'Email cannot be empty' : null,
         onSaved: (value) => _email = value.trim(),
       ),
@@ -78,14 +86,10 @@ class _SignUpPage extends State<SignUpPage> {
   Widget _passwordWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-      child: TextFormField(
-        maxLines: 1,
+      child: formField(
+        placeholder: 'Password',
         obscureText: true,
         autofocus: false,
-        decoration: InputDecoration(
-          hintText: 'Password',
-          icon: Icon(Icons.lock, color: Colors.grey),
-        ),
         validator: (value) => value.isEmpty ? 'Password cannot be empty' : null,
         onSaved: (value) => _password = value.trim(),
       ),
@@ -95,10 +99,10 @@ class _SignUpPage extends State<SignUpPage> {
   Widget _firstNameWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-      child: TextFormField(
-        maxLines: 1,
+      child: formField(
+        placeholder: 'First Name',
         autofocus: false,
-        decoration: InputDecoration(hintText: 'First Name'),
+        textCapitalization: TextCapitalization.words,
         validator: (value) =>
             value.isEmpty ? 'First name cannot be empty' : null,
         onSaved: (value) => _first_name = value.trim(),
@@ -109,10 +113,10 @@ class _SignUpPage extends State<SignUpPage> {
   Widget _lastNameWidget() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
-      child: TextFormField(
-        maxLines: 1,
+      child: formField(
+        placeholder: 'Last Name',
+        textCapitalization: TextCapitalization.words,
         autofocus: false,
-        decoration: InputDecoration(hintText: 'Last Name'),
         validator: (value) =>
             value.isEmpty ? 'Last name cannot be empty' : null,
         onSaved: (value) => _last_name = value.trim(),
@@ -123,14 +127,10 @@ class _SignUpPage extends State<SignUpPage> {
   Widget signUpButtonWidget() {
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 35.0, 10, 0),
-      child: MaterialButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        elevation: 5.0,
-        minWidth: 200.0,
-        height: 42.0,
-        color: Colors.blue,
-        child: Text('Sign Up',
-            style: new TextStyle(fontSize: 20.0, color: Colors.white)),
+      child: button(
+        text: 'Sign Up',
+        height: 60.0,
+        color: Theme.of(context).focusColor,
         onPressed: _validateAndSubmit,
       ),
     );

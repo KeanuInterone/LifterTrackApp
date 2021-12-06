@@ -105,6 +105,7 @@ class _SetGroupPageState extends State<SetGroupPage> {
       child: text(
         '${setGroup.focusExercise.name}',
         fontSize: 40,
+        textAlign: TextAlign.center
       ),
     );
   }

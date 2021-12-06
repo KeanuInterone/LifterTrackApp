@@ -104,6 +104,8 @@ class _LoginPage extends State<LoginPage> {
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: formField(
         placeholder: "Email",
+        autoCorrect: false,
+        textCapitalization: TextCapitalization.none,
         keyboardType: TextInputType.emailAddress,
         validator: (value) => value.isEmpty ? 'Email cannot be empty' : null,
         onSaved: (value) => _email = value.trim(),
@@ -116,6 +118,8 @@ class _LoginPage extends State<LoginPage> {
       padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
       child: formField(
         placeholder: 'Password',
+        autoCorrect: false,
+        textCapitalization: TextCapitalization.none,
         obscureText: true,
         validator: (value) => value.isEmpty ? 'Password cannot be empty' : null,
         onSaved: (value) => _password = value.trim(),

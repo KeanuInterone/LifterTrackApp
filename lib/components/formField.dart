@@ -9,14 +9,19 @@ Widget formField(
     Function(String) onSaved,
     Function(String) onChanged,
     bool obscureText = false,
-    bool required = false}
+    bool required = false,
+    bool autofocus = false,
+    bool autoCorrect = false,
+    TextCapitalization textCapitalization = TextCapitalization.none}
     ) {
   return TextFormField(
     initialValue: initialValue,
     maxLines: 1,
-    autofocus: false,
+    autofocus: autofocus,
     obscureText: obscureText,
     keyboardType: keyboardType,
+    autocorrect: autoCorrect,
+    textCapitalization: textCapitalization,
     style: TextStyle(color: Colors.white),
     cursorColor: Colors.white,
     decoration: InputDecoration(
