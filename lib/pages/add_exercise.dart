@@ -27,8 +27,8 @@ class _AddExercisePageState extends State<AddExercisePage> {
     'Value'
   ];
   String _exerciseName;
-  String _selectedExerciseType = null;
-  String _exerciseType = null;
+  String _selectedExerciseType;
+  String _exerciseType;
   String _errorMessage = '';
 
   @override
@@ -38,45 +38,60 @@ class _AddExercisePageState extends State<AddExercisePage> {
       child: background(
         context,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           body: SafeArea(
-              child: Column(
-            children: [
-              header(context),
-              Expanded(
-                flex: 7,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: ListView(
-                    children: [
-                      Form(
-                        key: _formKey,
-                        child: formField(
-                          placeholder: 'Name',
-                          validator: (value) =>
-                              value.isEmpty ? 'Name cannot be empty' : null,
-                          onSaved: (value) => _exerciseName = value.trim(),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      exerciseTypeGrid(context),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      errorWidget(),
-                      button(
-                          text: 'Add Exercise',
-                          color: Theme.of(context).focusColor,
-                          height: 60,
-                          onPressed: _validateAndSubmit)
-                    ],
-                  ),
-                ),
-              )
-            ],
-          )),
+            child: Column(
+              children: [
+                header(context),
+                body(context),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Expanded body(BuildContext context) {
+    return Expanded(
+      flex: 7,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Form(
+              key: _formKey,
+              child: formField(
+                placeholder: 'Name',
+                autofocus: true,
+                textCapitalization: TextCapitalization.words,
+                validator: (value) =>
+                    value.isEmpty ? 'Name cannot be empty' : null,
+                onSaved: (value) => _exerciseName = value.trim(),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Align(child: text('Select Exercise Type', fontSize: 18)),
+            SizedBox(
+              height: 10,
+            ),
+            exerciseTypeList(context),
+            SizedBox(
+              height: 10,
+            ),
+            errorWidget(),
+            Expanded(flex: 1, child: Container()),
+            button(
+              text: 'Add Exercise',
+              color: Theme.of(context).focusColor,
+              height: 60,
+              onPressed: _validateAndSubmit,
+            )
+          ],
         ),
       ),
     );
@@ -110,6 +125,17 @@ class _AddExercisePageState extends State<AddExercisePage> {
     }
   }
 
+  Widget exerciseTypeList(BuildContext context) {
+    return ListView(
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      children: exerciseTypes
+          .map((type) =>
+              exerciseType(type, _selectedExerciseType == type, context))
+          .toList(),
+    );
+  }
+
   GridView exerciseTypeGrid(BuildContext context) {
     return GridView.count(
       mainAxisSpacing: 10,
@@ -125,23 +151,34 @@ class _AddExercisePageState extends State<AddExercisePage> {
   }
 
   Widget exerciseType(String type, bool selected, BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-              width: 2,
-              color: selected
-                  ? Theme.of(context).focusColor
-                  : Theme.of(context).primaryColor),
+    return Padding(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: GestureDetector(
+        child: Container(
+          decoration: BoxDecoration(
+            color: selected
+                ? Theme.of(context).focusColor.withAlpha(50)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+                width: 2,
+                color: selected
+                    ? Theme.of(context).focusColor
+                    : Theme.of(context).primaryColor),
+          ),
+          child: Center(
+              child: Padding(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+            child: text(type),
+          )),
         ),
-        child: Center(child: text(type)),
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+          setState(() {
+            _selectedExerciseType = type;
+          });
+        },
       ),
-      onTap: () {
-        setState(() {
-          _selectedExerciseType = type;
-        });
-      },
     );
   }
 
