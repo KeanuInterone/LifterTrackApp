@@ -23,4 +23,10 @@ class CurrentWorkout extends ChangeNotifier {
     notifyListeners();
     return res;
   }
+
+  Future<Response> addSet(SetGroup setGroup, Exercise exercise, int weight, int reps) async {
+    Response res = await workout.createSet(setGroup, exercise, weight, reps);
+    notifyListeners();
+    return res;
+  }
 }

@@ -86,17 +86,29 @@ class _ExercisesPageState extends State<ExercisesPage> {
       flex: 7,
       child: Container(
         padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             formField(placeholder: 'Search'),
             SizedBox(
               height: 30,
             ),
-            Consumer<Exercises>(
-              builder: (context, exercises, child) {
-                return exerciseList(exercises.exercises);
-              },
+            Expanded(
+              flex: 1,
+              child: Consumer<Exercises>(
+                builder: (context, exercises, child) {
+                  return exerciseList(exercises.exercises);
+                },
+              ),
             ),
+            button(
+              text: 'Add Exercise',
+              color: Theme.of(context).focusColor,
+              height: 60,
+              onPressed: () {
+                navigateTo('add_exercise', context);
+              },
+            )
           ],
         ),
       ),

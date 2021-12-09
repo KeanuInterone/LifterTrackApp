@@ -9,6 +9,7 @@ import 'package:lifter_track_app/models/workout_timer.dart';
 import 'package:lifter_track_app/pages/select_exercise.dart';
 import 'package:provider/provider.dart';
 import 'package:lifter_track_app/pages/set_group.dart';
+import 'package:lifter_track_app/components/workoutHeader.dart';
 
 class WorkoutPage extends StatefulWidget {
   @override
@@ -25,29 +26,8 @@ class _WorkoutPage extends State<WorkoutPage> {
         body: SafeArea(
           child: Column(
             children: [
-              header(context),
-              Expanded(
-                flex: 7,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  child: ListView(
-                    shrinkWrap: true,
-                    physics: ClampingScrollPhysics(),
-                    children: [
-                      setGroups(),
-                      SizedBox(height: 10),
-                      button(
-                        text: 'Add set group',
-                        color: Theme.of(context).focusColor,
-                        height: 200,
-                        onPressed: () {
-                          navigateTo('select_exercise', context);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              workoutHeader(context),
+              body(context),
             ],
           ),
         ),
@@ -55,31 +35,26 @@ class _WorkoutPage extends State<WorkoutPage> {
     );
   }
 
-  Expanded header(context) {
+  Expanded body(BuildContext context) {
     return Expanded(
-      flex: 1,
-      child: Container(
-        child: Stack(
+      flex: 7,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              constraints: BoxConstraints.expand(width: 24),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-              ),
+            Expanded(
+              flex: 1,
+              child: setGroups(),
             ),
-            Center(
-              child: Consumer<WorkoutTimer>(
-                builder: (context, timer, child) {
-                  return text('${timer.time}', fontSize: 20);
-                },
-              ),
-            )
+            button(
+              text: 'Add set group',
+              color: Theme.of(context).focusColor,
+              height: 80,
+              onPressed: () {
+                navigateTo('select_exercise', context);
+              },
+            ),
           ],
         ),
       ),
@@ -89,18 +64,24 @@ class _WorkoutPage extends State<WorkoutPage> {
   Widget setGroups() {
     return Consumer<CurrentWorkout>(
       builder: (context, currentWorkout, child) {
-        return ListView.separated(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          itemCount: currentWorkout.workout.setGroups.length,
-          itemBuilder: (context, index) {
-            SetGroup setGroup = currentWorkout.workout.setGroups[index];
-            return setGroupWidget(context, setGroup);
-          },
-          separatorBuilder: (context, index) {
-            return SizedBox(height: 10);
-          },
-        );
+        return currentWorkout.workout.setGroups.length == 0
+            ? Padding(
+                padding: const EdgeInsets.fromLTRB(20, 200, 20, 0),
+                child: text('No set groups added, add one below',
+                    textAlign: TextAlign.center),
+              )
+            : ListView.separated(
+                shrinkWrap: true,
+                physics: ClampingScrollPhysics(),
+                itemCount: currentWorkout.workout.setGroups.length,
+                itemBuilder: (context, index) {
+                  SetGroup setGroup = currentWorkout.workout.setGroups[index];
+                  return setGroupWidget(context, setGroup);
+                },
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 10);
+                },
+              );
       },
     );
   }

@@ -3,8 +3,12 @@ import 'package:flutter/services.dart';
 
 Widget formField(
     {String placeholder,
+    TextEditingController controller,
+    FocusNode focusNode,
     String initialValue,
     TextInputType keyboardType = TextInputType.text,
+    TextInputAction textInputAction,
+    TextAlign textAlign = TextAlign.start,
     String Function(String value) validator,
     Function(String) onSaved,
     Function(String) onChanged,
@@ -15,12 +19,16 @@ Widget formField(
     TextCapitalization textCapitalization = TextCapitalization.none}
     ) {
   return TextFormField(
+    controller: controller,
+    focusNode: focusNode,
     initialValue: initialValue,
     maxLines: 1,
     autofocus: autofocus,
     obscureText: obscureText,
     keyboardType: keyboardType,
+    textInputAction: textInputAction,
     autocorrect: autoCorrect,
+    textAlign: textAlign,
     textCapitalization: textCapitalization,
     style: TextStyle(color: Colors.white),
     cursorColor: Colors.white,

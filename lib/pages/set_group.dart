@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/background.dart';
+import 'package:lifter_track_app/components/box.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
+import 'package:lifter_track_app/components/workoutHeader.dart';
+import 'package:lifter_track_app/models/current_workout.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/workout_timer.dart';
@@ -29,7 +32,7 @@ class _SetGroupPageState extends State<SetGroupPage> {
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
             child: Column(
               children: [
-                header(context),
+                workoutHeader(context),
                 body(setGroup, context),
               ],
             ),
@@ -42,42 +45,94 @@ class _SetGroupPageState extends State<SetGroupPage> {
   Expanded body(SetGroup setGroup, BuildContext context) {
     return Expanded(
       flex: 7,
-      child: ListView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          focusExerciseTitle(setGroup),
-          SizedBox(height: 10),
-          metrixCards(context),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemCount: setGroup.sets.length,
-              itemBuilder: (context, index) {
-                return text(
-                    '${setGroup.sets[index].weight} x ${setGroup.sets[index].reps}');
-              },
-            ),
-          ),
-          SizedBox(
-            height: 10,
+          Expanded(
+            flex: 1,
+            child: Consumer<CurrentWorkout>(
+                builder: (context, currentWorkout, child) {
+              return ListView(
+                children: [
+                  focusExerciseTitle(setGroup),
+                  SizedBox(height: 10),
+                  metricsCards(context),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: setGroup.sets.length == 0
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                            child: text('No sets added, add one below',
+                                textAlign: TextAlign.center),
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemCount: setGroup.sets.length,
+                            itemBuilder: (context, index) {
+                              return setRow(
+                                  setGroup.sets[index].weight,
+                                  setGroup.sets[index].reps,
+                                  Theme.of(context).primaryColor);
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(height: 10);
+                            },
+                          ),
+                  ),
+                ],
+              );
+            }),
           ),
           button(
             text: 'Add Set',
             height: 75,
             color: Theme.of(context).focusColor,
-            onPressed: () => navigateTo('add_set', context, parameters: {'onSetCreated': onSetCreated, 'exercise': setGroup.focusExercise}),
+            onPressed: () => navigateTo('add_set', context, parameters: {
+              'onSetCreated': onSetCreated,
+              'setGroup': setGroup
+            }),
           )
         ],
       ),
     );
   }
 
-  void onSetCreated(Set set) {
-
+  Widget setRow(int weight, int reps, Color color) {
+    return box(
+      height: 80,
+      borderColor: color,
+      fillColor: color.withAlpha(50),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              text('$weight', fontSize: 24, fontWeight: FontWeight.bold),
+              text('Weight', fontSize: 12),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+            child: text('x', fontWeight: FontWeight.bold),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              text('$reps', fontSize: 24, fontWeight: FontWeight.bold),
+              text('Reps', fontSize: 12),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
-  Align metrixCards(BuildContext context) {
+  void onSetCreated(Set set) {}
+
+  Align metricsCards(BuildContext context) {
     return Align(
       child: Container(
         height: 150,
@@ -102,42 +157,8 @@ class _SetGroupPageState extends State<SetGroupPage> {
 
   Align focusExerciseTitle(SetGroup setGroup) {
     return Align(
-      child: text(
-        '${setGroup.focusExercise.name}',
-        fontSize: 40,
-        textAlign: TextAlign.center
-      ),
-    );
-  }
-
-  Expanded header(context) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        child: Stack(
-          children: [
-            Container(
-              constraints: BoxConstraints.expand(width: 24),
-              child: IconButton(
-                onPressed: () {
-                  pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Center(
-              child: Consumer<WorkoutTimer>(
-                builder: (context, timer, child) {
-                  return text('${timer.time}', fontSize: 20);
-                },
-              ),
-            )
-          ],
-        ),
-      ),
+      child: text('${setGroup.focusExercise.name}',
+          fontSize: 40, textAlign: TextAlign.center),
     );
   }
 }

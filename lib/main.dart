@@ -67,8 +67,8 @@ class MyApp extends StatelessWidget {
             case 'add_set':
               Map<String, dynamic> argMap = settings.arguments;
               void Function(Set) onSetCreated = argMap['onSetCreated'];
-              Exercise exercise = argMap['exercise'];
-              page = AddSetPage(onSetCreated: onSetCreated, exercise: exercise,);
+              SetGroup setGroup = argMap['setGroup'];
+              page = AddSetPage(onSetCreated: onSetCreated, setGroup: setGroup,);
               break;
             case 'exercises':
               page = ExercisesPage();

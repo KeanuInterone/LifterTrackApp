@@ -4,6 +4,7 @@ import 'package:lifter_track_app/components/formField.dart';
 import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
+import 'package:lifter_track_app/components/workoutHeader.dart';
 import 'package:lifter_track_app/models/current_workout.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
@@ -29,18 +30,21 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
         context,
         child: Scaffold(
           backgroundColor: Colors.transparent,
+          //resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: Column(
                 children: [
-                  header(context),
+                  workoutHeader(context),
                   Expanded(
                     flex: 7,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                    child: ListView(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
                       children: [
                         ExerciseSearchBar(
+                          autoFocus: true,
                           onExerciseSelected: (exercise) {
                             createSetGroup(context, exercise);
                           },
@@ -85,22 +89,6 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget exerciseSearchBar(context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        formField(placeholder: 'Search'),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          color: Colors.white,
-          height: 100,
-        )
-      ],
     );
   }
 

@@ -10,14 +10,10 @@ class Workout {
   String id;
   List<SetGroup> setGroups;
 
-
   Workout({this.id, this.setGroups});
 
   factory Workout.fromJson(Map<String, dynamic> json) {
-    return Workout(
-      id: json['_id'],
-      setGroups: []
-    );
+    return Workout(id: json['_id'], setGroups: []);
   }
 
   static Future<Response> create() async {
@@ -51,7 +47,7 @@ class Workout {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'
       },
-      body: jsonEncode({'focus_exercise': exercise.id }),
+      body: jsonEncode({'focus_exercise': exercise.id}),
     );
     if (response.statusCode != 200) {
       Map<String, dynamic> json = jsonDecode(response.body);
@@ -66,5 +62,37 @@ class Workout {
     SetGroup setGroup = SetGroup.fromJson(json);
     setGroups.add(setGroup);
     return Response(true, null, setGroup);
+  }
+
+  Future<Response> createSet(
+      SetGroup setGroup, Exercise exercise, int weight, int reps) async {
+    String url = "${API.baseURL}/workouts/$id/add_set";
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${API.authToken}'
+      },
+      body: jsonEncode({
+        'exercise_id': exercise.id,
+        'set_group_id': setGroup.id,
+        'weight': weight,
+        'reps': reps
+      }),
+    );
+    if (response.statusCode != 200) {
+      Map<String, dynamic> json = jsonDecode(response.body);
+      bool hasError = json != null && json.containsKey('error');
+      return Response(
+          false,
+          hasError ? json['error'] : "There was an error creating the workout",
+          null);
+    }
+
+    Map<String, dynamic> json = jsonDecode(response.body);
+    Set set = Set.fromJson(json);
+    set.exercise = exercise;
+    setGroup.sets.add(set);
+    return Response(true, null, set);
   }
 }

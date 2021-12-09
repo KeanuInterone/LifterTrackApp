@@ -8,7 +8,13 @@ import 'package:provider/provider.dart';
 class ExerciseSearchBar extends StatefulWidget {
   final void Function(Exercise) onExerciseSelected;
   final String initialValue;
-  ExerciseSearchBar({Key key, this.onExerciseSelected, this.initialValue}) : super(key: key);
+  final bool autoFocus;
+  ExerciseSearchBar(
+      {Key key,
+      this.onExerciseSelected,
+      this.initialValue,
+      this.autoFocus = false})
+      : super(key: key);
 
   @override
   _ExerciseSearchBarState createState() => _ExerciseSearchBarState();
@@ -25,6 +31,7 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
         formField(
             initialValue: widget.initialValue,
             placeholder: 'Search',
+            autofocus: widget.autoFocus,
             onChanged: (value) {
               searchExercises(context, value);
             }),
@@ -50,7 +57,8 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
                       return GestureDetector(
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: text(searchResults[index].name, color: Colors.black, fontSize: 20),
+                          child: text(searchResults[index].name,
+                              color: Colors.black, fontSize: 20),
                         ),
                         onTap: () {
                           widget.onExerciseSelected(searchResults[index]);
@@ -68,11 +76,15 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
   }
 
   void searchExercises(BuildContext context, String value) {
-    List<Exercise> exercises =
-        Provider.of<Exercises>(context, listen: false).exercises;
-    searchResults = exercises.where((exercise) {
-      return exercise.name.toLowerCase().contains(value.toLowerCase());
-    }).toList();
+    if (value.isEmpty) {
+      searchResults = [];
+    } else {
+      List<Exercise> exercises =
+          Provider.of<Exercises>(context, listen: false).exercises;
+      searchResults = exercises.where((exercise) {
+        return exercise.name.toLowerCase().contains(value.toLowerCase());
+      }).toList();
+    }
     setState(() {});
   }
 }

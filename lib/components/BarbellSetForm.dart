@@ -30,10 +30,6 @@ class BarbellWeightNotifier extends ChangeNotifier {
 }
 
 class _BarbellSetFormState extends State<BarbellSetForm> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,127 +41,142 @@ class _BarbellSetFormState extends State<BarbellSetForm> {
           SizedBox(
             height: 20,
           ),
-          Row(
-            children: [
-              WeightSelector(
-                initialWeight: widget.initalWeight,
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Expanded(
-                flex: 1,
-                child: ScrollableValuePicker(
-                  initialValue: 8,
-                  increment: 1,
-                  onValueChanged: repValueChanged,
+          Expanded(child: barbell()),
+          weightAndReps(),
+        ],
+      ),
+    );
+  }
+
+  Widget barbell() {
+    return LayoutBuilder(builder: (context, constraints) {
+      double height = constraints.maxHeight;
+      double width = constraints.maxWidth;
+      return Container(
+        //color: Colors.red,
+        height: height,
+        width: width,
+        child: Consumer<BarbellWeightNotifier>(
+            builder: (context, barbellWeight, child) {
+          List<String> plateStrings =
+              getBarbellPlateAmounts(barbellWeight.weight);
+          double start = 70;
+          double plateWidth = 30;
+          double fullPlateHeight = 200;
+          double fiveHeight = 100;
+          double twoPointFiveHeight = 50;
+          List<Positioned> plates = [];
+          for (var i = 0; i < plateStrings.length; i++) {
+            double plateHeight;
+            Color plateColor;
+            switch (plateStrings[i]) {
+              case '45':
+                plateHeight = fullPlateHeight;
+                plateColor = Colors.blue;
+                break;
+              case '25':
+                plateHeight = fullPlateHeight;
+                plateColor = Colors.green;
+                break;
+              case '10':
+                plateHeight = fullPlateHeight;
+                plateColor = Colors.grey.shade800;
+                break;
+              case '5':
+                plateHeight = fiveHeight;
+                plateColor = Colors.black;
+                break;
+              case '2.5':
+                plateHeight = twoPointFiveHeight;
+                plateColor = Colors.black;
+                break;
+              default:
+            }
+            plates.add(
+              Positioned(
+                right: start + plateWidth * i,
+                top: height / 2 - plateHeight / 2,
+                child: Container(
+                  height: plateHeight,
+                  width: plateWidth,
+                  decoration: BoxDecoration(
+                    color: plateColor,
+                    border: Border.all(color: Colors.white, width: 0.5),
+                  ),
                 ),
               ),
-            ],
+            );
+          }
+          return Stack(
+            children: [
+                  Positioned(
+                    right: 0,
+                    top: height / 2 - 10,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade800,
+                        border: Border.all(color: Colors.white, width: 0.5),
+                      ),
+                      height: 20,
+                      width: 50,
+                    ),
+                  ),
+                  Positioned(
+                    right: 50,
+                    top: height / 2 - 25,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade800,
+                        border: Border.all(color: Colors.white, width: 0.5),
+                      ),
+                      height: 50,
+                      width: 20,
+                    ),
+                  ),
+                  Positioned(
+                    right: 70,
+                    top: height / 2 - 15,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade800,
+                        border: Border.all(color: Colors.white, width: 0.5),
+                      ),
+                      height: 30,
+                      width: 250,
+                    ),
+                  ),
+                ] +
+                plates,
+          );
+        }),
+      );
+    });
+  }
+
+  Widget weightAndReps() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0,0,0,30),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            flex: 1,
+            child: WeightSelector(
+              initialWeight: widget.initalWeight,
+              onValueChanged: widget.onWeightChanged,
+            ),
+          ),
+          Container(
+            width: 40,
+            child: text('x', textAlign: TextAlign.center),
           ),
           Expanded(
             flex: 1,
-            child: LayoutBuilder(builder: (context, constraints) {
-              double height = constraints.maxHeight;
-              double width = constraints.maxWidth;
-              return Container(
-                //color: Colors.red,
-                height: height,
-                width: width,
-                child: Consumer<BarbellWeightNotifier>(
-                    builder: (context, barbellWeight, child) {
-                  List<String> plateStrings =
-                      getBarbellPlateAmounts(barbellWeight.weight);
-                  double start = 70;
-                  double plateWidth = 30;
-                  double fullPlateHeight = 200;
-                  double fiveHeight = 100;
-                  double twoPointFiveHeight = 50;
-                  List<Positioned> plates = [];
-                  for (var i = 0; i < plateStrings.length; i++) {
-                    double plateHeight;
-                    Color plateColor;
-                    switch (plateStrings[i]) {
-                      case '45':
-                        plateHeight = fullPlateHeight;
-                        plateColor = Colors.blue;
-                        break;
-                      case '25':
-                        plateHeight = fullPlateHeight;
-                        plateColor = Colors.green;
-                        break;
-                      case '10':
-                        plateHeight = fullPlateHeight;
-                        plateColor = Colors.grey.shade800;
-                        break;
-                      case '5':
-                        plateHeight = fiveHeight;
-                        plateColor = Colors.black;
-                        break;
-                      case '2.5':
-                        plateHeight = twoPointFiveHeight;
-                        plateColor = Colors.black;
-                        break;
-                      default:
-                    }
-                    plates.add(
-                      Positioned(
-                        right: start + plateWidth * i,
-                        top: height / 2 - plateHeight / 2,
-                        child: Container(
-                          height: plateHeight,
-                          width: plateWidth,
-                          decoration: BoxDecoration(
-                            color: plateColor,
-                            border: Border.all(color: Colors.white, width: 0.5),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  return Stack(
-                    children: [
-                      Positioned(
-                        right: 0,
-                        top: height / 2 - 10,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade800,
-                            border: Border.all(color: Colors.white, width: 0.5),
-                          ),
-                          height: 20,
-                          width: 50,
-                        ),
-                      ),
-                      Positioned(
-                        right: 50,
-                        top: height / 2 - 25,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade800,
-                            border: Border.all(color: Colors.white, width: 0.5),
-                          ),
-                          height: 50,
-                          width: 20,
-                        ),
-                      ),
-                      Positioned(
-                        right: 70,
-                        top: height / 2 - 15,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade800,
-                            border: Border.all(color: Colors.white, width: 0.5),
-                          ),
-                          height: 30,
-                          width: 250,
-                        ),
-                      ),
-                    ] + plates,
-                  );
-                }),
-              );
-            }),
+            child: ScrollableValuePicker(
+              initialValue: widget.initialReps,
+              increment: 1,
+              onValueChanged: widget.onRepsChanged,
+            ),
           ),
         ],
       ),
@@ -196,26 +207,23 @@ class _BarbellSetFormState extends State<BarbellSetForm> {
 
     return plates;
   }
-
-  void repValueChanged(int value) {}
 }
 
 class WeightSelector extends StatelessWidget {
   final int initialWeight;
-  const WeightSelector({Key key, this.initialWeight}) : super(key: key);
+  final Function(int) onValueChanged;
+  const WeightSelector({Key key, this.initialWeight, this.onValueChanged}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: ScrollableValuePicker(
-        initialValue: initialWeight,
-        increment: 5,
-        onValueChanged: (value) {
-          Provider.of<BarbellWeightNotifier>(context, listen: false)
-              .setWeight(value);
-        },
-      ),
+    return ScrollableValuePicker(
+      initialValue: initialWeight,
+      increment: 5,
+      onValueChanged: (value) {
+        onValueChanged(value);
+        Provider.of<BarbellWeightNotifier>(context, listen: false)
+            .setWeight(value);
+      },
     );
   }
 }
