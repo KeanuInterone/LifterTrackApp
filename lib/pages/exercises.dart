@@ -7,7 +7,6 @@ import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/exercises.dart';
-import 'package:lifter_track_app/pages/add_exercise.dart';
 import 'package:provider/provider.dart';
 
 class ExercisesPage extends StatefulWidget {
