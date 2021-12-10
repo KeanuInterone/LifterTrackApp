@@ -12,9 +12,13 @@ class Exercises extends ChangeNotifier {
     _exercises = exercises;
     notifyListeners();
   } 
-  void addExercise(Exercise exercise) {
-    _exercises.add(exercise);
-    notifyListeners();
+  Future<Response> addExercise(Exercise exercise) async {
+    Response res = await Exercise.create(exercise);
+    if (res.success) {
+      _exercises.add(res.data);
+      notifyListeners();
+    }
+    return res;
   }
   void removeExercise(Exercise exercise) {
     _exercises.removeWhere((e) => e.id == exercise.id);

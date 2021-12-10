@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/models/current_workout.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/exercises.dart';
+import 'package:lifter_track_app/models/new_exercise_notifier.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/workout_timer.dart';
-import 'package:lifter_track_app/pages/add_exercise.dart';
+import 'package:lifter_track_app/pages/AddExercisePages/exercise_name.dart';
+import 'package:lifter_track_app/pages/AddExercisePages/exercise_review.dart';
+import 'package:lifter_track_app/pages/AddExercisePages/exercise_type.dart';
+import 'package:lifter_track_app/pages/AddExercisePages/exercise_weight_input.dart';
 import 'package:lifter_track_app/pages/add_set.dart';
 import 'package:lifter_track_app/pages/exercises.dart';
 import 'package:lifter_track_app/pages/login.dart';
@@ -30,7 +34,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => Exercises()),
         ChangeNotifierProvider(create: (context) => WorkoutTimer()),
-        ChangeNotifierProvider(create: (context) => CurrentWorkout())
+        ChangeNotifierProvider(create: (context) => CurrentWorkout()),
+        ChangeNotifierProvider(create: (context) => NewExerciseNotifier())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -39,47 +44,19 @@ class MyApp extends StatelessWidget {
             backgroundColor: Color(0xff313342),
             focusColor: Color(0xff15f410)),
         home: LoginPage(),
-        onGenerateRoute: (settings) {
-          Widget page;
-          switch (settings.name) {
-            case 'login':
-              page = LoginPage();
-              break;
-            case 'sign_up':
-              page = SignUpPage();
-              break;
-            case 'home':
-              page = HomePage();
-              break;
-            case 'workout':
-              page = WorkoutPage();
-              break;
-            case 'select_exercise':
-              page = SelectExercisePage();
-              break;
-            case 'set_group':
-              Map<String, dynamic> argMap = settings.arguments;
-              SetGroup setGroup = argMap['setGroup'];
-              page = SetGroupPage(
-                setGroup: setGroup,
-              );
-              break;
-            case 'add_set':
-              Map<String, dynamic> argMap = settings.arguments;
-              void Function(Set) onSetCreated = argMap['onSetCreated'];
-              SetGroup setGroup = argMap['setGroup'];
-              page = AddSetPage(onSetCreated: onSetCreated, setGroup: setGroup,);
-              break;
-            case 'exercises':
-              page = ExercisesPage();
-              break;
-            case 'add_exercise':
-              page = AddExercisePage();
-              break;
-          }
-          return MaterialPageRoute(builder: (context) {
-            return page;
-          });
+        routes: {
+          'login': (context) => LoginPage(),
+          'sign_up': (context) => SignUpPage(),
+          'home': (context) => HomePage(),
+          'workout': (context) => WorkoutPage(),
+          'select_exercise': (context) => SelectExercisePage(),
+          'set_group': (context) => SetGroupPage(),
+          'add_set': (context) => AddSetPage(),
+          'exercises': (context) => ExercisesPage(),
+          'exercise_name': (context) => ExerciseNamePage(),
+          'exercise_type': (context) => ExerciseTypePage(),
+          'exercise_weight_input': (context) => ExerciseWeightInputPage(),
+          'exercise_review': (context) => ExerciseReviewPage(),
         },
       ),
     );

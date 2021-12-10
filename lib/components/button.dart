@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
 Widget button(
-    {String text, Color color = Colors.white, double height, bool isLoading = false, Function onPressed}) {
+    {String text, Color color = Colors.white, Color fillColor = Colors.transparent, double height, bool isLoading = false, Function onPressed}) {
   return Container(
     height: height,
     child: OutlinedButton(
       style: OutlinedButton.styleFrom(
+        backgroundColor: fillColor,
         side: BorderSide(color: color, width: 2),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(20))),
       ),
+      
       child: isLoading ? CircularProgressIndicator(color: color) : Text(
         text,
         style: new TextStyle(

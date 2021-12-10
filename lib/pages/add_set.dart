@@ -18,9 +18,8 @@ import 'package:lifter_track_app/models/set_group.dart';
 import 'package:provider/provider.dart';
 
 class AddSetPage extends StatefulWidget {
-  final void Function(Set) onSetCreated;
   final SetGroup setGroup;
-  const AddSetPage({Key key, this.onSetCreated, this.setGroup})
+  const AddSetPage({Key key, this.setGroup})
       : super(key: key);
 
   @override
@@ -63,6 +62,8 @@ class _AddSetPageState extends State<AddSetPage> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> argMap = ModalRoute.of(context).settings.arguments;
+    setGroup = argMap['setGroup'];
     initializeWeightAndReps();
     return keyboardDefocuser(
       context,
@@ -142,24 +143,8 @@ class _AddSetPageState extends State<AddSetPage> {
           onRepsChanged: repsChanged,
         );
         break;
-      case ExerciseType.weights:
-       form = ValueSetForm(
-          initialWeight: weight,
-          initialReps: reps,
-          onWeightChanged: weightChanged,
-          onRepsChanged: repsChanged,
-        );
-        break;
       case ExerciseType.bodyweight:
         form = BarbellSetForm();
-        break;
-      case ExerciseType.value:
-        form = ValueSetForm(
-          initialWeight: weight,
-          initialReps: reps,
-          onWeightChanged: weightChanged,
-          onRepsChanged: repsChanged,
-        );
         break;
     }
     return form;

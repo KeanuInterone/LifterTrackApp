@@ -67,7 +67,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               bottom: 0,
               child: IconButton(
                 onPressed: () {
-                  navigateTo('add_exercise', context);
+                  navigateTo('exercise_name', context);
                 },
                 icon: Icon(
                   Icons.add,
@@ -106,7 +106,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               color: Theme.of(context).focusColor,
               height: 60,
               onPressed: () {
-                navigateTo('add_exercise', context);
+                navigateTo('exercise_name', context);
               },
             )
           ],

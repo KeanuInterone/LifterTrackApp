@@ -22,7 +22,8 @@ class SetGroupPage extends StatefulWidget {
 class _SetGroupPageState extends State<SetGroupPage> {
   @override
   Widget build(BuildContext context) {
-    SetGroup setGroup = widget.setGroup;
+    Map<String, dynamic> argMap = ModalRoute.of(context).settings.arguments;
+    SetGroup setGroup = argMap['setGroup'];
     return background(
       context,
       child: Scaffold(

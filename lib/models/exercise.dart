@@ -4,13 +4,16 @@ import 'package:lifter_track_app/models/api.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:http/http.dart' as http;
 
-enum ExerciseType { barbell, weight, weights, bodyweight, value }
+enum ExerciseType { barbell, weight, bodyweight }
+enum WeightInput { plates, value }
 
 class Exercise {
   String id;
   String name;
   ExerciseType type;
-  Exercise({this.id, this.name, this.type});
+  bool trackPerSide;
+  WeightInput weightInput;
+  Exercise({this.id, this.name, this.type, this.trackPerSide, this.weightInput});
   factory Exercise.fromJson(Map<String, dynamic> json) {
     ExerciseType type;
     switch (json['type']) {
@@ -20,19 +23,46 @@ class Exercise {
       case 'weight':
         type = ExerciseType.weight;
         break;
-      case 'weights':
-        type = ExerciseType.weights;
-        break;
       case 'bodyweight':
         type = ExerciseType.bodyweight;
         break;
-      default:
-        type = ExerciseType.value;
     }
-    return Exercise(id: json['_id'], name: json['name'], type: type);
+    WeightInput weightInput;
+    switch (json['weight_input']) {
+      case 'plates':
+        weightInput = WeightInput.plates;
+        break;
+      case 'value':
+        weightInput = WeightInput.value;
+        break;
+    }
+    return Exercise(id: json['_id'], name: json['name'], type: type, trackPerSide: json['track_per_side'], weightInput: weightInput);
   }
 
-  static Future<Response> create(String name, String type) async {
+  static Future<Response> create(Exercise newExercise) async {
+    String type;
+    switch (newExercise.type) {
+      case ExerciseType.barbell:
+        type = 'barbell';
+        break;
+      case ExerciseType.weight:
+        type = 'weight';
+        break;
+      case ExerciseType.bodyweight:
+        type = 'bodyweight';
+        break;
+    }
+
+    String weightInput;
+    switch (newExercise.weightInput) {
+      case WeightInput.plates:
+        weightInput = 'plates';
+        break;
+      case WeightInput.value:
+        weightInput = 'value';
+        break;
+    }
+
     String url = "${API.baseURL}/exercises/create";
     var response = await http.post(
       url,
@@ -40,7 +70,7 @@ class Exercise {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'
       },
-      body: jsonEncode({'name': name, 'type': type}),
+      body: jsonEncode({'name': newExercise.name, 'type': type, 'weight_input': weightInput, 'track_per_side':newExercise.trackPerSide ?? false}),
     );
     if (response.statusCode != 200) {
       Map<String, dynamic> json = jsonDecode(response.body);
