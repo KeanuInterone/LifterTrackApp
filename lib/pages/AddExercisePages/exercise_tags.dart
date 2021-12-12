@@ -45,7 +45,7 @@ class _ExerciseTagsPageState extends State<ExerciseTagsPage> {
                             return ListView(
                               children: tagsNotifier.tags.map((tag) {
                                 bool isSelected = newExercise.exercise.tagIDs.contains(tag.id);
-                                return Padding(
+                                return Container(
                                   padding: const EdgeInsets.all(8.0),
                                   child: button(
                                     height: 60,
@@ -60,7 +60,19 @@ class _ExerciseTagsPageState extends State<ExerciseTagsPage> {
                                     }
                                   ),
                                 );
-                              }).toList(),
+                              }).toList() + [
+                                Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: button(
+                                      height: 60,
+                                      text: 'Add tag',
+                                      color: Theme.of(context).primaryColor,
+                                      onPressed: () {
+                                        navigateTo('add_tag', context);
+                                      }
+                                    ),
+                                ),
+                              ],
                             );
                           },
                         );

@@ -12,6 +12,7 @@ import 'package:lifter_track_app/pages/AddExercisePages/exercise_review.dart';
 import 'package:lifter_track_app/pages/AddExercisePages/exercise_tags.dart';
 import 'package:lifter_track_app/pages/AddExercisePages/exercise_type.dart';
 import 'package:lifter_track_app/pages/AddExercisePages/exercise_weight_input.dart';
+import 'package:lifter_track_app/pages/AddTag/add_tag.dart';
 import 'package:lifter_track_app/pages/add_set.dart';
 import 'package:lifter_track_app/pages/exercises.dart';
 import 'package:lifter_track_app/pages/login.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
           'exercise_weight_input': (context) => ExerciseWeightInputPage(),
           'exercise_tags': (context) => ExerciseTagsPage(),
           'exercise_review': (context) => ExerciseReviewPage(),
+          'add_tag': (context) => AddTagPage(),
         },
       ),
     );
