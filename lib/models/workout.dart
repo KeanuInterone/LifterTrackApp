@@ -95,4 +95,27 @@ class Workout {
     setGroup.sets.add(set);
     return Response(true, null, set);
   }
+
+  Future<Response> finish() async {
+    String url = "${API.baseURL}/workouts/$id/finish";
+    var response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ${API.authToken}'
+      },
+    );
+    if (response.statusCode != 200) {
+      Map<String, dynamic> json = jsonDecode(response.body);
+      bool hasError = json != null && json.containsKey('error');
+      return Response(
+          false,
+          hasError ? json['error'] : "There was an error finishing the workout",
+          null);
+    }
+    
+    return Response(true, null, true);
+  }
+
+
 }

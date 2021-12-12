@@ -5,17 +5,25 @@ import 'package:flutter/material.dart';
 class WorkoutTimer extends ChangeNotifier {
   int timeSeconds = 0;
   String time = '0m:0s';
-  Timer _timer;
+  Timer timer;
+  DateTime startTimeStamp;
   void start() {
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+    timeSeconds = 0;
+    startTimeStamp = DateTime.now();
+    timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       timeSeconds++;
       time = readableTimeFromSeconds(timeSeconds);
       notifyListeners();
     });
   }
 
+  void resyncTime() {
+    timeSeconds = DateTime.now().difference(startTimeStamp).inSeconds;
+    notifyListeners();
+  }
+
   void stop() {
-    _timer.cancel();
+    timer.cancel();
   } 
 
   void reset() {

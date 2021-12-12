@@ -29,4 +29,12 @@ class CurrentWorkout extends ChangeNotifier {
     notifyListeners();
     return res;
   }
+
+  Future<Response> finish(BuildContext context) async {
+    Response res = await workout.finish();
+    workout = null;
+    Provider.of<WorkoutTimer>(context, listen: false).stop();
+    notifyListeners();
+  }
+
 }

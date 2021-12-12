@@ -16,11 +16,50 @@ class HomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _HomePage();
 }
 
-class _HomePage extends State<HomePage> {
-  _HomePage() {}
+class _HomePage extends State<HomePage> with WidgetsBindingObserver {
+  BuildContext context;
+  DateTime appInactiveTimeStamp;
+  bool startWorkoutLoading = false;
+  bool finishWorkoutLoading = false;
+
+  @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print("app in resumed");
+        WorkoutTimer workoutTimer =
+            Provider.of<WorkoutTimer>(context, listen: false);
+        if (workoutTimer.timer != null) {
+          workoutTimer.resyncTime();
+        }
+        break;
+      case AppLifecycleState.inactive:
+        print("app in inactive");
+        break;
+      case AppLifecycleState.paused:
+        print("app in paused");
+        break;
+      case AppLifecycleState.detached:
+        print("app in detached");
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    this.context = context;
     return background(
       context,
       child: Scaffold(
@@ -53,41 +92,59 @@ class _HomePage extends State<HomePage> {
     );
   }
 
-  Expanded startWorkoutButton(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
-        child: Consumer2<CurrentWorkout, WorkoutTimer>(
-          builder: (context, currentWorkout, workoutTimer, child) {
-            if (currentWorkout.workout != null) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  button(
+  Widget startWorkoutButton(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+      child: Consumer2<CurrentWorkout, WorkoutTimer>(
+        builder: (context, currentWorkout, workoutTimer, child) {
+          if (currentWorkout.workout != null) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                button(
                     text: 'Return to workout: ${workoutTimer.time}',
                     color: Theme.of(context).focusColor,
                     onPressed: () {
                       navigateTo('workout', context);
                     },
-                    height: 48
-                  ),
-                  SizedBox(height: 10),
-                  button(text: 'Finish workout', color: Colors.red, height: 48)
-                ],
-              );
-            } else {
-              return button(
-                text: 'Start Workout',
-                color: Theme.of(context).focusColor,
-                onPressed: () async {
-                  Response res = await currentWorkout.startWorkout(context);
-                  if (res.success) navigateTo('workout', context);
-                },
-              );
-            }
-          },
-        ),
+                    height: 100),
+                SizedBox(height: 10),
+                button(
+                  text: 'Finish workout',
+                  color: Colors.red,
+                  isLoading: finishWorkoutLoading,
+                  height: 48,
+                  onPressed: () async {
+                    setState(() {
+                      finishWorkoutLoading = true;
+                    });
+                    await currentWorkout.finish(context);
+                    setState(() {
+                      finishWorkoutLoading = false;
+                    });
+                  },
+                )
+              ],
+            );
+          } else {
+            return button(
+              text: 'Start Workout',
+              color: Theme.of(context).focusColor,
+              isLoading: startWorkoutLoading,
+              height: 100,
+              onPressed: () async {
+                setState(() {
+                  startWorkoutLoading = true;
+                });
+                Response res = await currentWorkout.startWorkout(context);
+                if (res.success) navigateTo('workout', context);
+                setState(() {
+                  startWorkoutLoading = false;
+                });
+              },
+            );
+          }
+        },
       ),
     );
   }
