@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/formField.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
-import 'package:lifter_track_app/models/exercises.dart';
+import 'package:lifter_track_app/models/Notifiers/exercises.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseSearchBar extends StatefulWidget {

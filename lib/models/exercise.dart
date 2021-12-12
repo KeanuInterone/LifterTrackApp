@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:lifter_track_app/models/api.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:http/http.dart' as http;
+import 'package:lifter_track_app/models/tag.dart';
 
 enum ExerciseType { barbell, weight, bodyweight }
 enum WeightInput { plates, value }
@@ -10,11 +11,21 @@ enum WeightInput { plates, value }
 class Exercise {
   String id;
   String name;
+  List<String> tagIDs;
+  List<Tag> tags;
   ExerciseType type;
   bool trackPerSide;
   WeightInput weightInput;
-  Exercise({this.id, this.name, this.type, this.trackPerSide, this.weightInput});
+  Exercise({this.id, this.name, this.tagIDs, this.tags, this.type, this.trackPerSide, this.weightInput}) {
+    if (this.tagIDs == null) {
+      tagIDs = [];
+    }
+    if (this.tags == null) {
+      tags = [];
+    }
+  }
   factory Exercise.fromJson(Map<String, dynamic> json) {
+    
     ExerciseType type;
     switch (json['type']) {
       case 'barbell':
@@ -36,7 +47,7 @@ class Exercise {
         weightInput = WeightInput.value;
         break;
     }
-    return Exercise(id: json['_id'], name: json['name'], type: type, trackPerSide: json['track_per_side'], weightInput: weightInput);
+    return Exercise(id: json['_id'], name: json['name'], tagIDs: json['tags'].cast<String>(), type: type, trackPerSide: json['track_per_side'], weightInput: weightInput);
   }
 
   static Future<Response> create(Exercise newExercise) async {
@@ -70,7 +81,7 @@ class Exercise {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'
       },
-      body: jsonEncode({'name': newExercise.name, 'type': type, 'weight_input': weightInput, 'track_per_side':newExercise.trackPerSide ?? false}),
+      body: jsonEncode({'name': newExercise.name, 'type': type, 'weight_input': weightInput, 'track_per_side':newExercise.trackPerSide ?? false, 'tags': newExercise.tagIDs}),
     );
     if (response.statusCode != 200) {
       Map<String, dynamic> json = jsonDecode(response.body);

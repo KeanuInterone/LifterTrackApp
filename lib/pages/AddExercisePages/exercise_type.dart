@@ -5,7 +5,7 @@ import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
-import 'package:lifter_track_app/models/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseTypePage extends StatefulWidget {
@@ -131,7 +131,7 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
                         if(type == ExerciseType.weight) {
                           navigateTo('exercise_weight_input', context);
                         } else {
-                          navigateTo('exercise_review', context);
+                          navigateTo('exercise_tags', context);
                         }
                       }),
                   SizedBox(height: 10),
@@ -161,8 +161,12 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
               ),
             ),
           ),
-          Center(
-            child: text('New Exercise', fontSize: 20),
+          Consumer<NewExerciseNotifier>(
+            builder: (context, newExercise, child) {
+              return Center(
+                child: text(newExercise.exercise.name ?? '', fontSize: 20),
+              );
+            }
           )
         ],
       ),

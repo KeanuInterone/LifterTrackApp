@@ -10,7 +10,7 @@ import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/scrollableValuePicker.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/components/workoutHeader.dart';
-import 'package:lifter_track_app/models/current_workout.dart';
+import 'package:lifter_track_app/models/Notifiers/current_workout.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/set.dart';

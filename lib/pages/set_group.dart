@@ -5,10 +5,10 @@ import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/components/workoutHeader.dart';
-import 'package:lifter_track_app/models/current_workout.dart';
+import 'package:lifter_track_app/models/Notifiers/current_workout.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
-import 'package:lifter_track_app/models/workout_timer.dart';
+import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
 import 'package:provider/provider.dart';
 
 class SetGroupPage extends StatefulWidget {

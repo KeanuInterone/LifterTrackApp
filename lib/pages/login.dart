@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/navigator.dart';
-import 'package:lifter_track_app/models/exercises.dart';
+import 'package:lifter_track_app/models/Notifiers/exercises.dart';
+import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
 import 'package:lifter_track_app/models/user.dart';
 import 'package:lifter_track_app/pages/home.dart';
 import 'package:lifter_track_app/models/response.dart';
@@ -34,9 +35,14 @@ class _LoginPage extends State<LoginPage> {
     await API.loadAuthtoken();
     bool validAuthToken = await API.validateToken();
     if (validAuthToken) {
-      Provider.of<Exercises>(context, listen: false).getExercises();
+      initializeData();
       navigateTo('home', context);
     }
+  }
+
+  void initializeData() {
+    Provider.of<Exercises>(context, listen: false).getExercises();
+    Provider.of<TagsNotifier>(context, listen: false).getTags();
   }
 
   @override
@@ -219,6 +225,7 @@ class _LoginPage extends State<LoginPage> {
     if (_validateAndSave()) {
       Response res = await User.login(_email, _password);
       if (res.success) {
+        initializeData();
         navigateTo('home', context);
       } else {
         _errorMessage = res.errMessage;

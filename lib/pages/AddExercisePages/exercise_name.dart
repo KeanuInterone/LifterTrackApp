@@ -6,8 +6,8 @@ import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
-import 'package:lifter_track_app/models/exercises.dart';
-import 'package:lifter_track_app/models/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/exercises.dart';
+import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseNamePage extends StatefulWidget {

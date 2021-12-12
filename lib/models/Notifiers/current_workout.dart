@@ -3,7 +3,7 @@ import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/workout.dart';
-import 'package:lifter_track_app/models/workout_timer.dart';
+import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
 import 'package:provider/provider.dart';
 
 class CurrentWorkout extends ChangeNotifier {

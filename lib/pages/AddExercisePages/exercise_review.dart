@@ -6,10 +6,12 @@ import 'package:lifter_track_app/components/hide_if.dart';
 import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
+import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
 import 'package:lifter_track_app/models/exercise.dart';
-import 'package:lifter_track_app/models/exercises.dart';
-import 'package:lifter_track_app/models/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/exercises.dart';
+import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
 import 'package:lifter_track_app/models/response.dart';
+import 'package:lifter_track_app/models/tag.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseReviewPage extends StatefulWidget {
@@ -43,7 +45,7 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                   Expanded(
                     child: Consumer<NewExerciseNotifier>(
                         builder: (context, newExercise, child) {
-                          name = newExercise.exercise.name;
+                      name = newExercise.exercise.name;
                       ExerciseType type = newExercise.exercise.type;
                       bool isBarbell = type == ExerciseType.barbell;
                       bool isBodyweight = type == ExerciseType.bodyweight;
@@ -77,7 +79,8 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                                 SizedBox(
                                   height: 50,
                                 ),
-                                text('Weight Input', textAlign: TextAlign.center),
+                                text('Weight Input',
+                                    textAlign: TextAlign.center),
                                 SizedBox(height: 10),
                                 weightInputPicker(
                                     isPlates, context, newExercise, isValue),
@@ -92,6 +95,10 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                             ),
                           ),
                           SizedBox(height: 50),
+                          text('Tags', textAlign: TextAlign.center),
+                          SizedBox(height: 10),
+                          tags(newExercise, context),
+                          SizedBox(height: 50),
                           errorMessageForResponse(),
                           button(
                               text: 'Add Exercise',
@@ -104,10 +111,14 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                                 setState(() {
                                   isLoading = true;
                                 });
-                                Response res = await Provider.of<Exercises>(context, listen: false).addExercise(newExercise.exercise);
+                                Response res = await Provider.of<Exercises>(
+                                        context,
+                                        listen: false)
+                                    .addExercise(newExercise.exercise);
                                 if (res.success) {
                                   newExercise.clearExercise();
-                                  Navigator.popUntil(context, ModalRoute.withName('exercises'));
+                                  Navigator.popUntil(context,
+                                      ModalRoute.withName('exercises'));
                                 } else {
                                   setState(() {
                                     isLoading = false;
@@ -127,6 +138,27 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
         ),
       ),
     );
+  }
+
+  Container tags(NewExerciseNotifier newExercise, BuildContext context) {
+    return Container(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: newExercise.exercise.tags.map((tag) {
+                                return Padding(
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                                  child: button(
+                                    height: 60,
+                                    text: tag.name,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        );
   }
 
   Container perSidePicker(
@@ -302,8 +334,8 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
       padding: const EdgeInsets.all(10),
       child: hideIf(
         condition: errorMessageForName.isEmpty,
-        child:
-            text(errorMessageForName, color: Colors.red, textAlign: TextAlign.center),
+        child: text(errorMessageForName,
+            color: Colors.red, textAlign: TextAlign.center),
       ),
     );
   }
@@ -364,8 +396,12 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
               ),
             ),
           ),
-          Center(
-            child: text('New Exercise', fontSize: 20),
+          Consumer<NewExerciseNotifier>(
+            builder: (context, newExercise, child) {
+              return Center(
+                child: text(newExercise.exercise.name ?? '', fontSize: 20),
+              );
+            }
           )
         ],
       ),

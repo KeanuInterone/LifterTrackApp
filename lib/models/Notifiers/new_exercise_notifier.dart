@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/models/api.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
+import 'package:lifter_track_app/models/tag.dart';
 
 class NewExerciseNotifier extends ChangeNotifier {
   Exercise exercise = Exercise();
@@ -25,6 +26,18 @@ class NewExerciseNotifier extends ChangeNotifier {
 
   void setTrackPerSide(bool trackPerSide) {
     exercise.trackPerSide = trackPerSide;
+    notifyListeners();
+  }
+
+  void addTag(Tag tag) {
+    exercise.tagIDs.add(tag.id);
+    exercise.tags.add(tag);
+    notifyListeners();
+  }
+
+  void removeTag(Tag tag) {
+    exercise.tagIDs.remove(tag.id);
+    exercise.tags.remove(tag);
     notifyListeners();
   }
 
