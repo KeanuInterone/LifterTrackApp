@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/box.dart';
 import 'package:lifter_track_app/components/button.dart';
+import 'package:lifter_track_app/components/hide_if.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/components/workoutHeader.dart';
 import 'package:lifter_track_app/models/Notifiers/current_workout.dart';
+import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
+import 'package:lifter_track_app/pages/AddExercisePages/exercise_type.dart';
 import 'package:provider/provider.dart';
 
 class SetGroupPage extends StatefulWidget {
@@ -72,8 +75,7 @@ class _SetGroupPageState extends State<SetGroupPage> {
                             itemCount: setGroup.sets.length,
                             itemBuilder: (context, index) {
                               return setRow(
-                                  setGroup.sets[index].weight,
-                                  setGroup.sets[index].reps,
+                                  setGroup.sets[index],
                                   Theme.of(context).primaryColor);
                             },
                             separatorBuilder: (context, index) {
@@ -99,7 +101,7 @@ class _SetGroupPageState extends State<SetGroupPage> {
     );
   }
 
-  Widget setRow(int weight, int reps, Color color) {
+  Widget setRow(Set set, Color color) {
     return box(
       height: 80,
       borderColor: color,
@@ -108,21 +110,27 @@ class _SetGroupPageState extends State<SetGroupPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          hideIf(
+            condition: set.exercise.type == ExerciseType.bodyweight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                text('${set.weight}', fontSize: 24, fontWeight: FontWeight.bold),
+                text('Weight', fontSize: 12),
+              ],
+            ),
+          ),
+          hideIf(
+            condition: set.exercise.type == ExerciseType.bodyweight,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+              child: text('x', fontWeight: FontWeight.bold),
+            ),
+          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              text('$weight', fontSize: 24, fontWeight: FontWeight.bold),
-              text('Weight', fontSize: 12),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-            child: text('x', fontWeight: FontWeight.bold),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              text('$reps', fontSize: 24, fontWeight: FontWeight.bold),
+              text('${set.reps}', fontSize: 24, fontWeight: FontWeight.bold),
               text('Reps', fontSize: 12),
             ],
           ),

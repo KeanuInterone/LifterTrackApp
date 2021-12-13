@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/BarbellSetForm.dart';
+import 'package:lifter_track_app/components/BodyweightSetForm.dart';
 import 'package:lifter_track_app/components/ValueSetForm.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
@@ -144,7 +145,11 @@ class _AddSetPageState extends State<AddSetPage> {
         );
         break;
       case ExerciseType.bodyweight:
-        form = BarbellSetForm();
+        weight = 0;
+        form = BodyweightSetForm(
+          initialReps: reps,
+          onRepsChanged: repsChanged,
+        );
         break;
     }
     return form;
