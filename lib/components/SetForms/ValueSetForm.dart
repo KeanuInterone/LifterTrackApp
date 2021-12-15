@@ -36,7 +36,7 @@ class ValueSetForm extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ScrollableValuePicker(
-              initialValue: initialWeight,
+              value: initialWeight,
               increment: 1,
               onValueChanged: onWeightChanged,
             ),
@@ -48,7 +48,7 @@ class ValueSetForm extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ScrollableValuePicker(
-              initialValue: initialReps,
+              value: initialReps,
               increment: 1,
               onValueChanged: onRepsChanged,
             ),

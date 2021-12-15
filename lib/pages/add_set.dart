@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lifter_track_app/components/BarbellSetForm.dart';
-import 'package:lifter_track_app/components/BodyweightSetForm.dart';
-import 'package:lifter_track_app/components/ValueSetForm.dart';
+import 'package:lifter_track_app/components/SetForms/BarbellPlateSelectorSetForm.dart';
+import 'package:lifter_track_app/components/SetForms/BarbellSetForm.dart';
+import 'package:lifter_track_app/components/SetForms/BodyweightSetForm.dart';
+import 'package:lifter_track_app/components/SetForms/ValueSetForm.dart';
+import 'package:lifter_track_app/components/SetForms/WeightPlateSelectorSetForm.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/exercise_search_bar.dart';
@@ -20,8 +22,7 @@ import 'package:provider/provider.dart';
 
 class AddSetPage extends StatefulWidget {
   final SetGroup setGroup;
-  const AddSetPage({Key key, this.setGroup})
-      : super(key: key);
+  const AddSetPage({Key key, this.setGroup}) : super(key: key);
 
   @override
   _AddSetPageState createState() => _AddSetPageState(setGroup: setGroup);
@@ -129,7 +130,7 @@ class _AddSetPageState extends State<AddSetPage> {
     Widget form;
     switch (exercise.type) {
       case ExerciseType.barbell:
-        form = BarbellSetForm(
+        form = BarbellPlateSelectorSetForm(
           initalWeight: weight,
           initialReps: reps,
           onWeightChanged: weightChanged,
@@ -137,12 +138,21 @@ class _AddSetPageState extends State<AddSetPage> {
         );
         break;
       case ExerciseType.weight:
-        form = ValueSetForm(
-          initialWeight: weight,
-          initialReps: reps,
-          onWeightChanged: weightChanged,
-          onRepsChanged: repsChanged,
-        );
+        if (exercise.weightInput == WeightInput.plates) {
+          form = WeightPlateSelectorSetForm(
+            initalWeight: weight,
+            initialReps: reps,
+            onWeightChanged: weightChanged,
+            onRepsChanged: repsChanged,
+          );
+        } else {
+          form = ValueSetForm(
+            initialWeight: weight,
+            initialReps: reps,
+            onWeightChanged: weightChanged,
+            onRepsChanged: repsChanged,
+          );
+        }
         break;
       case ExerciseType.bodyweight:
         weight = 0;

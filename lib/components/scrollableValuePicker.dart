@@ -4,12 +4,13 @@ import 'package:lifter_track_app/components/text.dart';
 import 'package:flutter/services.dart';
 
 class ScrollableValuePicker extends StatefulWidget {
-  final int initialValue;
+  final int value;
+  final TextEditingController textController;
   final int increment;
   final void Function(int value) onValueChanged;
 
   const ScrollableValuePicker(
-      {Key key, this.initialValue, this.onValueChanged, this.increment})
+      {Key key, this.value, this.textController, this.onValueChanged, this.increment})
       : super(key: key);
 
   @override
@@ -27,30 +28,25 @@ class _ScrollableValuePickerState extends State<ScrollableValuePicker> {
   @override
   void initState() {
     super.initState();
-    currentValue = widget.initialValue;
+    currentValue = widget.value;
     displayedValue = currentValue;
-    textController = TextEditingController(text: '$displayedValue');
+    textController = widget.textController;
+    if (textController == null) {
+      textController = TextEditingController();
+    }
+    textController.text = '$displayedValue';
     focusNode = FocusNode();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         textController.selection =
             TextSelection(baseOffset: 0, extentOffset: textController.text.length);
-      }
+      } 
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // child: Container(
-      //     height: 50,
-      //     decoration: BoxDecoration(
-      //       border: Border.all(color: Colors.white),
-      //       borderRadius: BorderRadius.all(Radius.circular(20)),
-      //     ),
-      //     child: Center(
-      //       child: text('$displayedValue'),
-      //     )),
       child: Column(children: [
         IconButton(
           onPressed: () {

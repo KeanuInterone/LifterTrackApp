@@ -29,7 +29,7 @@ class BodyweightSetForm extends StatelessWidget {
       child: Expanded(
         flex: 1,
         child: ScrollableValuePicker(
-          initialValue: initialReps,
+          value: initialReps,
           increment: 1,
           onValueChanged: onRepsChanged,
         ),

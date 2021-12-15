@@ -173,7 +173,7 @@ class _BarbellSetFormState extends State<BarbellSetForm> {
           Expanded(
             flex: 1,
             child: ScrollableValuePicker(
-              initialValue: widget.initialReps,
+              value: widget.initialReps,
               increment: 1,
               onValueChanged: widget.onRepsChanged,
             ),
@@ -217,7 +217,7 @@ class WeightSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScrollableValuePicker(
-      initialValue: initialWeight,
+      value: initialWeight,
       increment: 5,
       onValueChanged: (value) {
         onValueChanged(value);
