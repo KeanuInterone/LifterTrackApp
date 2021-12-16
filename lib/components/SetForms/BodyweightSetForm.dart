@@ -30,14 +30,18 @@ class BodyweightSetForm extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
       child: Expanded(
         flex: 1,
-        child: Column(children: [
-          text('Reps', fontSize: 18, fontWeight: FontWeight.bold),
-          SizedBox(height: 10,),
-          ValueField(
-            value: initialReps,
-            onValueChanged: onRepsChanged,
-          ),
-        ]),
+        child: Column(
+          children: [
+            text('Reps', fontSize: 18, fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 10,
+            ),
+            ValueField(
+              value: initialReps,
+              onValueChanged: onRepsChanged,
+            ),
+          ],
+        ),
       ),
     );
   }
