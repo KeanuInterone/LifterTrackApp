@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lifter_track_app/components/ValueField.dart';
 import 'package:lifter_track_app/components/button.dart';
+import 'package:lifter_track_app/components/hide_if.dart';
 import 'package:lifter_track_app/components/scrollableValuePicker.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:provider/provider.dart';
@@ -126,99 +128,90 @@ class _WeightPlateSelectorSetFormState
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             weightAndReps(plateWeight, weightTextController),
+            SizedBox(height: 30),
             Expanded(
-              child: LayoutBuilder(builder: (context, constraints) {
-                return ListView(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  children: [
-                    Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                child: button(
-                                    text: 'Clear Weight',
-                                    onPressed: () {
-                                      plateWeight.clear();
-                                      weightTextController.text =
-                                          '${plateWeight.weight}';
-                                      widget.onWeightChanged(plateWeight.weight);
-                                    }),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  button(
+                      text: 'Clear Weight',
+                      borderWidth: 1,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 17,
+                      height: 48,
+                      onPressed: () {
+                        plateWeight.clear();
+                        weightTextController.text =
+                            '${plateWeight.weight}';
+                        widget.onWeightChanged(plateWeight.weight);
+                      }),
+                  SizedBox(height: 20),
+                  text('Per side', textAlign: TextAlign.center),
+                  Expanded(
+                    child: GridView.count(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                      childAspectRatio: 0.82,
+                      children: weights.map((weight) {
+                        int plateAmount = plateWeight.plateAmounts[weight];
+                        return Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 30,
+                                child: hideIf(
+                                    condition: plateAmount == 0,
+                                    child: text('x $plateAmount', fontWeight: FontWeight.bold)),
                               ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: ListView(
-                                      physics: ClampingScrollPhysics(),
-                                      children: ((plateWeight.quantizedPlatesList
-                                                      .length ==
-                                                  0)
-                                              ? [
-                                                  text('No plates added',
-                                                      textAlign:
-                                                          TextAlign.center)
-                                                ]
-                                              : plateWeight
-                                                  .quantizedPlatesList
-                                                  .map((item) => text(item,
-                                                      textAlign:
-                                                          TextAlign.center))
-                                                  .toList())),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        height: constraints.maxHeight / 2),
-                    Container(
-                      height: constraints.maxHeight / 2,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: weights.map((weight) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: GestureDetector(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: text(weight),
-                                  width: constraints.maxHeight / 4,
-                                  height: constraints.maxHeight / 4,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade600.withAlpha(50),
-                                    border:
-                                        Border.all(color: Colors.grey.shade600),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                          constraints.maxHeight / 8),
+                              Expanded(
+                                child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                  double size = constraints.maxHeight >
+                                          constraints.maxWidth
+                                      ? constraints.maxWidth
+                                      : constraints.maxHeight;
+                                  return Center(
+                                    child: GestureDetector(
+                                      child: Container(
+                                        height: size,
+                                        width: size,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade800,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(size / 2)),
+                                        ),
+                                        child: Center(
+                                          child: text('$weight',
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        HapticFeedback.heavyImpact();
+                                        plateWeight.addPlate(weight);
+                                        weightTextController.text =
+                                            '${plateWeight.weight}';
+                                        widget.onWeightChanged(
+                                            plateWeight.weight);
+                                      },
                                     ),
-                                  ),
-                                ),
-                                onTap: () {
-                                  HapticFeedback.heavyImpact();
-                                  plateWeight.addPlate(weight);
-                                  weightTextController.text =
-                                      '${plateWeight.weight}';
-                                  widget.onWeightChanged(plateWeight.weight);
-                                },
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    )
-                  ],
-                );
-              }),
+                                  );
+                                }),
+                              )
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         );
@@ -226,24 +219,27 @@ class _WeightPlateSelectorSetFormState
     );
   }
 
-  
-
   Widget weightAndReps(WeightNotifier plateWeight,
-      TextEditingController weightTextController) {
+      TextEditingController barWeightTextController) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           flex: 1,
-          child: ScrollableValuePicker(
-            value: plateWeight.weight,
-            textController: weightTextController,
-            increment: 5,
-            onValueChanged: (value) {
-              plateWeight.setWeight(value);
-              widget.onWeightChanged(plateWeight.weight);
-            },
-          ),
+          child: Column(children: [
+            text('Weight', fontSize: 15, fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 5,
+            ),
+            ValueField(
+              value: plateWeight.weight,
+              textController: barWeightTextController,
+              onValueChanged: (value) {
+                plateWeight.setWeight(value);
+                widget.onWeightChanged(plateWeight.weight);
+              },
+            ),
+          ]),
         ),
         Container(
           width: 40,
@@ -251,11 +247,16 @@ class _WeightPlateSelectorSetFormState
         ),
         Expanded(
           flex: 1,
-          child: ScrollableValuePicker(
-            value: widget.initialReps,
-            increment: 1,
-            onValueChanged: widget.onRepsChanged,
-          ),
+          child: Column(children: [
+            text('Reps', fontSize: 15, fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 5,
+            ),
+            ValueField(
+              value: widget.initialReps,
+              onValueChanged: widget.onRepsChanged,
+            ),
+          ]),
         ),
       ],
     );

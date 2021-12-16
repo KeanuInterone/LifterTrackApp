@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/ValueField.dart';
 import 'package:lifter_track_app/components/scrollableValuePicker.dart';
+import 'package:lifter_track_app/components/text.dart';
 
 class BodyweightSetForm extends StatelessWidget {
   final int initialReps;
   final void Function(int) onRepsChanged;
-  const BodyweightSetForm(
-      {Key key,
-      this.initialReps,
-      this.onRepsChanged,})
-      : super(key: key);
+  const BodyweightSetForm({
+    Key key,
+    this.initialReps,
+    this.onRepsChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +30,14 @@ class BodyweightSetForm extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
       child: Expanded(
         flex: 1,
-        child: ScrollableValuePicker(
-          value: initialReps,
-          increment: 1,
-          onValueChanged: onRepsChanged,
-        ),
+        child: Column(children: [
+          text('Reps', fontSize: 18, fontWeight: FontWeight.bold),
+          SizedBox(height: 10,),
+          ValueField(
+            value: initialReps,
+            onValueChanged: onRepsChanged,
+          ),
+        ]),
       ),
     );
   }

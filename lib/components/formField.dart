@@ -6,6 +6,7 @@ Widget formField(
     TextEditingController controller,
     FocusNode focusNode,
     String initialValue,
+    FontWeight fontWeight,
     TextInputType keyboardType = TextInputType.text,
     TextInputAction textInputAction,
     TextAlign textAlign = TextAlign.start,
@@ -30,7 +31,7 @@ Widget formField(
     autocorrect: autoCorrect,
     textAlign: textAlign,
     textCapitalization: textCapitalization,
-    style: TextStyle(color: Colors.white),
+    style: TextStyle(color: Colors.white, fontWeight: fontWeight),
     cursorColor: Colors.white,
     decoration: InputDecoration(
       isDense: true,

@@ -98,9 +98,8 @@ class _AddSetPageState extends State<AddSetPage> {
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
           children: [
-            ExerciseSearchBar(
-              initialValue: exercise.name,
-            ),
+            text('${exercise.name}', fontSize: 30, textAlign: TextAlign.center),
+            SizedBox(height: 10),
             Container(
               height: constraints.maxHeight - 135,
               child: setForm(exercise),

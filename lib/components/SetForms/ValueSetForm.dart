@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/ValueField.dart';
 import 'package:lifter_track_app/components/scrollableValuePicker.dart';
 import 'package:lifter_track_app/components/text.dart';
 
@@ -35,10 +36,17 @@ class ValueSetForm extends StatelessWidget {
         children: [
           Expanded(
             flex: 1,
-            child: ScrollableValuePicker(
-              value: initialWeight,
-              increment: 1,
-              onValueChanged: onWeightChanged,
+            child: Column(
+              children: [
+                text('Weight', fontSize: 18, fontWeight: FontWeight.bold),
+                SizedBox(
+                  height: 10,
+                ),
+                ValueField(
+                  value: initialWeight,
+                  onValueChanged: onWeightChanged,
+                ),
+              ],
             ),
           ),
           Container(
@@ -47,12 +55,19 @@ class ValueSetForm extends StatelessWidget {
           ),
           Expanded(
             flex: 1,
-            child: ScrollableValuePicker(
-              value: initialReps,
-              increment: 1,
-              onValueChanged: onRepsChanged,
+            child: Column(
+              children: [
+                text('Reps', fontSize: 18, fontWeight: FontWeight.bold),
+                SizedBox(
+                  height: 10,
+                ),
+                ValueField(
+                  value: initialReps,
+                  onValueChanged: onRepsChanged,
+                ),
+              ],
             ),
-          ),
+          )
         ],
       ),
     );

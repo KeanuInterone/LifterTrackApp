@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lifter_track_app/components/ValueField.dart';
 import 'package:lifter_track_app/components/button.dart';
+import 'package:lifter_track_app/components/hide_if.dart';
 import 'package:lifter_track_app/components/scrollableValuePicker.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:provider/provider.dart';
@@ -128,214 +130,95 @@ class _BarbellPlateSelectorSetFormState
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             weightAndReps(barbellWeight, barweightTextController),
+            SizedBox(height: 30),
             Expanded(
-              child: LayoutBuilder(builder: (context, constraints) {
-                return ListView(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  children: [
-                    Container(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                child: button(
-                                    text: 'Clear Weight',
-                                    onPressed: () {
-                                      barbellWeight.clear();
-                                      barweightTextController.text =
-                                          '${barbellWeight.weight}';
-                                      widget.onWeightChanged(barbellWeight.weight);
-                                    }),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  button(
+                      text: 'Clear Weight',
+                      borderWidth: 1,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 17,
+                      height: 48,
+                      onPressed: () {
+                        barbellWeight.clear();
+                        barweightTextController.text =
+                            '${barbellWeight.weight}';
+                        widget.onWeightChanged(barbellWeight.weight);
+                      }),
+                  SizedBox(height: 20),
+                  text('Per side', textAlign: TextAlign.center),
+                  Expanded(
+                    child: GridView.count(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 5,
+                      crossAxisSpacing: 5,
+                      childAspectRatio: 0.82,
+                      children: weights.map((weight) {
+                        int plateAmount = barbellWeight.plateAmounts[weight];
+                        return Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 30,
+                                child: hideIf(
+                                    condition: plateAmount == 0,
+                                    child: text('x $plateAmount', fontWeight: FontWeight.bold)),
                               ),
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: ListView(
-                                      physics: ClampingScrollPhysics(),
-                                      children: [
-                                            text('Each side',
-                                                textAlign: TextAlign.center),
-                                            SizedBox(height: 10)
-                                          ] +
-                                          ((barbellWeight.quantizedPlatesList
-                                                      .length ==
-                                                  0)
-                                              ? [
-                                                  text('No plates added',
-                                                      textAlign:
-                                                          TextAlign.center)
-                                                ]
-                                              : barbellWeight
-                                                  .quantizedPlatesList
-                                                  .map((item) => text(item,
-                                                      textAlign:
-                                                          TextAlign.center))
-                                                  .toList())),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        height: constraints.maxHeight / 2),
-                    Container(
-                      height: constraints.maxHeight / 2,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: weights.map((weight) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: GestureDetector(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: text(weight),
-                                  width: constraints.maxHeight / 4,
-                                  height: constraints.maxHeight / 4,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade600.withAlpha(50),
-                                    border:
-                                        Border.all(color: Colors.grey.shade600),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(
-                                          constraints.maxHeight / 8),
+                              Expanded(
+                                child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                  double size = constraints.maxHeight >
+                                          constraints.maxWidth
+                                      ? constraints.maxWidth
+                                      : constraints.maxHeight;
+                                  return Center(
+                                    child: GestureDetector(
+                                      child: Container(
+                                        height: size,
+                                        width: size,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade800,
+                                          border: Border.all(
+                                            color: Colors.white,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(size / 2)),
+                                        ),
+                                        child: Center(
+                                          child: text('$weight',
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        HapticFeedback.heavyImpact();
+                                        barbellWeight.addPlate(weight);
+                                        barweightTextController.text =
+                                            '${barbellWeight.weight}';
+                                        widget.onWeightChanged(
+                                            barbellWeight.weight);
+                                      },
                                     ),
-                                  ),
-                                ),
-                                onTap: () {
-                                  HapticFeedback.heavyImpact();
-                                  barbellWeight.addPlate(weight);
-                                  barweightTextController.text =
-                                      '${barbellWeight.weight}';
-                                  widget.onWeightChanged(barbellWeight.weight);
-                                },
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    )
-                  ],
-                );
-              }),
+                                  );
+                                }),
+                              )
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         );
       }),
     );
-  }
-
-  Widget barbell() {
-    return LayoutBuilder(builder: (context, constraints) {
-      double height = constraints.maxHeight;
-      double width = constraints.maxWidth;
-      return Container(
-        //color: Colors.red,
-        height: height,
-        width: width,
-        child: Consumer<BarbellWeightNotifier>(
-            builder: (context, barbellWeight, child) {
-          List<String> plateStrings =
-              getBarbellPlateAmounts(barbellWeight.weight);
-          double start = 70;
-          double plateWidth = 30;
-          double fullPlateHeight = 200;
-          double fiveHeight = 100;
-          double twoPointFiveHeight = 50;
-          List<Positioned> plates = [];
-          for (var i = 0; i < plateStrings.length; i++) {
-            double plateHeight;
-            Color plateColor;
-            switch (plateStrings[i]) {
-              case '45':
-                plateHeight = fullPlateHeight;
-                plateColor = Colors.blue;
-                break;
-              case '25':
-                plateHeight = fullPlateHeight;
-                plateColor = Colors.green;
-                break;
-              case '10':
-                plateHeight = fullPlateHeight;
-                plateColor = Colors.grey.shade800;
-                break;
-              case '5':
-                plateHeight = fiveHeight;
-                plateColor = Colors.black;
-                break;
-              case '2.5':
-                plateHeight = twoPointFiveHeight;
-                plateColor = Colors.black;
-                break;
-              default:
-            }
-            plates.add(
-              Positioned(
-                right: start + plateWidth * i,
-                top: height / 2 - plateHeight / 2,
-                child: Container(
-                  height: plateHeight,
-                  width: plateWidth,
-                  decoration: BoxDecoration(
-                    color: plateColor,
-                    border: Border.all(color: Colors.white, width: 0.5),
-                  ),
-                ),
-              ),
-            );
-          }
-          return Stack(
-            children: [
-                  Positioned(
-                    right: 0,
-                    top: height / 2 - 10,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
-                        border: Border.all(color: Colors.white, width: 0.5),
-                      ),
-                      height: 20,
-                      width: 50,
-                    ),
-                  ),
-                  Positioned(
-                    right: 50,
-                    top: height / 2 - 25,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
-                        border: Border.all(color: Colors.white, width: 0.5),
-                      ),
-                      height: 50,
-                      width: 20,
-                    ),
-                  ),
-                  Positioned(
-                    right: 70,
-                    top: height / 2 - 15,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade800,
-                        border: Border.all(color: Colors.white, width: 0.5),
-                      ),
-                      height: 30,
-                      width: 250,
-                    ),
-                  ),
-                ] +
-                plates,
-          );
-        }),
-      );
-    });
   }
 
   Widget weightAndReps(BarbellWeightNotifier barbellWieght,
@@ -345,15 +228,20 @@ class _BarbellPlateSelectorSetFormState
       children: [
         Expanded(
           flex: 1,
-          child: ScrollableValuePicker(
-            value: barbellWieght.weight,
-            textController: barWeightTextController,
-            increment: 5,
-            onValueChanged: (value) {
-              barbellWieght.setWeight(value);
-              widget.onWeightChanged(barbellWieght.weight);
-            },
-          ),
+          child: Column(children: [
+            text('Weight', fontSize: 15, fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 5,
+            ),
+            ValueField(
+              value: barbellWieght.weight,
+              textController: barWeightTextController,
+              onValueChanged: (value) {
+                barbellWieght.setWeight(value);
+                widget.onWeightChanged(barbellWieght.weight);
+              },
+            ),
+          ]),
         ),
         Container(
           width: 40,
@@ -361,58 +249,18 @@ class _BarbellPlateSelectorSetFormState
         ),
         Expanded(
           flex: 1,
-          child: ScrollableValuePicker(
-            value: widget.initialReps,
-            increment: 1,
-            onValueChanged: widget.onRepsChanged,
-          ),
+          child: Column(children: [
+            text('Reps', fontSize: 15, fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 5,
+            ),
+            ValueField(
+              value: widget.initialReps,
+              onValueChanged: widget.onRepsChanged,
+            ),
+          ]),
         ),
       ],
-    );
-  }
-
-  List<String> getBarbellPlateAmounts(int value) {
-    if (value <= 45) return [];
-    print(value);
-    int plateWeight = value - 45;
-    double persideWeight = plateWeight.toDouble() / 2.0;
-    int fourtyFivesCount = persideWeight ~/ 45;
-    persideWeight -= (fourtyFivesCount * 45);
-    int twentyFivesCount = persideWeight ~/ 25;
-    persideWeight -= (twentyFivesCount * 25);
-    int tensCount = persideWeight ~/ 10;
-    persideWeight -= (tensCount * 10);
-    int fivesCount = persideWeight ~/ 5;
-    persideWeight -= (fivesCount * 5);
-    int twoPointFivesCount = persideWeight ~/ 2.5;
-
-    List<String> plates = [];
-    plates.addAll(List.generate(fourtyFivesCount, (index) => '45'));
-    plates.addAll(List.generate(twentyFivesCount, (index) => '25'));
-    plates.addAll(List.generate(tensCount, (index) => '10'));
-    plates.addAll(List.generate(fivesCount, (index) => '5'));
-    plates.addAll(List.generate(twoPointFivesCount, (index) => '2.5'));
-
-    return plates;
-  }
-}
-
-class WeightSelector extends StatelessWidget {
-  final int initialWeight;
-  final Function(int) onValueChanged;
-  const WeightSelector({Key key, this.initialWeight, this.onValueChanged})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ScrollableValuePicker(
-      value: initialWeight,
-      increment: 5,
-      onValueChanged: (value) {
-        onValueChanged(value);
-        Provider.of<BarbellWeightNotifier>(context, listen: false)
-            .setWeight(value);
-      },
     );
   }
 }
