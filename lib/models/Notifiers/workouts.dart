@@ -6,10 +6,15 @@ class Workouts extends ChangeNotifier {
   List<Workout> workouts = [];
 
   Future<Response> getWorkouts() async {
-
     Response res = await Workout.getLatestWorkouts();
     workouts = res.data;
     return res;
+  } 
 
-  }  
+  void addWorkout(Workout workout) {
+    workouts.insert(0, workout);
+    notifyListeners();
+  } 
+
+  
 }

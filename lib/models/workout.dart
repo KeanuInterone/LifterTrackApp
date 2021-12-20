@@ -8,16 +8,17 @@ import 'package:lifter_track_app/models/set_group.dart';
 
 class Workout {
   String id;
+  DateTime startTime;
   List<SetGroup> setGroups;
 
-  Workout({this.id, this.setGroups});
+  Workout({this.id, this.setGroups, this.startTime});
 
   factory Workout.fromJson(Map<String, dynamic> json) {
     List<SetGroup> setGroups = [];
     for (Map<String, dynamic> setGroupJson in json['set_groups']) {
       setGroups.add(SetGroup.fromJson(setGroupJson)); 
     }
-    return Workout(id: json['_id'], setGroups: setGroups);
+    return Workout(id: json['_id'], setGroups: setGroups, startTime: DateTime.parse(json['start_time']));
   }
 
   static Future<Response> create() async {

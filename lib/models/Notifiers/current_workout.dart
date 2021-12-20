@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/models/Notifiers/workouts.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/set_group.dart';
@@ -32,9 +33,11 @@ class CurrentWorkout extends ChangeNotifier {
 
   Future<Response> finish(BuildContext context) async {
     Response res = await workout.finish();
+    Provider.of<Workouts>(context, listen: false).addWorkout(workout);
     workout = null;
     Provider.of<WorkoutTimer>(context, listen: false).stop();
     notifyListeners();
+    return res;
   }
 
 }
