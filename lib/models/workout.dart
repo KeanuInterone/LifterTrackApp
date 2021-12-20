@@ -13,7 +13,11 @@ class Workout {
   Workout({this.id, this.setGroups});
 
   factory Workout.fromJson(Map<String, dynamic> json) {
-    return Workout(id: json['_id'], setGroups: []);
+    List<SetGroup> setGroups = [];
+    for (Map<String, dynamic> setGroupJson in json['set_groups']) {
+      setGroups.add(SetGroup.fromJson(setGroupJson)); 
+    }
+    return Workout(id: json['_id'], setGroups: setGroups);
   }
 
   static Future<Response> create() async {
@@ -116,6 +120,23 @@ class Workout {
     
     return Response(true, null, true);
   }
+
+
+
+  static Future<Response> getLatestWorkouts() async {
+    Response res = await API.makeApiRequest(path: 'workouts');
+    if (res.success) {
+      List<Workout> workouts = [];
+      for (Map<String, dynamic> json in res.data) {
+        workouts.add(Workout.fromJson(json));
+      }
+      res.data = workouts;
+    }
+    return res;
+
+  }
+
+  
 
 
 }

@@ -26,11 +26,16 @@ class SetGroup {
       exerciseId = json['focus_exercise'];
     }
 
+    List<Set> sets = [];
+    for (Map<String, dynamic> setJson in json['sets']) {
+      sets.add(Set.fromJson(setJson));
+    }
+
     return SetGroup(
       id: json['_id'],
       focusExerciseId: exerciseId,
       focusExercise: exercise,
-      sets: []
+      sets: sets
     );
   }
 

@@ -4,11 +4,15 @@ import 'package:lifter_track_app/models/tag.dart';
 
 class TagsNotifier extends ChangeNotifier {
   List<Tag> tags = [];
+  Map<String, Tag> tagWithId = {};
 
   Future<Response> getTags() async {
     Response res = await Tag.getTags();
-    if (res.success) {
-      tags = res.data;
+    if (!res.success) return res;
+    tags = res.data;
+    tagWithId = {};
+    for (Tag tag in tags) {
+      tagWithId[tag.id] = tag;
     }
     notifyListeners();
     return res;

@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/models/api.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
+import 'package:lifter_track_app/models/tag.dart';
 
 class Exercises extends ChangeNotifier {
   List<Exercise> _exercises = [];
+  Map<String, Exercise> exerciseWithId = {};
+  Map<String, List<Exercise>> groupedExercises = {};
   List<Exercise> get exercises => _exercises;
   void setExercises(List<Exercise> exercises) {
     _exercises = exercises;
@@ -42,8 +45,18 @@ class Exercises extends ChangeNotifier {
 
     List<dynamic> json = jsonDecode(response.body);
     List<Exercise> exerciseList = [];
+    exerciseWithId = {};
+    groupedExercises = {};
     json.forEach((exerciseJson) { 
-      exerciseList.add(Exercise.fromJson(exerciseJson));
+      Exercise exercise = Exercise.fromJson(exerciseJson);
+      exerciseList.add(exercise);
+      exerciseWithId[exercise.id] = exercise;
+      for(String tagId in exercise.tagIDs) {
+        if (groupedExercises[tagId] == null) {
+          groupedExercises[tagId] = [];
+        }
+        groupedExercises[tagId].add(exercise);
+      }
     });
     setExercises(exerciseList);
     return  Response(true, null, null);

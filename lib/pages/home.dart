@@ -163,6 +163,9 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver {
                 text: 'Workouts',
                 color: Theme.of(context).primaryColor,
                 height: 56,
+                onPressed: () {
+                  navigateTo('workouts', context);
+                }
               ),
             ),
             Container(
@@ -175,7 +178,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver {
                   navigateTo('exercises', context);
                 },
               ),
-            )
+            ),
           ],
         ),
       ),

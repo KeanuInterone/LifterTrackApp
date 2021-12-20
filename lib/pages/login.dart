@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/hide_if.dart';
 import 'package:lifter_track_app/components/navigator.dart';
+import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/Notifiers/exercises.dart';
 import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/workouts.dart';
 import 'package:lifter_track_app/models/user.dart';
 import 'package:lifter_track_app/pages/home.dart';
 import 'package:lifter_track_app/models/response.dart';
@@ -43,6 +46,7 @@ class _LoginPage extends State<LoginPage> {
   void initializeData() {
     Provider.of<Exercises>(context, listen: false).getExercises();
     Provider.of<TagsNotifier>(context, listen: false).getTags();
+    Provider.of<Workouts>(context, listen: false).getWorkouts();
   }
 
   @override
@@ -98,6 +102,7 @@ class _LoginPage extends State<LoginPage> {
           children: <Widget>[
             _emailWidget(),
             _passwordWidget(),
+            hideIf(condition: _errorMessage == '', child: text(_errorMessage, color: Colors.red, textAlign: TextAlign.center)),
             _loginButtonWidget()
           ],
         ),
@@ -138,6 +143,7 @@ class _LoginPage extends State<LoginPage> {
       padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: button(
         text: "Login",
+        isLoading: _isLoading,
         color: Theme.of(context).primaryColor,
         height: 48.0,
         onPressed: _validateAndSubmit,
@@ -205,7 +211,6 @@ class _LoginPage extends State<LoginPage> {
       ),
     );
   }
-
 
   bool _validateAndSave() {
     final form = _formKey.currentState;

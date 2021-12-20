@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/models/Notifiers/current_workout.dart';
 import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/workouts.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/Notifiers/exercises.dart';
 import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
@@ -20,8 +21,8 @@ import 'package:lifter_track_app/pages/select_exercise.dart';
 import 'package:lifter_track_app/pages/set_group.dart';
 import 'package:lifter_track_app/pages/sign_up.dart';
 import 'package:lifter_track_app/pages/workout.dart';
+import 'package:lifter_track_app/pages/workouts.dart';
 import 'package:provider/provider.dart';
-import 'models/api.dart';
 import 'pages/home.dart';
 
 void main() {
@@ -43,7 +44,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => WorkoutTimer()),
         ChangeNotifierProvider(create: (context) => CurrentWorkout()),
         ChangeNotifierProvider(create: (context) => NewExerciseNotifier()),
-        ChangeNotifierProvider(create: (context) => TagsNotifier())
+        ChangeNotifierProvider(create: (context) => TagsNotifier()),
+        ChangeNotifierProvider(create: (context) => Workouts())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -67,6 +69,7 @@ class _MyAppState extends State<MyApp> {
           'exercise_tags': (context) => ExerciseTagsPage(),
           'exercise_review': (context) => ExerciseReviewPage(),
           'add_tag': (context) => AddTagPage(),
+          'workouts': (context) => WorkoutsPage()
         },
       ),
     );
