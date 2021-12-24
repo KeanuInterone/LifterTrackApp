@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/keyboardDefocuser.dart';
@@ -31,7 +32,16 @@ class _ExerciseWeightInputPageState extends State<ExerciseWeightInputPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  header(context),
+                  appBar(
+                    context,
+                    centerChild: Consumer<NewExerciseNotifier>(
+                        builder: (context, newExercise, child) {
+                      return Center(
+                        child:
+                            text(newExercise.exercise.name ?? '', fontSize: 20),
+                      );
+                    }),
+                  ),
                   SizedBox(height: 20),
                   text('Almost there! Now select how you want to enter your weight. If your exercise uses plates, track it with plates and the app will do the adding for you! Otherwise use the simple number value.',
                       textAlign: TextAlign.center),
@@ -116,35 +126,6 @@ class _ExerciseWeightInputPageState extends State<ExerciseWeightInputPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget header(context) {
-    return Container(
-      height: 80,
-      child: Stack(
-        children: [
-          Container(
-            constraints: BoxConstraints.expand(width: 24),
-            child: IconButton(
-              onPressed: () {
-                pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Consumer<NewExerciseNotifier>(
-            builder: (context, newExercise, child) {
-              return Center(
-                child: text(newExercise.exercise.name ?? '', fontSize: 20),
-              );
-            }
-          )
-        ],
       ),
     );
   }

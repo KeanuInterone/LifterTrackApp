@@ -94,14 +94,15 @@ class _AddSetPageState extends State<AddSetPage> {
     return Expanded(
       flex: 1,
       child: LayoutBuilder(builder: (context, constraints) {
-        return ListView(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
+        return Column(
+          // shrinkWrap: true,
+          // physics: ClampingScrollPhysics(),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             text('${exercise.name}', fontSize: 30, textAlign: TextAlign.center),
             SizedBox(height: 10),
-            Container(
-              height: constraints.maxHeight - 135,
+            Expanded(
+              //height: constraints.maxHeight - 135,
               child: setForm(exercise),
             ),
             errorMessage == null

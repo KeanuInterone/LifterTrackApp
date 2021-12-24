@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/formField.dart';
@@ -41,7 +42,16 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  header(context),
+                  appBar(
+                    context,
+                    centerChild: Consumer<NewExerciseNotifier>(
+                        builder: (context, newExercise, child) {
+                      return Center(
+                        child:
+                            text(newExercise.exercise.name ?? '', fontSize: 20),
+                      );
+                    }),
+                  ),
                   Expanded(
                     child: Consumer<NewExerciseNotifier>(
                         builder: (context, newExercise, child) {
@@ -142,23 +152,22 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
 
   Container tags(NewExerciseNotifier newExercise, BuildContext context) {
     return Container(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: newExercise.exercise.tags.map((tag) {
-                                return Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                  child: button(
-                                    height: 60,
-                                    text: tag.name,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        );
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: newExercise.exercise.tags.map((tag) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Chip(
+                backgroundColor: Theme.of(context).focusColor,
+                label: text(tag.name, fontSize: 28),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 
   Container perSidePicker(
@@ -376,35 +385,6 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
           },
         );
       },
-    );
-  }
-
-  Widget header(context) {
-    return Container(
-      height: 80,
-      child: Stack(
-        children: [
-          Container(
-            constraints: BoxConstraints.expand(width: 24),
-            child: IconButton(
-              onPressed: () {
-                pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Consumer<NewExerciseNotifier>(
-            builder: (context, newExercise, child) {
-              return Center(
-                child: text(newExercise.exercise.name ?? '', fontSize: 20),
-              );
-            }
-          )
-        ],
-      ),
     );
   }
 }

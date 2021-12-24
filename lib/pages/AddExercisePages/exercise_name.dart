@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/formField.dart';
@@ -35,7 +36,7 @@ class _ExerciseNamePageState extends State<ExerciseNamePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  header(context),
+                  appBar(context, centerChild: text('New Exercise', fontSize: 20)),
                   SizedBox(height: 20),
                   text(
                       'Enter the exercise name! This can be what ever you want!',
@@ -96,31 +97,6 @@ class _ExerciseNamePageState extends State<ExerciseNamePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget header(context) {
-    return Container(
-      height: 80,
-      child: Stack(
-        children: [
-          Container(
-            constraints: BoxConstraints.expand(width: 24),
-            child: IconButton(
-              onPressed: () {
-                pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Center(
-            child: text('New Exercise', fontSize: 20),
-          )
-        ],
       ),
     );
   }

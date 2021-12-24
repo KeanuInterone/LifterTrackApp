@@ -28,20 +28,19 @@ class BodyweightSetForm extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-      child: Expanded(
-        flex: 1,
-        child: Column(
-          children: [
-            text('Reps', fontSize: 18, fontWeight: FontWeight.bold),
-            SizedBox(
-              height: 10,
-            ),
-            ValueField(
-              value: initialReps,
-              onValueChanged: onRepsChanged,
-            ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          text('Reps', fontSize: 18, fontWeight: FontWeight.bold, textAlign: TextAlign.center),
+          SizedBox(
+            height: 10,
+          ),
+          ValueField(
+            value: initialReps,
+            onValueChanged: onRepsChanged,
+          ),
+        ],
       ),
     );
   }

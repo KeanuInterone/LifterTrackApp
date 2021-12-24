@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/box.dart';
 import 'package:lifter_track_app/components/button.dart';
@@ -31,7 +32,16 @@ class _ExerciseTagsPageState extends State<ExerciseTagsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  header(context),
+                  appBar(
+                    context,
+                    centerChild: Consumer<NewExerciseNotifier>(
+                        builder: (context, newExercise, child) {
+                      return Center(
+                        child:
+                            text(newExercise.exercise.name ?? '', fontSize: 20),
+                      );
+                    }),
+                  ),
                   SizedBox(height: 20),
                   text(
                       'Select some tags to help categorize your exercises! Add a new one if you don\'t see one you like or you can skip this and add later',
@@ -39,45 +49,49 @@ class _ExerciseTagsPageState extends State<ExerciseTagsPage> {
                   SizedBox(height: 20),
                   Expanded(
                     child: Consumer<NewExerciseNotifier>(
-                      builder: (context, newExercise, child) {
-                        return Consumer<TagsNotifier>(
-                          builder: (context, tagsNotifier, child) {
-                            return ListView(
-                              children: tagsNotifier.tags.map((tag) {
-                                bool isSelected = newExercise.exercise.tagIDs.contains(tag.id);
-                                return Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: button(
-                                    height: 60,
-                                    text: tag.name,
-                                    color: isSelected ? Theme.of(context).focusColor : Colors.white,
-                                    onPressed: () {
-                                      if (isSelected) {
-                                        newExercise.removeTag(tag);
-                                      } else {
-                                        newExercise.addTag(tag);
-                                      }
-                                    }
-                                  ),
-                                );
-                              }).toList() + [
-                                Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: button(
-                                      height: 60,
-                                      text: 'Add tag',
-                                      color: Theme.of(context).primaryColor,
-                                      onPressed: () {
-                                        navigateTo('add_tag', context);
-                                      }
+                        builder: (context, newExercise, child) {
+                      return Consumer<TagsNotifier>(
+                        builder: (context, tagsNotifier, child) {
+                          return Wrap(
+                            spacing: 10,
+                            runSpacing: 10,
+                            children: tagsNotifier.tags.map((tag) {
+                                  bool isSelected = newExercise.exercise.tagIDs
+                                      .contains(tag.id);
+                                  return Container(
+                                    child: GestureDetector(
+                                      child: Chip(
+                                        backgroundColor: isSelected
+                                            ? Theme.of(context).focusColor
+                                            : Theme.of(context).primaryColor,
+                                        label: text(tag.name, fontSize: 28),
+                                      ),
+                                      onTap: () {
+                                        if (isSelected) {
+                                          newExercise.removeTag(tag);
+                                        } else {
+                                          newExercise.addTag(tag);
+                                        }
+                                      },
                                     ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                    ),
+                                  );
+                                }).toList() +
+                                [
+                                  Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: button(
+                                        height: 60,
+                                        text: 'Add tag',
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: () {
+                                          navigateTo('add_tag', context);
+                                        }),
+                                  ),
+                                ],
+                          );
+                        },
+                      );
+                    }),
                   ),
                   SizedBox(
                     height: 30,
@@ -95,35 +109,6 @@ class _ExerciseTagsPageState extends State<ExerciseTagsPage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget header(context) {
-    return Container(
-      height: 80,
-      child: Stack(
-        children: [
-          Container(
-            constraints: BoxConstraints.expand(width: 24),
-            child: IconButton(
-              onPressed: () {
-                pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Consumer<NewExerciseNotifier>(
-            builder: (context, newExercise, child) {
-              return Center(
-                child: text(newExercise.exercise.name ?? '', fontSize: 20),
-              );
-            }
-          )
-        ],
       ),
     );
   }

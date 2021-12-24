@@ -50,6 +50,18 @@ class Exercise {
     return Exercise(id: json['_id'], name: json['name'], tagIDs: json['tags'].cast<String>(), type: type, trackPerSide: json['track_per_side'], weightInput: weightInput);
   }
 
+  static Future<Response> getExercises() async {
+    Response res = await API.makeApiRequest(path: 'exercises');
+    if (res.success == false) return res;
+    List<Exercise> exerciseList = [];
+    res.data.forEach((exerciseJson) { 
+      Exercise exercise = Exercise.fromJson(exerciseJson);
+      exerciseList.add(exercise);
+    });
+    res.data = exerciseList;
+    return res;
+  }
+
   static Future<Response> create(Exercise newExercise) async {
     String type;
     switch (newExercise.type) {

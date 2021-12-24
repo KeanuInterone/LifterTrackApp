@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/box.dart';
 import 'package:lifter_track_app/components/navigator.dart';
@@ -29,7 +30,7 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              header(context),
+              appBar(context, centerChild: text('Workouts', fontSize: 30),),
               Expanded(
                 child: Consumer2<Workouts, Exercises>(
                     builder: (context, workoutsNotifier, exercises, child) {
@@ -46,31 +47,6 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget header(context) {
-    return Container(
-      height: 80,
-      child: Stack(
-        children: [
-          Container(
-            constraints: BoxConstraints.expand(width: 24),
-            child: IconButton(
-              onPressed: () {
-                pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Center(
-            child: text('Workouts', fontSize: 30),
-          ),
-        ],
       ),
     );
   }

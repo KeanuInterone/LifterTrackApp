@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/keyboardDefocuser.dart';
@@ -31,7 +32,16 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  header(context),
+                  appBar(
+                    context,
+                    centerChild: Consumer<NewExerciseNotifier>(
+                        builder: (context, newExercise, child) {
+                      return Center(
+                        child:
+                            text(newExercise.exercise.name ?? '', fontSize: 20),
+                      );
+                    }),
+                  ),
                   SizedBox(height: 20),
                   text('Great! Now select the exercise type.',
                       textAlign: TextAlign.center),
@@ -55,11 +65,16 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
                                       ? Theme.of(context).focusColor
                                       : Theme.of(context).primaryColor,
                                   fillColor: isBarbell
-                                      ? Theme.of(context).focusColor.withAlpha(50)
+                                      ? Theme.of(context)
+                                          .focusColor
+                                          .withAlpha(50)
                                       : Colors.transparent,
                                   onPressed: () {
-                                    setState(() {errorMessage = '';});
-                                    newExercise.exercise.weightInput = WeightInput.plates;
+                                    setState(() {
+                                      errorMessage = '';
+                                    });
+                                    newExercise.exercise.weightInput =
+                                        WeightInput.plates;
                                     newExercise
                                         .setExerciseType(ExerciseType.barbell);
                                   },
@@ -73,13 +88,18 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
                                       ? Theme.of(context).focusColor
                                       : Theme.of(context).primaryColor,
                                   fillColor: isBodyweight
-                                      ? Theme.of(context).focusColor.withAlpha(50)
+                                      ? Theme.of(context)
+                                          .focusColor
+                                          .withAlpha(50)
                                       : Colors.transparent,
                                   onPressed: () {
-                                    setState(() {errorMessage = '';});
-                                    newExercise.exercise.weightInput = WeightInput.value;
-                                    newExercise
-                                        .setExerciseType(ExerciseType.bodyweight);
+                                    setState(() {
+                                      errorMessage = '';
+                                    });
+                                    newExercise.exercise.weightInput =
+                                        WeightInput.value;
+                                    newExercise.setExerciseType(
+                                        ExerciseType.bodyweight);
                                   },
                                 ),
                               ),
@@ -91,10 +111,14 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
                                       ? Theme.of(context).focusColor
                                       : Theme.of(context).primaryColor,
                                   fillColor: isWeight
-                                      ? Theme.of(context).focusColor.withAlpha(50)
+                                      ? Theme.of(context)
+                                          .focusColor
+                                          .withAlpha(50)
                                       : Colors.transparent,
                                   onPressed: () {
-                                    setState(() {errorMessage = '';});
+                                    setState(() {
+                                      errorMessage = '';
+                                    });
                                     newExercise
                                         .setExerciseType(ExerciseType.weight);
                                   },
@@ -121,14 +145,18 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
                       color: Theme.of(context).primaryColor,
                       height: 60,
                       onPressed: () {
-                        ExerciseType type = Provider.of<NewExerciseNotifier>(context, listen: false).exercise.type;
+                        ExerciseType type = Provider.of<NewExerciseNotifier>(
+                                context,
+                                listen: false)
+                            .exercise
+                            .type;
                         if (type == null) {
                           setState(() {
                             errorMessage = 'Must select exercise type';
                           });
                           return;
                         }
-                        if(type == ExerciseType.weight) {
+                        if (type == ExerciseType.weight) {
                           navigateTo('exercise_weight_input', context);
                         } else {
                           navigateTo('exercise_tags', context);
@@ -140,35 +168,6 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget header(context) {
-    return Container(
-      height: 80,
-      child: Stack(
-        children: [
-          Container(
-            constraints: BoxConstraints.expand(width: 24),
-            child: IconButton(
-              onPressed: () {
-                pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          Consumer<NewExerciseNotifier>(
-            builder: (context, newExercise, child) {
-              return Center(
-                child: text(newExercise.exercise.name ?? '', fontSize: 20),
-              );
-            }
-          )
-        ],
       ),
     );
   }

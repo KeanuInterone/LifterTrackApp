@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/formField.dart';
@@ -30,52 +31,23 @@ class _ExercisesPageState extends State<ExercisesPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                header(context),
+                appBar(
+                  context,
+                  centerChild: text('Exercises', fontSize: 30),
+                  rightChild: IconButton(
+                    onPressed: () {
+                      navigateTo('exercise_name', context);
+                    },
+                    icon: Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
                 body(context),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget header(context) {
-    return Expanded(
-      flex: 1,
-      child: Container(
-        child: Stack(
-          children: [
-            Container(
-              constraints: BoxConstraints.expand(width: 24),
-              child: IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            Center(
-              child: text('Exercises', fontSize: 30),
-            ),
-            Positioned(
-              right: 0,
-              top: 0,
-              bottom: 0,
-              child: IconButton(
-                onPressed: () {
-                  navigateTo('exercise_name', context);
-                },
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

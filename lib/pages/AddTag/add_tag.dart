@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/formField.dart';
@@ -37,7 +38,10 @@ class _AddTagPageState extends State<AddTagPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  header(context),
+                  appBar(
+                    context,
+                    centerChild: text('New Tag', fontSize: 20),
+                  ),
                   SizedBox(height: 20),
                   formField(
                     placeholder: 'Tag Name',
@@ -48,14 +52,18 @@ class _AddTagPageState extends State<AddTagPage> {
                         inputErrorMessage = '';
                       });
                       tag.name = value;
-                      Tag tagMatch = Provider.of<TagsNotifier>(context,
-                              listen: false)
-                          .tags
-                          .firstWhere(
-                              (t) => t.name.toLowerCase() == value.toLowerCase(), orElse: () => null,);
+                      Tag tagMatch =
+                          Provider.of<TagsNotifier>(context, listen: false)
+                              .tags
+                              .firstWhere(
+                                (t) =>
+                                    t.name.toLowerCase() == value.toLowerCase(),
+                                orElse: () => null,
+                              );
                       if (tagMatch != null) {
                         setState(() {
-                          inputErrorMessage = 'Tag with that name already exists';
+                          inputErrorMessage =
+                              'Tag with that name already exists';
                         });
                       }
                       setState(() {
@@ -68,7 +76,8 @@ class _AddTagPageState extends State<AddTagPage> {
                     condition: inputErrorMessage == '',
                     child: Padding(
                       padding: EdgeInsets.all(10),
-                      child: text(inputErrorMessage, color: Colors.red, textAlign: TextAlign.center),
+                      child: text(inputErrorMessage,
+                          color: Colors.red, textAlign: TextAlign.center),
                     ),
                   ),
                   Expanded(
@@ -78,7 +87,8 @@ class _AddTagPageState extends State<AddTagPage> {
                     condition: errorMessage == '',
                     child: Padding(
                       padding: EdgeInsets.all(10),
-                      child: text(errorMessage, color: Colors.red, textAlign: TextAlign.center),
+                      child: text(errorMessage,
+                          color: Colors.red, textAlign: TextAlign.center),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -99,9 +109,9 @@ class _AddTagPageState extends State<AddTagPage> {
                       setState(() {
                         isLoading = true;
                       });
-                      Response res =
-                          await Provider.of<TagsNotifier>(context, listen: false)
-                              .addTag(tag);
+                      Response res = await Provider.of<TagsNotifier>(context,
+                              listen: false)
+                          .addTag(tag);
                       if (!res.success) {
                         setState(() {
                           errorMessage = res.errMessage;
@@ -111,7 +121,9 @@ class _AddTagPageState extends State<AddTagPage> {
                       pop(context);
                     },
                   ),
-                  SizedBox(height: 10,)
+                  SizedBox(
+                    height: 10,
+                  )
                 ],
               ),
             ),
