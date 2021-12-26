@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1057620245051-3qd39aff5m973dt6chf5r4t90vg566ij.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1057620245051-3qd39aff5m973dt6chf5r4t90vg566ij</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB7QoaegnqgflNksDCih_6YQtHWW_KU6iA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1057620245051</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.liftertrack.app</string>
+	<key>PROJECT_ID</key>
+	<string>liftertrack</string>
+	<key>STORAGE_BUCKET</key>
+	<string>liftertrack.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1057620245051:ios:33ed2edec917a905f5fa1e</string>
+</dict>
+</plist>

@@ -33,7 +33,6 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
         context,
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          //resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
