@@ -48,14 +48,19 @@ class User {
   }
 
   static Future<Response> authorizeOAuthToken(
-      String email, String token, String provider) async {
+      {String token, String provider, String firstName, String lastName}) async {
     String url = "${API.baseURL}/users/authorizeOAuthToken";
     var response = await http.post(
       url,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode({'email': email, 'token': token, 'provider': provider}),
+      body: jsonEncode({
+        'token': token, 
+        'provider': provider,
+        'first_name': firstName,
+        'last_name': lastName
+      }),
     );
     if (response.statusCode != 200) {
       Map<String, dynamic> json = jsonDecode(response.body);

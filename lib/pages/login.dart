@@ -15,7 +15,7 @@ import 'package:lifter_track_app/components/formField.dart';
 import 'package:lifter_track_app/models/api.dart';
 import 'package:provider/provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(
   scopes: ['email', 'profile'],
@@ -41,9 +41,7 @@ class _LoginPage extends State<LoginPage> {
     googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       if (account == null) return;
       account.authentication.then((googleKey) async {
-        print(googleKey.idToken);
-        Response res = await User.authorizeOAuthToken(
-            account.email, googleKey.idToken, 'google');
+        Response res = await User.authorizeOAuthToken(token: googleKey.idToken, provider: 'google');
         if (!res.success) {
           setState(() {
             _errorMessage = res.errMessage;
@@ -223,7 +221,7 @@ class _LoginPage extends State<LoginPage> {
             ),
             SignInButton(
               Buttons.Apple,
-              onPressed: () {},
+              onPressed: handleAppleSignIn,
             ),
             TextButton(
               onPressed: () {
@@ -243,6 +241,26 @@ class _LoginPage extends State<LoginPage> {
     } catch (error) {
       print(error);
     }
+  }
+
+  Future<void> handleAppleSignIn() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+      Response res = await User.authorizeOAuthToken(token: credential.identityToken, provider: 'apple', firstName: credential.givenName, lastName: credential.familyName);
+        if (!res.success) {
+          setState(() {
+            _errorMessage = res.errMessage;
+          });
+          return;
+        }
+        initializeData();
+        navigateTo('home', context);
+    } catch (e) {}
   }
 
   bool _validateAndSave() {
