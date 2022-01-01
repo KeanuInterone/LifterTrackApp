@@ -14,6 +14,12 @@ import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/formField.dart';
 import 'package:lifter_track_app/models/api.dart';
 import 'package:provider/provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+
+GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: ['email', 'profile'],
+);
 
 class LoginPage extends StatefulWidget {
   @override
@@ -32,6 +38,22 @@ class _LoginPage extends State<LoginPage> {
   void initState() {
     super.initState();
     validateAuthToken(context);
+    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
+      if (account == null) return;
+      account.authentication.then((googleKey) async {
+        print(googleKey.idToken);
+        Response res = await User.authorizeOAuthToken(
+            account.email, googleKey.idToken, 'google');
+        if (!res.success) {
+          setState(() {
+            _errorMessage = res.errMessage;
+          });
+          return;
+        }
+        initializeData();
+        navigateTo('home', context);
+      });
+    });
   }
 
   void validateAuthToken(BuildContext context) async {
@@ -102,7 +124,10 @@ class _LoginPage extends State<LoginPage> {
           children: <Widget>[
             _emailWidget(),
             _passwordWidget(),
-            hideIf(condition: _errorMessage == '', child: text(_errorMessage, color: Colors.red, textAlign: TextAlign.center)),
+            hideIf(
+                condition: _errorMessage == '',
+                child: text(_errorMessage,
+                    color: Colors.red, textAlign: TextAlign.center)),
             _loginButtonWidget()
           ],
         ),
@@ -194,7 +219,7 @@ class _LoginPage extends State<LoginPage> {
           children: [
             SignInButton(
               Buttons.Google,
-              onPressed: () {},
+              onPressed: handleGoogleSignIn,
             ),
             SignInButton(
               Buttons.Apple,
@@ -210,6 +235,14 @@ class _LoginPage extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> handleGoogleSignIn() async {
+    try {
+      await googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
   }
 
   bool _validateAndSave() {

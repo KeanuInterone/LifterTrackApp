@@ -47,6 +47,29 @@ class User {
     return Response(true, null, true);
   }
 
+  static Future<Response> authorizeOAuthToken(
+      String email, String token, String provider) async {
+    String url = "${API.baseURL}/users/authorizeOAuthToken";
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({'email': email, 'token': token, 'provider': provider}),
+    );
+    if (response.statusCode != 200) {
+      Map<String, dynamic> json = jsonDecode(response.body);
+      bool hasError = json != null && json.containsKey('error');
+      return Response(false, hasError ? json['error'] : "There was an error authorizing the token", null);
+    }
+
+    Map<String, dynamic> json = jsonDecode(response.body);
+    currentUser = User();
+    API.authToken = json['jwt'];
+    await API.saveAuthToken();
+    return Response(true, null, true);
+  }
+
   static Future<Response> signUp(
       String email, String password, String firstName, String lastName) async {
     String url = "${API.baseURL}/users/create";
