@@ -34,8 +34,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> { 
-
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -50,9 +49,11 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-            primaryColor: Color(0xff4cd0fa),
-            backgroundColor: Color(0xff313342),
-            focusColor: Color(0xff15f410)),
+          primaryColor: Color(0xff4cd0fa), //Colors.white, //
+          backgroundColor: Color(0xff313342), //Colors.black, //
+          focusColor: Color(0xff15f410) //Colors.white, //
+
+        ),
         home: LoginPage(),
         routes: {
           'login': (context) => LoginPage(),
