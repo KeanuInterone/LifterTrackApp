@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/AppBar.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/button.dart';
+import 'package:lifter_track_app/components/exercise_search_bar.dart';
 import 'package:lifter_track_app/components/formField.dart';
 import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
@@ -61,9 +62,11 @@ class _ExercisesPageState extends State<ExercisesPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            formField(placeholder: 'Search'),
+            ExerciseSearchBar(
+              onExerciseSelected: (exercise) {},
+            ),
             SizedBox(
-              height: 30,
+              height: 10,
             ),
             Expanded(
               flex: 1,

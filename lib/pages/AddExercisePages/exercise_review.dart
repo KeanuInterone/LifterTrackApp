@@ -127,8 +127,13 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                                     .addExercise(newExercise.exercise);
                                 if (res.success) {
                                   newExercise.clearExercise();
-                                  Navigator.popUntil(context,
-                                      ModalRoute.withName('exercises'));
+                                  int count = 0;
+                                  Navigator.popUntil(context, (route) {
+                                    return route.settings.name == 'exercises' || route.settings.name == 'select_exercise';
+                                  });
+                                  // Navigator.popUntil(context, (route) {
+                                  //   return ModalRoute.withName('exercises');
+                                  // });
                                 } else {
                                   setState(() {
                                     isLoading = false;

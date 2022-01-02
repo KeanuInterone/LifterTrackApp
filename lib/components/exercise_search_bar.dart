@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/formField.dart';
+import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
+import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/Notifiers/exercises.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +24,7 @@ class ExerciseSearchBar extends StatefulWidget {
 
 class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
   List<Exercise> searchResults = [];
+  String value = "";
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,7 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
             placeholder: 'Search',
             autofocus: widget.autoFocus,
             onChanged: (value) {
+              this.value = value;
               searchExercises(context, value);
             }),
         SizedBox(
@@ -45,8 +49,24 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
               Radius.circular(20),
             ),
           ),
-          child: searchResults.length == 0
-              ? SizedBox(height: 0)
+          child: (searchResults.length == 0)
+              ? (value.isEmpty
+                  ? SizedBox(height: 0)
+                  : GestureDetector(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: text('Add Exercise "$value"',
+                            color: Colors.black, fontSize: 20),
+                      ),
+                      onTap: () {
+                        Provider.of<NewExerciseNotifier>(context, listen: false).clearExercise();
+                        Provider.of<NewExerciseNotifier>(context, listen: false).setName(value);
+                        navigateTo('exercise_name', context);
+                        setState(() {
+                          value = "";
+                        });
+                      },
+                    ))
               : Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: ListView.separated(

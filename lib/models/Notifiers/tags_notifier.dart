@@ -21,7 +21,9 @@ class TagsNotifier extends ChangeNotifier {
   Future<Response> addTag(Tag tag) async {
     Response res = await Tag.createTag(tag);
     if (res.success) {
-      tags.add(res.data);
+      tag = res.data;
+      tags.add(tag);
+      tagWithId[tag.id] = tag;
       notifyListeners();
     }
     return res;
