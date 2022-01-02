@@ -10,12 +10,14 @@ import 'package:provider/provider.dart';
 class WeightPlateSelectorSetForm extends StatefulWidget {
   final int initalWeight;
   final int initialReps;
+  final bool perSide;
   final void Function(int) onWeightChanged;
   final void Function(int) onRepsChanged;
   const WeightPlateSelectorSetForm(
       {Key key,
       this.initalWeight,
       this.initialReps,
+      this.perSide = false,
       this.onRepsChanged,
       this.onWeightChanged})
       : super(key: key);
@@ -122,8 +124,7 @@ class _WeightPlateSelectorSetFormState
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => WeightNotifier(weight: widget.initalWeight),
-      child: Consumer<WeightNotifier>(
-          builder: (context, plateWeight, child) {
+      child: Consumer<WeightNotifier>(builder: (context, plateWeight, child) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -141,12 +142,14 @@ class _WeightPlateSelectorSetFormState
                       height: 48,
                       onPressed: () {
                         plateWeight.clear();
-                        weightTextController.text =
-                            '${plateWeight.weight}';
+                        weightTextController.text = '${plateWeight.weight}';
                         widget.onWeightChanged(plateWeight.weight);
                       }),
                   SizedBox(height: 20),
-                  text('Per side', textAlign: TextAlign.center),
+                  hideIf(
+                    condition: !widget.perSide,
+                    child: text('Per side', textAlign: TextAlign.center),
+                  ),
                   Expanded(
                     child: GridView.count(
                       shrinkWrap: true,
@@ -165,7 +168,8 @@ class _WeightPlateSelectorSetFormState
                                 height: 30,
                                 child: hideIf(
                                     condition: plateAmount == 0,
-                                    child: text('x $plateAmount', fontWeight: FontWeight.bold)),
+                                    child: text('x $plateAmount',
+                                        fontWeight: FontWeight.bold)),
                               ),
                               Expanded(
                                 child: LayoutBuilder(

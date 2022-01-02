@@ -142,6 +142,7 @@ class _AddSetPageState extends State<AddSetPage> {
           form = WeightPlateSelectorSetForm(
             initalWeight: weight,
             initialReps: reps,
+            perSide: exercise.trackPerSide,
             onWeightChanged: weightChanged,
             onRepsChanged: repsChanged,
           );
