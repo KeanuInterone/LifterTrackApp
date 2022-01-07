@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1057620245051-cnvcmii1usc84cjsgkdhmeoj73j1gf72.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.liftertrack.app",
+            "certificate_hash": "abb978ad017274170e734a88318b5ea8cf46a043"
+          }
+        },
+        {
           "client_id": "1057620245051-fhodcv8plbtih8jtjp0voks37u214001.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "1057620245051-fhodcv8plbtih8jtjp0voks37u214001.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1057620245051-3qd39aff5m973dt6chf5r4t90vg566ij.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.liftertrack.app"
+              }
             }
           ]
         }

@@ -16,6 +16,7 @@ import 'package:lifter_track_app/models/api.dart';
 import 'package:provider/provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'dart:io' show Platform;
 
 GoogleSignIn googleSignIn = GoogleSignIn(
   scopes: ['email', 'profile'],
@@ -48,6 +49,7 @@ class _LoginPage extends State<LoginPage> {
           });
           return;
         }
+        googleSignIn.disconnect();
         initializeData();
         navigateTo('home', context);
       });
@@ -219,9 +221,11 @@ class _LoginPage extends State<LoginPage> {
               Buttons.Google,
               onPressed: handleGoogleSignIn,
             ),
-            SignInButton(
-              Buttons.Apple,
-              onPressed: handleAppleSignIn,
+            hideIf(condition: Platform.isAndroid,
+              child: SignInButton(
+                Buttons.Apple,
+                onPressed: handleAppleSignIn,
+              ),
             ),
             TextButton(
               onPressed: () {
