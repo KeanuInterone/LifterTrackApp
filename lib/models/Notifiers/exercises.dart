@@ -20,6 +20,15 @@ class Exercises extends ChangeNotifier {
     return res;
   }
 
+  Future<Response> editExercise(Exercise exercise) async {
+    Response res = await exercises.firstWhere((e) => e.id == exercise.id).update(exercise);
+    if (res.success) {
+      parseExercises();
+      notifyListeners();
+    }
+    return res;
+  }
+
   void removeExercise(Exercise exercise) {
     exercises.removeWhere((e) => e.id == exercise.id);
     parseExercises();
@@ -47,39 +56,5 @@ class Exercises extends ChangeNotifier {
         groupedExercises[tagId].add(exercise);
       }
     }
-  }  
-
-  Future<Response> getExercises2() async {
-    String url = "${API.baseURL}/exercises";
-    var response = await http.get(
-      url,
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ${API.authToken}'
-      },
-    );
-    if (response.statusCode != 200) {
-      Map<String, dynamic> json = jsonDecode(response.body);
-      bool hasError = json != null && json.containsKey('error');
-      return Response(false, hasError ? json['error'] : "There was an error creating the user", null);
-    }
-
-    List<dynamic> json = jsonDecode(response.body);
-    List<Exercise> exerciseList = [];
-    exerciseWithId = {};
-    groupedExercises = {};
-    json.forEach((exerciseJson) { 
-      Exercise exercise = Exercise.fromJson(exerciseJson);
-      exerciseList.add(exercise);
-      exerciseWithId[exercise.id] = exercise;
-      for(String tagId in exercise.tagIDs) {
-        if (groupedExercises[tagId] == null) {
-          groupedExercises[tagId] = [];
-        }
-        groupedExercises[tagId].add(exercise);
-      }
-    });
-    //setExercises(exerciseList);
-    return  Response(true, null, null);
   }  
 }

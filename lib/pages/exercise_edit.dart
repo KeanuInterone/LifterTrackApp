@@ -15,14 +15,14 @@ import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/tag.dart';
 import 'package:provider/provider.dart';
 
-class ExerciseReviewPage extends StatefulWidget {
-  const ExerciseReviewPage({Key key}) : super(key: key);
+class ExerciseEditPage extends StatefulWidget {
+  const ExerciseEditPage({Key key}) : super(key: key);
 
   @override
-  _ExerciseReviewPageState createState() => _ExerciseReviewPageState();
+  _ExerciseEditPageState createState() => _ExerciseEditPageState();
 }
 
-class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
+class _ExerciseEditPageState extends State<ExerciseEditPage> {
   String name = '';
   String errorMessageForName = '';
   String errorMessage = '';
@@ -54,33 +54,27 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                   ),
                   Expanded(
                     child: Consumer<ExerciseNotifier>(
-                        builder: (context, newExercise, child) {
-                      name = newExercise.exercise.name;
-                      ExerciseType type = newExercise.exercise.type;
+                        builder: (context, exercise, child) {
+                      name = exercise.exercise.name;
+                      ExerciseType type = exercise.exercise.type;
                       bool isBarbell = type == ExerciseType.barbell;
                       bool isBodyweight = type == ExerciseType.bodyweight;
                       bool isWeight = type == ExerciseType.weight;
-                      WeightInput weightInput =
-                          newExercise.exercise.weightInput;
+                      WeightInput weightInput = exercise.exercise.weightInput;
                       bool isPlates = weightInput == WeightInput.plates;
                       bool isValue = weightInput == WeightInput.value;
-                      bool isPerSide =
-                          newExercise.exercise.trackPerSide ?? false;
+                      bool isPerSide = exercise.exercise.trackPerSide ?? false;
                       return ListView(
                         children: [
-                          text(
-                              'All Done! Review and make sure that it all looks good. Then add the exercise',
-                              textAlign: TextAlign.center),
-                          SizedBox(height: 40),
                           text('Name', textAlign: TextAlign.center),
                           SizedBox(height: 10),
-                          exerciseNameField(context, newExercise),
+                          exerciseNameField(context, exercise),
                           nameErrorMessage(),
                           SizedBox(height: 30),
                           text('Type', textAlign: TextAlign.center),
                           SizedBox(height: 10),
-                          typePicker(isBarbell, context, newExercise,
-                              isBodyweight, isWeight),
+                          typePicker(isBarbell, context, exercise, isBodyweight,
+                              isWeight),
                           hideIf(
                             condition: !isWeight,
                             child: Column(
@@ -93,25 +87,25 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                                     textAlign: TextAlign.center),
                                 SizedBox(height: 10),
                                 weightInputPicker(
-                                    isPlates, context, newExercise, isValue),
+                                    isPlates, context, exercise, isValue),
                                 SizedBox(
                                   height: 50,
                                 ),
                                 text('Track per side',
                                     textAlign: TextAlign.center),
                                 SizedBox(height: 10),
-                                perSidePicker(isPerSide, context, newExercise)
+                                perSidePicker(isPerSide, context, exercise)
                               ],
                             ),
                           ),
                           SizedBox(height: 50),
                           text('Tags', textAlign: TextAlign.center),
                           SizedBox(height: 10),
-                          tags(newExercise, context),
+                          tags(exercise, context),
                           SizedBox(height: 50),
                           errorMessageForResponse(),
                           button(
-                              text: 'Add Exercise',
+                              text: 'Update Exercise',
                               color: Theme.of(context).focusColor,
                               isLoading: isLoading,
                               fillColor:
@@ -124,16 +118,14 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                                 Response res = await Provider.of<Exercises>(
                                         context,
                                         listen: false)
-                                    .addExercise(newExercise.exercise);
+                                    .editExercise(exercise.exercise);
                                 if (res.success) {
-                                  newExercise.clearExercise();
-                                  int count = 0;
+                                  exercise.clearExercise();
                                   Navigator.popUntil(context, (route) {
-                                    return route.settings.name == 'exercises' || route.settings.name == 'select_exercise';
+                                    return route.settings.name == 'exercises' ||
+                                        route.settings.name ==
+                                            'select_exercise';
                                   });
-                                  // Navigator.popUntil(context, (route) {
-                                  //   return ModalRoute.withName('exercises');
-                                  // });
                                 } else {
                                   setState(() {
                                     isLoading = false;
@@ -155,21 +147,50 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
     );
   }
 
-  Container tags(ExerciseNotifier newExercise, BuildContext context) {
+  Container tags(ExerciseNotifier exercise, BuildContext context) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: newExercise.exercise.tags.map((tag) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-              child: Chip(
-                backgroundColor: Theme.of(context).focusColor,
-                label: text(tag.name, fontSize: 28),
-              ),
+        child: Consumer<TagsNotifier>(
+          builder: (context, allTags, child) {
+            return Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: allTags.tags.map((tag) {
+                    bool isSelected =
+                        exercise.exercise.tagIDs.contains(tag.id);
+                    return Container(
+                      child: GestureDetector(
+                        child: Chip(
+                          backgroundColor: isSelected
+                              ? Theme.of(context).focusColor
+                              : Theme.of(context).primaryColor,
+                          label: text(tag.name, fontSize: 28),
+                        ),
+                        onTap: () {
+                          if (isSelected) {
+                            exercise.removeTag(tag);
+                          } else {
+                            exercise.addTag(tag);
+                          }
+                        },
+                      ),
+                    );
+                  }).toList() +
+                  [
+                    Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: button(
+                          height: 40,
+                          text: 'Add tag',
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () {
+                            navigateTo('add_tag', context);
+                          }),
+                    ),
+                  ],
             );
-          }).toList(),
+          },
         ),
       ),
     );
@@ -365,8 +386,7 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
     );
   }
 
-  Widget exerciseNameField(
-      BuildContext context, ExerciseNotifier newExercise) {
+  Widget exerciseNameField(BuildContext context, ExerciseNotifier newExercise) {
     return formField(
       placeholder: 'Exercise Name',
       initialValue: name,

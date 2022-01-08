@@ -4,7 +4,7 @@ import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
 import 'package:lifter_track_app/models/Notifiers/workouts.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/Notifiers/exercises.dart';
-import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/exercise_notifier.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
@@ -15,6 +15,7 @@ import 'package:lifter_track_app/pages/AddExercisePages/exercise_type.dart';
 import 'package:lifter_track_app/pages/AddExercisePages/exercise_weight_input.dart';
 import 'package:lifter_track_app/pages/AddTag/add_tag.dart';
 import 'package:lifter_track_app/pages/add_set.dart';
+import 'package:lifter_track_app/pages/exercise_edit.dart';
 import 'package:lifter_track_app/pages/exercises.dart';
 import 'package:lifter_track_app/pages/login.dart';
 import 'package:lifter_track_app/pages/select_exercise.dart';
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => Exercises()),
         ChangeNotifierProvider(create: (context) => WorkoutTimer()),
         ChangeNotifierProvider(create: (context) => CurrentWorkout()),
-        ChangeNotifierProvider(create: (context) => NewExerciseNotifier()),
+        ChangeNotifierProvider(create: (context) => ExerciseNotifier()),
         ChangeNotifierProvider(create: (context) => TagsNotifier()),
         ChangeNotifierProvider(create: (context) => Workouts())
       ],
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
           'set_group': (context) => SetGroupPage(),
           'add_set': (context) => AddSetPage(),
           'exercises': (context) => ExercisesPage(),
+          'exercise_edit': (context) => ExerciseEditPage(),
           'exercise_name': (context) => ExerciseNamePage(),
           'exercise_type': (context) => ExerciseTypePage(),
           'exercise_weight_input': (context) => ExerciseWeightInputPage(),

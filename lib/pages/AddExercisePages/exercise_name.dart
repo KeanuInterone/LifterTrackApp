@@ -8,7 +8,7 @@ import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/Notifiers/exercises.dart';
-import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/exercise_notifier.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseNamePage extends StatefulWidget {
@@ -42,7 +42,7 @@ class _ExerciseNamePageState extends State<ExerciseNamePage> {
                       'Enter the exercise name! This can be what ever you want!',
                       textAlign: TextAlign.center),
                   SizedBox(height: 20),
-                  Consumer<NewExerciseNotifier>(
+                  Consumer<ExerciseNotifier>(
                       builder: (context, newExercise, child) {
                     name = newExercise.exercise.name;
                     return formField(

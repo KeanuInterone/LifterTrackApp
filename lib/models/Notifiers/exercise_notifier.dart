@@ -6,8 +6,13 @@ import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/tag.dart';
 
-class NewExerciseNotifier extends ChangeNotifier {
+class ExerciseNotifier extends ChangeNotifier {
   Exercise exercise = Exercise();
+
+  void setExercise(Exercise exercise) {
+    this.exercise = exercise;
+    notifyListeners();
+  }
   
   void setName(String name) {
     exercise.name = name;

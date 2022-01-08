@@ -6,7 +6,7 @@ import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
-import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/exercise_notifier.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseWeightInputPage extends StatefulWidget {
@@ -34,7 +34,7 @@ class _ExerciseWeightInputPageState extends State<ExerciseWeightInputPage> {
                 children: [
                   appBar(
                     context,
-                    centerChild: Consumer<NewExerciseNotifier>(
+                    centerChild: Consumer<ExerciseNotifier>(
                         builder: (context, newExercise, child) {
                       return Center(
                         child:
@@ -47,7 +47,7 @@ class _ExerciseWeightInputPageState extends State<ExerciseWeightInputPage> {
                       textAlign: TextAlign.center),
                   SizedBox(height: 20),
                   Expanded(
-                    child: Consumer<NewExerciseNotifier>(
+                    child: Consumer<ExerciseNotifier>(
                       builder: (context, newExercise, child) {
                         WeightInput type = newExercise.exercise.weightInput;
                         bool isPlates = type == WeightInput.plates;
@@ -111,7 +111,7 @@ class _ExerciseWeightInputPageState extends State<ExerciseWeightInputPage> {
                       color: Theme.of(context).primaryColor,
                       height: 60,
                       onPressed: () {
-                        WeightInput type = Provider.of<NewExerciseNotifier>(context, listen: false).exercise.weightInput;
+                        WeightInput type = Provider.of<ExerciseNotifier>(context, listen: false).exercise.weightInput;
                         if (type == null) {
                           setState(() {
                             errorMessage = 'Must select a type';

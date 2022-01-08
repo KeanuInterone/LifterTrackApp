@@ -6,7 +6,7 @@ import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
-import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/exercise_notifier.dart';
 import 'package:provider/provider.dart';
 
 class ExerciseTypePage extends StatefulWidget {
@@ -34,7 +34,7 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
                 children: [
                   appBar(
                     context,
-                    centerChild: Consumer<NewExerciseNotifier>(
+                    centerChild: Consumer<ExerciseNotifier>(
                         builder: (context, newExercise, child) {
                       return Center(
                         child:
@@ -47,7 +47,7 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
                       textAlign: TextAlign.center),
                   SizedBox(height: 20),
                   Expanded(
-                    child: Consumer<NewExerciseNotifier>(
+                    child: Consumer<ExerciseNotifier>(
                       builder: (context, newExercise, child) {
                         ExerciseType type = newExercise.exercise.type;
                         bool isBarbell = type == ExerciseType.barbell;
@@ -145,7 +145,7 @@ class _ExerciseTypePageState extends State<ExerciseTypePage> {
                       color: Theme.of(context).primaryColor,
                       height: 60,
                       onPressed: () {
-                        ExerciseType type = Provider.of<NewExerciseNotifier>(
+                        ExerciseType type = Provider.of<ExerciseNotifier>(
                                 context,
                                 listen: false)
                             .exercise

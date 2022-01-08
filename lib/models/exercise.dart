@@ -108,4 +108,60 @@ class Exercise {
     Exercise exercise = Exercise.fromJson(json);
     return Response(true, null, exercise);
   }
+
+  Future<Response> update(Exercise exercise) async {
+    Response res = await API.makeApiRequest(
+      path: 'exercises/${exercise.id}/edit',
+      method: HttpMethod.post,
+      body: jsonEncode({
+        'name': exercise.name,
+        'tags': exercise.tagIDs,
+        'type': stringForExerciseType(exercise.type),
+        'track_per_side': exercise.trackPerSide,
+        'weight_input': stringForWeightInputType(exercise.weightInput)
+      })
+    );
+    if (res.success) {
+      name = exercise.name;
+      tags = exercise.tags;
+      tagIDs = exercise.tagIDs;
+      type = exercise.type;
+      trackPerSide = exercise.trackPerSide;
+      weightInput = exercise.weightInput;
+    }
+    return res;
+  }
+
+  Exercise clone() {
+    return new Exercise(id: this.id, name: this.name, tagIDs: List.from(this.tagIDs), tags: List.from(this.tags), type: this.type, trackPerSide: this.trackPerSide, weightInput: this.weightInput);
+  }
+
+  static String stringForExerciseType(ExerciseType type) {
+    String returnType;
+    switch (type) {
+      case ExerciseType.barbell:
+        returnType = 'barbell';
+        break;
+      case ExerciseType.bodyweight:
+        returnType = 'bodyweight';
+        break;
+      case ExerciseType.weight:
+        returnType = 'weight';
+        break;
+    }
+    return returnType;
+  }
+
+  static String stringForWeightInputType(WeightInput type) {
+    String returnType;
+    switch (type) {
+      case WeightInput.plates:
+        returnType = 'plates';
+        break;
+      case WeightInput.value:
+        returnType = 'value';
+        break;
+    }
+    return returnType;
+  }
 }

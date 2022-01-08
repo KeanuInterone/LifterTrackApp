@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/formField.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
-import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/exercise_notifier.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/Notifiers/exercises.dart';
 import 'package:provider/provider.dart';
@@ -59,8 +59,8 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
                             color: Colors.black, fontSize: 20),
                       ),
                       onTap: () {
-                        Provider.of<NewExerciseNotifier>(context, listen: false).clearExercise();
-                        Provider.of<NewExerciseNotifier>(context, listen: false).setName(value);
+                        Provider.of<ExerciseNotifier>(context, listen: false).clearExercise();
+                        Provider.of<ExerciseNotifier>(context, listen: false).setName(value);
                         navigateTo('exercise_name', context);
                         setState(() {
                           value = "";

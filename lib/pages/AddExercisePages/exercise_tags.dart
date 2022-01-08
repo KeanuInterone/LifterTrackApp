@@ -6,7 +6,7 @@ import 'package:lifter_track_app/components/button.dart';
 import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
-import 'package:lifter_track_app/models/Notifiers/new_exercise_notifier.dart';
+import 'package:lifter_track_app/models/Notifiers/exercise_notifier.dart';
 import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +34,7 @@ class _ExerciseTagsPageState extends State<ExerciseTagsPage> {
                 children: [
                   appBar(
                     context,
-                    centerChild: Consumer<NewExerciseNotifier>(
+                    centerChild: Consumer<ExerciseNotifier>(
                         builder: (context, newExercise, child) {
                       return Center(
                         child:
@@ -48,7 +48,7 @@ class _ExerciseTagsPageState extends State<ExerciseTagsPage> {
                       textAlign: TextAlign.center),
                   SizedBox(height: 20),
                   Expanded(
-                    child: Consumer<NewExerciseNotifier>(
+                    child: Consumer<ExerciseNotifier>(
                         builder: (context, newExercise, child) {
                       return Consumer<TagsNotifier>(
                         builder: (context, tagsNotifier, child) {
@@ -80,7 +80,7 @@ class _ExerciseTagsPageState extends State<ExerciseTagsPage> {
                                   Container(
                                     padding: EdgeInsets.all(8.0),
                                     child: button(
-                                        height: 60,
+                                        height: 42,
                                         text: 'Add tag',
                                         color: Theme.of(context).primaryColor,
                                         onPressed: () {

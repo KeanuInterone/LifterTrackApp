@@ -7,6 +7,7 @@ import 'package:lifter_track_app/components/formField.dart';
 import 'package:lifter_track_app/components/keyboardDefocuser.dart';
 import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/components/text.dart';
+import 'package:lifter_track_app/models/Notifiers/exercise_notifier.dart';
 import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/Notifiers/exercises.dart';
@@ -37,6 +38,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                   centerChild: text('Exercises', fontSize: 30),
                   rightChild: IconButton(
                     onPressed: () {
+                      Provider.of<ExerciseNotifier>(context, listen: false).clearExercise();
                       navigateTo('exercise_name', context);
                     },
                     icon: Icon(
@@ -97,7 +99,8 @@ class _ExercisesPageState extends State<ExercisesPage> {
                                       label: text(exercise.name, fontSize: 28),
                                     ),
                                     onTap: () {
-                                      //createSetGroup(context, exercise);
+                                      Provider.of<ExerciseNotifier>(context, listen: false).setExercise(exercise.clone());
+                                      navigateTo('exercise_edit', context);
                                     },
                                   ),
                                 )
@@ -116,6 +119,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               color: Theme.of(context).focusColor,
               height: 60,
               onPressed: () {
+                Provider.of<ExerciseNotifier>(context, listen: false).clearExercise();
                 navigateTo('exercise_name', context);
               },
             )
