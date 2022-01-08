@@ -21,24 +21,31 @@ import 'package:lifter_track_app/models/set_group.dart';
 import 'package:provider/provider.dart';
 
 class AddSetPage extends StatefulWidget {
-  final SetGroup setGroup;
-  const AddSetPage({Key key, this.setGroup}) : super(key: key);
+  const AddSetPage({
+    Key key,
+  }) : super(key: key);
 
   @override
-  _AddSetPageState createState() => _AddSetPageState(setGroup: setGroup);
+  _AddSetPageState createState() => _AddSetPageState();
 }
 
 class _AddSetPageState extends State<AddSetPage> {
   Exercise exercise;
   SetGroup setGroup;
+  Set setToEdit;
   int weight;
   int reps;
   String errorMessage;
   bool isLoading = false;
-
-  _AddSetPageState({this.setGroup});
+  bool isDeleteLoading = false;
 
   void initializeWeightAndReps() {
+    if (setToEdit != null) {
+      exercise = setToEdit.exercise;
+      reps = setToEdit.reps;
+      weight = setToEdit.weight;
+      return;
+    }
     exercise = setGroup.focusExercise;
     if (setGroup.sets.length == 0) {
       reps = 0;
@@ -66,6 +73,7 @@ class _AddSetPageState extends State<AddSetPage> {
   Widget build(BuildContext context) {
     Map<String, dynamic> argMap = ModalRoute.of(context).settings.arguments;
     setGroup = argMap['setGroup'];
+    setToEdit = argMap['setToEdit'];
     initializeWeightAndReps();
     return keyboardDefocuser(
       context,
@@ -79,7 +87,41 @@ class _AddSetPageState extends State<AddSetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  workoutHeader(context),
+                  workoutHeader(context,
+                      rightChild: setToEdit != null
+                          ? isDeleteLoading
+                              ? Center(
+                                child: CircularProgressIndicator(
+                                    color: Colors.red,
+                                  ),
+                              )
+                              : GestureDetector(
+                                  child: Center(
+                                    child: text(
+                                      'Delete',
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  onTap: () async {
+                                    setState(() {
+                                      isDeleteLoading = true;
+                                    });
+                                    Response res =
+                                        await Provider.of<CurrentWorkout>(
+                                                context,
+                                                listen: false)
+                                            .deleteSet(setGroup, setToEdit);
+                                    if (!res.success) {
+                                      setState(() {
+                                        errorMessage = res.errMessage;
+                                        isDeleteLoading = false;
+                                      });
+                                    } else {
+                                      pop(context);
+                                    }
+                                  },
+                                )
+                          : null),
                   body(),
                 ],
               ),
@@ -95,14 +137,11 @@ class _AddSetPageState extends State<AddSetPage> {
       flex: 1,
       child: LayoutBuilder(builder: (context, constraints) {
         return Column(
-          // shrinkWrap: true,
-          // physics: ClampingScrollPhysics(),
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             text('${exercise.name}', fontSize: 30, textAlign: TextAlign.center),
             SizedBox(height: 10),
             Expanded(
-              //height: constraints.maxHeight - 135,
               child: setForm(exercise),
             ),
             errorMessage == null
@@ -110,12 +149,12 @@ class _AddSetPageState extends State<AddSetPage> {
                 : text(errorMessage,
                     textAlign: TextAlign.center, color: Colors.red),
             button(
-                text: 'Add Set',
+                text: setToEdit == null ? 'Add Set' : 'Update Set',
                 isLoading: isLoading,
                 height: 60,
                 color: Theme.of(context).focusColor,
                 onPressed: () {
-                  addSet(context);
+                  addOrUpdateSet(context);
                 }),
             SizedBox(
               height: 10,
@@ -174,7 +213,7 @@ class _AddSetPageState extends State<AddSetPage> {
     reps = value;
   }
 
-  void addSet(BuildContext context) async {
+  void addOrUpdateSet(BuildContext context) async {
     if (reps == 0) {
       setState(() {
         errorMessage = 'Reps were not set';
@@ -184,6 +223,21 @@ class _AddSetPageState extends State<AddSetPage> {
     setState(() {
       isLoading = true;
     });
+    // Edit Set
+    if (setToEdit != null) {
+      Response res = await setToEdit.update(weight, reps);
+      if (!res.success) {
+        setState(() {
+          errorMessage = res.errMessage;
+          isLoading = false;
+        });
+      } else {
+        Provider.of<CurrentWorkout>(context, listen: false).updateViews();
+        pop(context);
+      }
+      return;
+    }
+    // Update Widget
     Response res = await Provider.of<CurrentWorkout>(context, listen: false)
         .addSet(setGroup, exercise, weight, reps);
     if (!res.success) {

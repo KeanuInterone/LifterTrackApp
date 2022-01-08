@@ -23,10 +23,11 @@ class SetGroupPage extends StatefulWidget {
 }
 
 class _SetGroupPageState extends State<SetGroupPage> {
+  SetGroup setGroup;
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> argMap = ModalRoute.of(context).settings.arguments;
-    SetGroup setGroup = argMap['setGroup'];
+    setGroup = argMap['setGroup'];
     return background(
       context,
       child: Scaffold(
@@ -74,8 +75,7 @@ class _SetGroupPageState extends State<SetGroupPage> {
                             physics: ClampingScrollPhysics(),
                             itemCount: setGroup.sets.length,
                             itemBuilder: (context, index) {
-                              return setRow(
-                                  setGroup.sets[index],
+                              return setRow(setGroup.sets[index],
                                   Theme.of(context).primaryColor);
                             },
                             separatorBuilder: (context, index) {
@@ -91,10 +91,11 @@ class _SetGroupPageState extends State<SetGroupPage> {
             text: 'Add Set',
             height: 75,
             color: Theme.of(context).focusColor,
-            onPressed: () => navigateTo('add_set', context, parameters: {
-              'onSetCreated': onSetCreated,
-              'setGroup': setGroup
-            }),
+            onPressed: () => navigateTo(
+              'add_set',
+              context,
+              parameters: {'setGroup': setGroup},
+            ),
           )
         ],
       ),
@@ -102,44 +103,51 @@ class _SetGroupPageState extends State<SetGroupPage> {
   }
 
   Widget setRow(Set set, Color color) {
-    return box(
-      height: 80,
-      borderColor: color,
-      fillColor: color.withAlpha(50),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          hideIf(
-            condition: set.exercise.type == ExerciseType.bodyweight,
-            child: Column(
+    return GestureDetector(
+      child: box(
+        height: 80,
+        borderColor: color,
+        fillColor: color.withAlpha(50),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            hideIf(
+              condition: set.exercise.type == ExerciseType.bodyweight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  text('${set.weight}',
+                      fontSize: 24, fontWeight: FontWeight.bold),
+                  text('Weight', fontSize: 12),
+                ],
+              ),
+            ),
+            hideIf(
+              condition: set.exercise.type == ExerciseType.bodyweight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                child: text('x', fontWeight: FontWeight.bold),
+              ),
+            ),
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                text('${set.weight}', fontSize: 24, fontWeight: FontWeight.bold),
-                text('Weight', fontSize: 12),
+                text('${set.reps}', fontSize: 24, fontWeight: FontWeight.bold),
+                text('Reps', fontSize: 12),
               ],
             ),
-          ),
-          hideIf(
-            condition: set.exercise.type == ExerciseType.bodyweight,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-              child: text('x', fontWeight: FontWeight.bold),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              text('${set.reps}', fontSize: 24, fontWeight: FontWeight.bold),
-              text('Reps', fontSize: 12),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
+      onTap: () => navigateTo(
+              'add_set',
+              context,
+              parameters: {'setGroup': setGroup, 'setToEdit': set},
+            ),
     );
   }
 
-  void onSetCreated(Set set) {}
 
   Align metricsCards(BuildContext context) {
     return Align(

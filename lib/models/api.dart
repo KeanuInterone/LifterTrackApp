@@ -62,7 +62,7 @@ class API {
         );
         break;
       case HttpMethod.delete:
-        response = await http.get(
+        response = await http.delete(
           url,
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
