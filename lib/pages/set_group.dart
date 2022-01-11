@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/Metrics/Graph.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/box.dart';
 import 'package:lifter_track_app/components/button.dart';
@@ -8,6 +9,7 @@ import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/components/workoutHeader.dart';
 import 'package:lifter_track_app/models/Notifiers/current_workout.dart';
 import 'package:lifter_track_app/models/exercise.dart';
+import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
@@ -61,7 +63,7 @@ class _SetGroupPageState extends State<SetGroupPage> {
                 children: [
                   focusExerciseTitle(setGroup),
                   SizedBox(height: 10),
-                  metricsCards(context),
+                  metricsCards(context, setGroup.focusExercise),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: setGroup.sets.length == 0
@@ -141,15 +143,14 @@ class _SetGroupPageState extends State<SetGroupPage> {
         ),
       ),
       onTap: () => navigateTo(
-              'add_set',
-              context,
-              parameters: {'setGroup': setGroup, 'setToEdit': set},
-            ),
+        'add_set',
+        context,
+        parameters: {'setGroup': setGroup, 'setToEdit': set},
+      ),
     );
   }
 
-
-  Align metricsCards(BuildContext context) {
+  Align metricsCards(BuildContext context, Exercise exercise) {
     return Align(
       child: Container(
         height: 150,
@@ -159,14 +160,20 @@ class _SetGroupPageState extends State<SetGroupPage> {
             Radius.circular(20),
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Center(child: text('Meta data cards')),
-            ),
-          ],
+        child: FutureBuilder(
+          future: exercise.getProgressionData(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return CircularProgressIndicator();
+            }
+            Response res = snapshot.data;
+            Map<String, dynamic> data = res.data;
+            return Graph(
+              minY: 0,
+              maxY: data['max'].toDouble(),
+              data: data['efforts'],
+            );
+          }
         ),
       ),
     );

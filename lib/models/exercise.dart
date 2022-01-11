@@ -132,6 +132,14 @@ class Exercise {
     return res;
   }
 
+  Future<Response> getProgressionData() async {
+    Response res = await API.makeApiRequest(
+      path: 'exercises/$id/progression',
+      method: HttpMethod.get,
+    );
+    return res;
+  }
+
   Exercise clone() {
     return new Exercise(id: this.id, name: this.name, tagIDs: List.from(this.tagIDs), tags: List.from(this.tags), type: this.type, trackPerSide: this.trackPerSide, weightInput: this.weightInput);
   }
