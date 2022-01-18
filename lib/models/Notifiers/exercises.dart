@@ -10,10 +10,10 @@ class Exercises extends ChangeNotifier {
   List<Exercise> exercises = [];
   Map<String, Exercise> exerciseWithId = {};
   Map<String, List<Exercise>> groupedExercises = {};
- 
+
   Future<Response> addExercise(Exercise exercise) async {
     Response res = await Exercise.create(exercise);
-    if (res.success == false) return res; 
+    if (res.success == false) return res;
     exercises.add(res.data);
     parseExercises();
     notifyListeners();
@@ -21,7 +21,8 @@ class Exercises extends ChangeNotifier {
   }
 
   Future<Response> editExercise(Exercise exercise) async {
-    Response res = await exercises.firstWhere((e) => e.id == exercise.id).update(exercise);
+    Response res =
+        await exercises.firstWhere((e) => e.id == exercise.id).update(exercise);
     if (res.success) {
       parseExercises();
       notifyListeners();
@@ -47,14 +48,27 @@ class Exercises extends ChangeNotifier {
   void parseExercises() {
     exerciseWithId = {};
     groupedExercises = {};
+
+    // LOOP THROUGH EXERCISES
     for (Exercise exercise in exercises) {
+
+      // ADD INDEX
       exerciseWithId[exercise.id] = exercise;
-      for(String tagId in exercise.tagIDs) {
-        if (groupedExercises[tagId] == null) {
-          groupedExercises[tagId] = [];
+      
+      // SORT INTO TAG GROUPS
+      if (exercise.tagIDs.isEmpty) {
+        if (groupedExercises['other'] == null) {
+          groupedExercises['other'] = [];
         }
-        groupedExercises[tagId].add(exercise);
+        groupedExercises['other'].add(exercise);
+      } else {
+        for (String tagId in exercise.tagIDs) {
+          if (groupedExercises[tagId] == null) {
+            groupedExercises[tagId] = [];
+          }
+          groupedExercises[tagId].add(exercise);
+        }
       }
     }
-  }  
+  }
 }
