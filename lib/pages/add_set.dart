@@ -91,10 +91,10 @@ class _AddSetPageState extends State<AddSetPage> {
                       rightChild: setToEdit != null
                           ? isDeleteLoading
                               ? Center(
-                                child: CircularProgressIndicator(
+                                  child: CircularProgressIndicator(
                                     color: Colors.red,
                                   ),
-                              )
+                                )
                               : GestureDetector(
                                   child: Center(
                                     child: text(
@@ -176,6 +176,15 @@ class _AddSetPageState extends State<AddSetPage> {
           onRepsChanged: repsChanged,
         );
         break;
+      case ExerciseType.dumbbell:
+        form = ValueSetForm(
+          initialWeight: weight,
+          initialReps: reps,
+          onWeightChanged: weightChanged,
+          onRepsChanged: repsChanged,
+          trackPerSide: exercise.trackPerSide,
+        );
+        break;
       case ExerciseType.weight:
         if (exercise.weightInput == WeightInput.plates) {
           form = WeightPlateSelectorSetForm(
@@ -191,6 +200,7 @@ class _AddSetPageState extends State<AddSetPage> {
             initialReps: reps,
             onWeightChanged: weightChanged,
             onRepsChanged: repsChanged,
+            trackPerSide: exercise.trackPerSide,
           );
         }
         break;

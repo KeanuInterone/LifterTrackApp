@@ -88,13 +88,14 @@ class _WorkoutsPageState extends State<WorkoutsPage> {
 
   Widget setGroupRow(BuildContext context, SetGroup setGroup, Color color) {
     Exercise exercise = Provider.of<Exercises>(context, listen: false).exerciseWithId[setGroup.focusExerciseId];
+    String exerciseName = exercise != null ? exercise.name : 'Deleted Exercise';
     return box(
       height: 80,
       borderColor: color,
       fillColor: color.withAlpha(50),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: text(exercise.name),
+        child: text(exerciseName),
       )
     );
   }

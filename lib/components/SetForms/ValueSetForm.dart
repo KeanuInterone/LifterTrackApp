@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/ValueField.dart';
+import 'package:lifter_track_app/components/hide_if.dart';
 import 'package:lifter_track_app/components/scrollableValuePicker.dart';
 import 'package:lifter_track_app/components/text.dart';
 
@@ -8,12 +9,14 @@ class ValueSetForm extends StatelessWidget {
   final int initialReps;
   final void Function(int) onWeightChanged;
   final void Function(int) onRepsChanged;
+  final bool trackPerSide;
   const ValueSetForm(
       {Key key,
       this.initialWeight,
       this.initialReps,
       this.onRepsChanged,
-      this.onWeightChanged})
+      this.onWeightChanged,
+      this.trackPerSide = false})
       : super(key: key);
 
   @override
@@ -39,6 +42,7 @@ class ValueSetForm extends StatelessWidget {
             child: Column(
               children: [
                 text('Weight', fontSize: 18, fontWeight: FontWeight.bold),
+                hideIf(condition: !trackPerSide, child: text('per side', fontSize: 12, fontWeight: FontWeight.normal)),
                 SizedBox(
                   height: 10,
                 ),

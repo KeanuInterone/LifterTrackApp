@@ -60,6 +60,7 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                       bool isBarbell = type == ExerciseType.barbell;
                       bool isBodyweight = type == ExerciseType.bodyweight;
                       bool isWeight = type == ExerciseType.weight;
+                      bool isDumbbell = type == ExerciseType.dumbbell;
                       WeightInput weightInput =
                           newExercise.exercise.weightInput;
                       bool isPlates = weightInput == WeightInput.plates;
@@ -79,8 +80,8 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                           SizedBox(height: 30),
                           text('Type', textAlign: TextAlign.center),
                           SizedBox(height: 10),
-                          typePicker(isBarbell, context, newExercise,
-                              isBodyweight, isWeight),
+                          typePicker(isBarbell, isDumbbell, context,
+                              newExercise, isBodyweight, isWeight),
                           hideIf(
                             condition: !isWeight,
                             child: Column(
@@ -129,7 +130,9 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                                   newExercise.clearExercise();
                                   int count = 0;
                                   Navigator.popUntil(context, (route) {
-                                    return route.settings.name == 'exercises' || route.settings.name == 'select_exercise';
+                                    return route.settings.name == 'exercises' ||
+                                        route.settings.name ==
+                                            'select_exercise';
                                   });
                                   // Navigator.popUntil(context, (route) {
                                   //   return ModalRoute.withName('exercises');
@@ -275,70 +278,111 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
     );
   }
 
-  Container typePicker(bool isBarbell, BuildContext context,
+  Container typePicker(bool isBarbell, bool isDumbbell, BuildContext context,
       ExerciseNotifier newExercise, bool isBodyweight, bool isWeight) {
     return Container(
-      height: 200,
+      height: 300,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: button(
-                text: 'Barbell',
-                color: isBarbell
-                    ? Theme.of(context).focusColor
-                    : Theme.of(context).primaryColor,
-                fillColor: isBarbell
-                    ? Theme.of(context).focusColor.withAlpha(50)
-                    : Colors.transparent,
-                onPressed: () {
-                  setState(() {
-                    errorMessageForName = '';
-                  });
-                  newExercise.setExerciseType(ExerciseType.barbell);
-                },
-              ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: button(
-                text: 'Bodyweight',
-                color: isBodyweight
-                    ? Theme.of(context).focusColor
-                    : Theme.of(context).primaryColor,
-                fillColor: isBodyweight
-                    ? Theme.of(context).focusColor.withAlpha(50)
-                    : Colors.transparent,
-                onPressed: () {
-                  setState(() {
-                    errorMessageForName = '';
-                  });
-                  newExercise.setExerciseType(ExerciseType.bodyweight);
-                },
-              ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: button(
-                text: 'Weight',
-                color: isWeight
-                    ? Theme.of(context).focusColor
-                    : Theme.of(context).primaryColor,
-                fillColor: isWeight
-                    ? Theme.of(context).focusColor.withAlpha(50)
-                    : Colors.transparent,
-                onPressed: () {
-                  setState(() {
-                    errorMessageForName = '';
-                  });
-                  newExercise.setExerciseType(ExerciseType.weight);
-                },
-              ),
-            ),
+            barbellButton(isBarbell, context, newExercise),
+            SizedBox(height: 20),
+            dumbbellButton(isDumbbell, context, newExercise),
+            SizedBox(height: 20),
+            bodyweightButton(isBodyweight, context, newExercise),
+            SizedBox(height: 20),
+            weightButton(isWeight, context, newExercise),
           ],
         ),
+      ),
+    );
+  }
+
+  Expanded weightButton(
+      bool isWeight, BuildContext context, ExerciseNotifier newExercise) {
+    return Expanded(
+      child: button(
+        text: 'Weight',
+        color: isWeight
+            ? Theme.of(context).focusColor
+            : Theme.of(context).primaryColor,
+        fillColor: isWeight
+            ? Theme.of(context).focusColor.withAlpha(50)
+            : Colors.transparent,
+        onPressed: () {
+          setState(() {
+            errorMessage = '';
+          });
+          newExercise.setExerciseType(ExerciseType.weight);
+        },
+      ),
+    );
+  }
+
+  Expanded bodyweightButton(
+      bool isBodyweight, BuildContext context, ExerciseNotifier newExercise) {
+    return Expanded(
+      child: button(
+        text: 'Bodyweight',
+        color: isBodyweight
+            ? Theme.of(context).focusColor
+            : Theme.of(context).primaryColor,
+        fillColor: isBodyweight
+            ? Theme.of(context).focusColor.withAlpha(50)
+            : Colors.transparent,
+        onPressed: () {
+          setState(() {
+            errorMessage = '';
+          });
+          newExercise.exercise.weightInput = WeightInput.value;
+          newExercise.setExerciseType(ExerciseType.bodyweight);
+        },
+      ),
+    );
+  }
+
+  Expanded dumbbellButton(
+      bool isDumbbell, BuildContext context, ExerciseNotifier newExercise) {
+    return Expanded(
+      child: button(
+        text: 'Dumbbell',
+        color: isDumbbell
+            ? Theme.of(context).focusColor
+            : Theme.of(context).primaryColor,
+        fillColor: isDumbbell
+            ? Theme.of(context).focusColor.withAlpha(50)
+            : Colors.transparent,
+        onPressed: () {
+          setState(() {
+            errorMessage = '';
+          });
+          newExercise.exercise.weightInput = WeightInput.value;
+          newExercise.setExerciseType(ExerciseType.dumbbell);
+        },
+      ),
+    );
+  }
+
+  Expanded barbellButton(
+      bool isBarbell, BuildContext context, ExerciseNotifier newExercise) {
+    return Expanded(
+      child: button(
+        text: 'Barbell',
+        color: isBarbell
+            ? Theme.of(context).focusColor
+            : Theme.of(context).primaryColor,
+        fillColor: isBarbell
+            ? Theme.of(context).focusColor.withAlpha(50)
+            : Colors.transparent,
+        onPressed: () {
+          setState(() {
+            errorMessage = '';
+          });
+          newExercise.exercise.weightInput = WeightInput.plates;
+          newExercise.setExerciseType(ExerciseType.barbell);
+        },
       ),
     );
   }
@@ -365,8 +409,7 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
     );
   }
 
-  Widget exerciseNameField(
-      BuildContext context, ExerciseNotifier newExercise) {
+  Widget exerciseNameField(BuildContext context, ExerciseNotifier newExercise) {
     return formField(
       placeholder: 'Exercise Name',
       initialValue: name,

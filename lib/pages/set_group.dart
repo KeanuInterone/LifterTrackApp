@@ -122,6 +122,7 @@ class _SetGroupPageState extends State<SetGroupPage> {
                   text('${set.weight}',
                       fontSize: 24, fontWeight: FontWeight.bold),
                   text('Weight', fontSize: 12),
+                  hideIf(condition: !set.exercise.trackPerSide, child: text('per side', fontSize: 8))
                 ],
               ),
             ),

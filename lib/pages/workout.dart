@@ -127,39 +127,41 @@ class _WorkoutPage extends State<WorkoutPage> {
 
   Widget setRow(Set set, Color color) {
     return box(
-      height: 80,
-      borderColor: color,
-      fillColor: color.withAlpha(50),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          hideIf(
-            condition: set.exercise.type == ExerciseType.bodyweight,
-            child: Column(
+        height: 80,
+        borderColor: color,
+        fillColor: color.withAlpha(50),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            hideIf(
+              condition: set.exercise.type == ExerciseType.bodyweight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  text('${set.weight}',
+                      fontSize: 24, fontWeight: FontWeight.bold),
+                  text('Weight', fontSize: 12),
+                  hideIf(condition: !set.exercise.trackPerSide, child: text('per side', fontSize: 8))
+                ],
+              ),
+            ),
+            hideIf(
+              condition: set.exercise.type == ExerciseType.bodyweight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                child: text('x', fontWeight: FontWeight.bold),
+              ),
+            ),
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                text('${set.weight}', fontSize: 24, fontWeight: FontWeight.bold),
-                text('Weight', fontSize: 12),
+                text('${set.reps}', fontSize: 24, fontWeight: FontWeight.bold),
+                text('Reps', fontSize: 12),
               ],
             ),
-          ),
-          hideIf(
-            condition: set.exercise.type == ExerciseType.bodyweight,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-              child: text('x', fontWeight: FontWeight.bold),
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              text('${set.reps}', fontSize: 24, fontWeight: FontWeight.bold),
-              text('Reps', fontSize: 12),
-            ],
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
   }
 }
