@@ -44,6 +44,7 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
                       physics: ClampingScrollPhysics(),
                       children: [
                         ExerciseSearchBar(
+                          autoFocus: true,
                           onExerciseSelected: (exercise) {
                             createSetGroup(context, exercise);
                           },

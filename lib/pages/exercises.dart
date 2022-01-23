@@ -65,7 +65,11 @@ class _ExercisesPageState extends State<ExercisesPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ExerciseSearchBar(
-              onExerciseSelected: (exercise) {},
+              onExerciseSelected: (exercise) {
+                Provider.of<ExerciseNotifier>(context, listen: false)
+                    .setExercise(exercise.clone());
+                navigateTo('exercise_edit', context);
+              },
             ),
             SizedBox(
               height: 10,

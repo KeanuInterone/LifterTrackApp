@@ -11,11 +11,13 @@ class ExerciseSearchBar extends StatefulWidget {
   final void Function(Exercise) onExerciseSelected;
   final String initialValue;
   final bool autoFocus;
+  final TextCapitalization textCapitalization;
   ExerciseSearchBar(
       {Key key,
       this.onExerciseSelected,
       this.initialValue,
-      this.autoFocus = false})
+      this.autoFocus = false,
+      this.textCapitalization = TextCapitalization.words,})
       : super(key: key);
 
   @override
@@ -35,6 +37,7 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
             initialValue: widget.initialValue,
             placeholder: 'Search',
             autofocus: widget.autoFocus,
+            textCapitalization: widget.textCapitalization,
             onChanged: (value) {
               this.value = value;
               searchExercises(context, value);
