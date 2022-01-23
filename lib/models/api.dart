@@ -23,8 +23,9 @@ class API {
   static Future<bool> validateToken() async {
     if (authToken == null) return false;
     String url = '$baseURL/users/me';
+    Uri uri = Uri.parse(url);
     var response = await http.get(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer $authToken'
@@ -39,12 +40,12 @@ class API {
   static Future<Response> makeApiRequest({String path, HttpMethod method = HttpMethod.get,  dynamic body,}) async {
     if (authToken == null) return Response(false, 'No authtoken', null);
     String url = '$baseURL/$path';
-
+    Uri uri = Uri.parse(url);
     var response;
     switch (method) {
       case HttpMethod.get:
         response = await http.get(
-          url,
+          uri,
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $authToken'
@@ -53,7 +54,7 @@ class API {
         break;
       case HttpMethod.post:
         response = await http.post(
-          url,
+          uri,
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $authToken'
@@ -63,7 +64,7 @@ class API {
         break;
       case HttpMethod.delete:
         response = await http.delete(
-          url,
+          uri,
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'Authorization': 'Bearer $authToken'

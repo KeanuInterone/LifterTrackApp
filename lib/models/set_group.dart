@@ -41,8 +41,9 @@ class SetGroup {
 
   static Future<Response> create() async {
     String url = "${API.baseURL}/setgroups/create";
+    Uri uri = Uri.parse(url);
     var response = await http.post(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'

@@ -23,8 +23,9 @@ class Workout {
 
   static Future<Response> create() async {
     String url = "${API.baseURL}/workouts/create";
+    Uri uri = Uri.parse(url);
     var response = await http.post(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'
@@ -46,8 +47,9 @@ class Workout {
 
   Future<Response> createSetGroup(Exercise exercise) async {
     String url = "${API.baseURL}/workouts/$id/add_set_group";
+    Uri uri = Uri.parse(url);
     var response = await http.post(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'
@@ -72,8 +74,9 @@ class Workout {
   Future<Response> createSet(
       SetGroup setGroup, Exercise exercise, int weight, int reps) async {
     String url = "${API.baseURL}/workouts/$id/add_set";
+    Uri uri = Uri.parse(url);
     var response = await http.post(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'
@@ -103,8 +106,9 @@ class Workout {
 
   Future<Response> finish() async {
     String url = "${API.baseURL}/workouts/$id/finish";
+    Uri uri = Uri.parse(url);
     var response = await http.get(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'

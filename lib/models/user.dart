@@ -27,8 +27,9 @@ class User {
   static Future<Response> login(
       String email, String password) async {
     String url = "${API.baseURL}/users/login";
+    Uri uri = Uri.parse(url);
     var response = await http.post(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -50,8 +51,9 @@ class User {
   static Future<Response> authorizeOAuthToken(
       {String token, String provider, String firstName, String lastName}) async {
     String url = "${API.baseURL}/users/authorizeOAuthToken";
+    Uri uri = Uri.parse(url);
     var response = await http.post(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -78,8 +80,9 @@ class User {
   static Future<Response> signUp(
       String email, String password, String firstName, String lastName) async {
     String url = "${API.baseURL}/users/create";
+    Uri uri = Uri.parse(url);
     var response = await http.post(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },

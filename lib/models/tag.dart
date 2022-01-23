@@ -17,8 +17,9 @@ class Tag {
 
   static Future<Response> createTag(Tag tag) async {
     String url = "${API.baseURL}/tags/create";
+    Uri uri = Uri.parse(url);
     var response = await http.post(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'
@@ -42,8 +43,9 @@ class Tag {
 
   static Future<Response> getTags() async {
     String url = "${API.baseURL}/tags";
+    Uri uri = Uri.parse(url);
     var response = await http.get(
-      url,
+      uri,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer ${API.authToken}'
