@@ -6,7 +6,7 @@ import 'package:lifter_track_app/models/Notifiers/exercises.dart';
 import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
 import 'package:lifter_track_app/models/Notifiers/workouts.dart';
 import 'package:lifter_track_app/models/user.dart';
-import 'package:lifter_track_app/pages/home.dart';
+import 'package:lifter_track_app/pages/HomePage.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:lifter_track_app/components/background.dart';

@@ -13,7 +13,7 @@ import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
-import 'package:lifter_track_app/pages/AddExercisePages/exercise_type.dart';
+import 'package:lifter_track_app/pages/AddExercisePages/ExerciseTypeSelectPage.dart';
 import 'package:provider/provider.dart';
 
 class SetGroupPage extends StatefulWidget {

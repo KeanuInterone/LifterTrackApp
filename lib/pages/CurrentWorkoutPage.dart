@@ -10,9 +10,9 @@ import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
-import 'package:lifter_track_app/pages/select_exercise.dart';
+import 'package:lifter_track_app/pages/SelectExercisePage.dart';
 import 'package:provider/provider.dart';
-import 'package:lifter_track_app/pages/set_group.dart';
+import 'package:lifter_track_app/pages/SetGroupPage.dart';
 import 'package:lifter_track_app/components/workoutHeader.dart';
 
 class WorkoutPage extends StatefulWidget {

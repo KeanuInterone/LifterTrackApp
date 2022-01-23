@@ -3,12 +3,12 @@ import 'package:lifter_track_app/components/navigator.dart';
 import 'package:lifter_track_app/models/Notifiers/current_workout.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
-import 'package:lifter_track_app/pages/workout.dart';
+import 'package:lifter_track_app/pages/CurrentWorkoutPage.dart';
 import 'package:lifter_track_app/models/user.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/components/button.dart';
-import 'package:lifter_track_app/pages/exercises.dart';
+import 'package:lifter_track_app/pages/ExercisePage.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
