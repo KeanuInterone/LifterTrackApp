@@ -106,8 +106,12 @@ class _WorkoutPage extends State<WorkoutPage> {
             shrinkWrap: true,
             physics: ClampingScrollPhysics(),
             children: [
-              text('${setGroup.focusExercise.name}', textAlign: TextAlign.center, fontSize:28, fontWeight: FontWeight.bold),
+              // EXERCISE NAME
+              Hero(
+                tag: 'ExerciseName',
+                child: text('${setGroup.focusExercise.name}', textAlign: TextAlign.center, fontSize:28, fontWeight: FontWeight.bold)),
               SizedBox(height: 10),
+              // SETS
               ListView.separated(
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),

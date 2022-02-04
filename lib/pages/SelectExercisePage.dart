@@ -46,7 +46,7 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
                         ExerciseSearchBar(
                           autoFocus: true,
                           onExerciseSelected: (exercise) {
-                            createSetGroup(context, exercise);
+                            startSetGroupWithExercise(context, exercise);
                           },
                         ),
                         Consumer2<Exercises, TagsNotifier>(
@@ -58,7 +58,7 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
                               tags: tags,
                               exercises: exercises,
                               onExerciseTap: (exercise) {
-                                createSetGroup(context, exercise);
+                                startSetGroupWithExercise(context, exercise);
                               },
                             );
                           },
@@ -106,15 +106,7 @@ class _SelectExercisePageState extends State<SelectExercisePage> {
     );
   }
 
-  void createSetGroup(BuildContext context, Exercise exercise) async {
-    Response res = await Provider.of<CurrentWorkout>(context, listen: false)
-        .addSetGroup(exercise);
-    if (!res.success) {
-      print(res.errMessage);
-      return;
-    }
-    SetGroup setGroup = res.data;
-    setGroup.focusExercise = exercise;
-    replaceScreenWith('set_group', context, parameters: {'setGroup': setGroup});
+  void startSetGroupWithExercise(BuildContext context, Exercise exercise) async {
+    replaceScreenWith('set_group', context, parameters: {'exercise': exercise});
   }
 }

@@ -17,19 +17,36 @@ import 'package:lifter_track_app/pages/AddExercisePages/ExerciseTypeSelectPage.d
 import 'package:provider/provider.dart';
 
 class SetGroupPage extends StatefulWidget {
-  final SetGroup setGroup;
-  const SetGroupPage({Key key, this.setGroup}) : super(key: key);
+  const SetGroupPage({Key key}) : super(key: key);
 
   @override
   _SetGroupPageState createState() => _SetGroupPageState();
 }
 
 class _SetGroupPageState extends State<SetGroupPage> {
+  Future<Response> getSetGroup() async {
+    Map<String, dynamic> argMap = ModalRoute.of(context).settings.arguments;
+    SetGroup setGroup = argMap['setGroup'];
+    if (setGroup != null) return Response(true, null, setGroup);
+    Exercise exercise = argMap['exercise'];
+    return await createSetGroup(context, exercise);
+  }
+
+  Future<Response> createSetGroup(
+      BuildContext context, Exercise exercise) async {
+    Response res = await Provider.of<CurrentWorkout>(context, listen: false)
+        .addSetGroup(exercise);
+    if (!res.success) {
+      return res;
+    }
+    SetGroup setGroup = res.data;
+    setGroup.focusExercise = exercise;
+    return Response(true, null, setGroup);
+  }
+
   SetGroup setGroup;
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> argMap = ModalRoute.of(context).settings.arguments;
-    setGroup = argMap['setGroup'];
     return background(
       context,
       child: Scaffold(
@@ -40,7 +57,22 @@ class _SetGroupPageState extends State<SetGroupPage> {
             child: Column(
               children: [
                 workoutHeader(context),
-                body(setGroup, context),
+                FutureBuilder(
+                  future: getSetGroup(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    Response res = snapshot.data;
+                    if (!res.success) {
+                      return Center(child: text(res.errMessage, color: Colors.red),);
+                    }
+                    SetGroup setGroup = res.data;
+                    return body(setGroup, context);
+                  },
+                ),
               ],
             ),
           ),
@@ -122,7 +154,9 @@ class _SetGroupPageState extends State<SetGroupPage> {
                   text('${set.weight}',
                       fontSize: 24, fontWeight: FontWeight.bold),
                   text('Weight', fontSize: 12),
-                  hideIf(condition: !set.exercise.trackPerSide, child: text('per side', fontSize: 8))
+                  hideIf(
+                      condition: !set.exercise.trackPerSide,
+                      child: text('per side', fontSize: 8))
                 ],
               ),
             ),
@@ -162,28 +196,30 @@ class _SetGroupPageState extends State<SetGroupPage> {
           ),
         ),
         child: FutureBuilder(
-          future: exercise.getProgressionData(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return CircularProgressIndicator();
-            }
-            Response res = snapshot.data;
-            Map<String, dynamic> data = res.data;
-            return Graph(
-              minY: 0,
-              maxY: data['max'].toDouble(),
-              data: data['efforts'],
-            );
-          }
-        ),
+            future: exercise.getProgressionData(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CircularProgressIndicator();
+              }
+              Response res = snapshot.data;
+              Map<String, dynamic> data = res.data;
+              return Graph(
+                minY: 0,
+                maxY: data['max'].toDouble(),
+                data: data['efforts'],
+              );
+            }),
       ),
     );
   }
 
   Align focusExerciseTitle(SetGroup setGroup) {
     return Align(
-      child: text('${setGroup.focusExercise.name}',
-          fontSize: 40, textAlign: TextAlign.center),
+      child: Hero(
+        tag: 'ExerciseName',
+        child: text('${setGroup.focusExercise.name}',
+            fontSize: 40, textAlign: TextAlign.center),
+      ),
     );
   }
 }
