@@ -437,7 +437,7 @@ class _ExerciseEditPageState extends State<ExerciseEditPage> {
         List<Exercise> exercises =
             Provider.of<Exercises>(context, listen: false).exercises;
         var searchResults = exercises.where((exercise) {
-          return exercise.name.toLowerCase() == value.toLowerCase();
+          return exercise.name == value;
         }).toList();
         if (searchResults.length > 0) {
           setState(() {
