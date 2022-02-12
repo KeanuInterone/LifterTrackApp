@@ -203,9 +203,12 @@ class _SetGroupPageState extends State<SetGroupPage> {
               }
               Response res = snapshot.data;
               Map<String, dynamic> data = res.data;
+              double min = data['min'].toDouble();
+              double max = data['max'].toDouble();
+              if (min == max) min = 0;
               return Graph(
-                minY: 0,
-                maxY: data['max'].toDouble(),
+                minY: min,
+                maxY: max,
                 data: data['efforts'],
               );
             }),
@@ -215,11 +218,8 @@ class _SetGroupPageState extends State<SetGroupPage> {
 
   Align focusExerciseTitle(SetGroup setGroup) {
     return Align(
-      child: Hero(
-        tag: 'ExerciseName',
-        child: text('${setGroup.focusExercise.name}',
-            fontSize: 40, textAlign: TextAlign.center),
-      ),
+      child: text('${setGroup.focusExercise.name}',
+          fontSize: 40, textAlign: TextAlign.center),
     );
   }
 }

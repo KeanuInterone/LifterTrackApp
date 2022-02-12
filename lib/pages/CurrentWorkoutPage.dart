@@ -107,9 +107,7 @@ class _WorkoutPage extends State<WorkoutPage> {
             physics: ClampingScrollPhysics(),
             children: [
               // EXERCISE NAME
-              Hero(
-                tag: 'ExerciseName',
-                child: text('${setGroup.focusExercise.name}', textAlign: TextAlign.center, fontSize:28, fontWeight: FontWeight.bold)),
+              text('${setGroup.focusExercise.name}', textAlign: TextAlign.center, fontSize:28, fontWeight: FontWeight.bold),
               SizedBox(height: 10),
               // SETS
               ListView.separated(
