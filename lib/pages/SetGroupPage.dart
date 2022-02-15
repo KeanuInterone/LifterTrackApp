@@ -67,7 +67,9 @@ class _SetGroupPageState extends State<SetGroupPage> {
                     }
                     Response res = snapshot.data;
                     if (!res.success) {
-                      return Center(child: text(res.errMessage, color: Colors.red),);
+                      return Center(
+                        child: text(res.errMessage, color: Colors.red),
+                      );
                     }
                     SetGroup setGroup = res.data;
                     return body(setGroup, context);
@@ -185,33 +187,64 @@ class _SetGroupPageState extends State<SetGroupPage> {
     );
   }
 
-  Align metricsCards(BuildContext context, Exercise exercise) {
-    return Align(
-      child: Container(
-        height: 150,
-        decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
+  Widget metricsCards(BuildContext context, Exercise exercise) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return Align(
+        child: Container(
+          height: 220,
+          width: constraints.maxWidth,
+          child: progressMetricCard(exercise),
         ),
-        child: FutureBuilder(
-            future: exercise.getProgressionData(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return CircularProgressIndicator();
-              }
-              Response res = snapshot.data;
-              Map<String, dynamic> data = res.data;
-              double min = data['min'].toDouble();
-              double max = data['max'].toDouble();
-              if (min == max) min = 0;
-              return Graph(
-                minY: min,
-                maxY: max,
-                data: data['efforts'],
-              );
-            }),
+      );
+    });
+  }
+
+  Widget progressMetricCard(Exercise exercise) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).backgroundColor,
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: text('Progression',
+                color: Theme.of(context).primaryColorDark,
+                fontWeight: FontWeight.bold),
+          ),
+          Expanded(
+            flex: 1,
+            child: FutureBuilder(
+              future: exercise.getProgressionData(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                Response res = snapshot.data;
+                Map<String, dynamic> data = res.data;
+                double min = data['min'].toDouble();
+                double max = data['max'].toDouble();
+                List points = data['efforts'];
+                if (min == max) min = 0;
+                return points.length == 0
+                    ? Center(
+                        child: text('No data',
+                            color: Theme.of(context).primaryColorDark))
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 16, 20),
+                        child: Graph(
+                          minY: min,
+                          maxY: max,
+                          data: points,
+                        ),
+                      );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

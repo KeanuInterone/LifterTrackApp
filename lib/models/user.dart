@@ -38,7 +38,7 @@ class User {
     if (response.statusCode != 200) {
       Map<String, dynamic> json = jsonDecode(response.body);
       bool hasError = json != null && json.containsKey('error');
-      return Response(false, hasError ? json['error'] : "There was an error creating the user", null);
+      return Response(false, hasError ? json['error'] : "There was an error logging in", null);
     }
 
     Map<String, dynamic> json = jsonDecode(response.body);

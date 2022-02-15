@@ -52,7 +52,8 @@ class _MyAppState extends State<MyApp> {
         theme: ThemeData(
           primaryColor: Color(0xff4cd0fa), //Colors.white, //
           backgroundColor: Color(0xff313342), //Colors.black, //
-          focusColor: Color(0xff15f410) //Colors.white, //
+          focusColor: Color(0xff15f410), //Colors.white, //
+          primaryColorDark: Color(0xff67727d)
 
         ),
         home: LoginPage(),
