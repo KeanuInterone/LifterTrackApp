@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lifter_track_app/components/Metrics/Graph.dart';
+import 'package:lifter_track_app/components/MetrixCards.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/box.dart';
 import 'package:lifter_track_app/components/button.dart';
@@ -12,10 +12,7 @@ import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/set_group.dart';
 import 'package:lifter_track_app/models/set.dart';
-import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
-import 'package:lifter_track_app/pages/AddExercisePages/ExerciseTypeSelectPage.dart';
 import 'package:provider/provider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 
 class SetGroupPage extends StatefulWidget {
   const SetGroupPage({Key key}) : super(key: key);
@@ -95,7 +92,9 @@ class _SetGroupPageState extends State<SetGroupPage> {
                 children: [
                   focusExerciseTitle(setGroup),
                   SizedBox(height: 10),
-                  metricsCards(context, setGroup.focusExercise),
+                  MetrixCards(
+                    exercise: setGroup.focusExercise,
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: setGroup.sets.length == 0
@@ -181,92 +180,6 @@ class _SetGroupPageState extends State<SetGroupPage> {
         'add_set',
         context,
         parameters: {'setGroup': setGroup, 'setToEdit': set},
-      ),
-    );
-  }
-
-  PageController pageController = PageController();
-  int currentPage = 0;
-  Widget metricsCards(BuildContext context, Exercise exercise) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return Container(
-        height: 240,
-        width: constraints.maxWidth,
-        child: Column(
-          children: [
-            Expanded(
-              child: PageView(
-                controller: pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    currentPage = index;
-                  });
-                },
-                children: [
-                  progressMetricCard(exercise),
-                  progressMetricCard(exercise)
-                ],
-              ),
-            ),
-            DotsIndicator(
-              dotsCount: 2,
-              position: currentPage.toDouble(),
-            )
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget progressMetricCard(Exercise exercise) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).backgroundColor,
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: text('Progression',
-                  color: Theme.of(context).primaryColorDark,
-                  fontWeight: FontWeight.bold),
-            ),
-            Expanded(
-              flex: 1,
-              child: FutureBuilder(
-                future: exercise.getProgressionData(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  Response res = snapshot.data;
-                  Map<String, dynamic> data = res.data;
-                  double min = data['min'].toDouble();
-                  double max = data['max'].toDouble();
-                  List points = data['efforts'];
-                  if (min == max) min = 0;
-                  return points.length == 0
-                      ? Center(
-                          child: text('No data',
-                              color: Theme.of(context).primaryColorDark))
-                      : Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 16, 20),
-                          child: Graph(
-                            minY: min,
-                            maxY: max,
-                            data: points,
-                          ),
-                        );
-                },
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

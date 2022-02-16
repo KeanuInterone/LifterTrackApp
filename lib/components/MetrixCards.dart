@@ -1,0 +1,126 @@
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/Metrics/Graph.dart';
+import 'package:lifter_track_app/components/text.dart';
+import 'package:lifter_track_app/models/exercise.dart';
+
+import '../models/response.dart';
+
+class MetrixCards extends StatefulWidget {
+  final Exercise exercise;
+  const MetrixCards({Key key, this.exercise}) : super(key: key);
+
+  @override
+  _MetrixCardsState createState() => _MetrixCardsState();
+}
+
+class _MetrixCardsState extends State<MetrixCards> {
+  PageController pageController = PageController();
+  int currentPage = 0;
+  Map<String, dynamic> progressionData;
+  String progressionErrorMessage = '';
+
+  Future<Response> getProgressionData(Exercise exercise) async {
+    if (progressionData != null) return Response(true, null, progressionData);
+    Response res = await exercise.getProgressionData();
+    if (res.success == false) return res;
+    progressionData = res.data;
+    return res;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        height: 240,
+        width: constraints.maxWidth,
+        child: Column(
+          children: [
+            Expanded(
+              child: PageView(
+                controller: pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentPage = index;
+                  });
+                },
+                children: [
+                  progressMetricCard(widget.exercise),
+                  progressMetricCard(widget.exercise)
+                ],
+              ),
+            ),
+            DotsIndicator(
+              dotsCount: 2,
+              position: currentPage.toDouble(),
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  Widget progressMetricCard(Exercise exercise) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: text('Progression',
+                  color: Theme.of(context).primaryColorDark,
+                  fontWeight: FontWeight.bold),
+            ),
+            Expanded(
+              flex: 1,
+              child: FutureBuilder(
+                future: getProgressionData(exercise),
+                builder: (context, snapshot) {
+                  // Loading
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  Response res = snapshot.data;
+                  // Error
+                  if (res.success == false) {
+                    return Center(
+                      child: text(res.errMessage,
+                          color: Theme.of(context).primaryColorDark),
+                    );
+                  }
+                  // Data
+                  Map<String, dynamic> data = res.data;
+                  double min = data['min'].toDouble();
+                  double max = data['max'].toDouble();
+                  List points = data['efforts'];
+                  if (min == max) min = 0;
+                  if (points.length == 0) {
+                    return Center(
+                      child: text('No data',
+                          color: Theme.of(context).primaryColorDark),
+                    );
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 20, 16, 20),
+                    child: Graph(
+                      minY: min,
+                      maxY: max,
+                      data: points,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
