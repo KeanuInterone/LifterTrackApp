@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lifter_track_app/components/Metrics/Graph.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
+import 'package:lifter_track_app/models/set_group.dart';
 
 import '../models/response.dart';
 
@@ -18,13 +19,21 @@ class _MetrixCardsState extends State<MetrixCards> {
   PageController pageController = PageController();
   int currentPage = 0;
   Map<String, dynamic> progressionData;
-  String progressionErrorMessage = '';
+  Map<String, dynamic> lastSetData;
 
   Future<Response> getProgressionData(Exercise exercise) async {
     if (progressionData != null) return Response(true, null, progressionData);
     Response res = await exercise.getProgressionData();
     if (res.success == false) return res;
     progressionData = res.data;
+    return res;
+  }
+
+  Future<Response> getLastSetData(Exercise exercise) async {
+    if (lastSetData != null) return Response(true, null, lastSetData);
+    Response res = await exercise.getLastSetData();
+    if (res.success == false) return res;
+    lastSetData = res.data;
     return res;
   }
 
@@ -46,7 +55,7 @@ class _MetrixCardsState extends State<MetrixCards> {
                 },
                 children: [
                   progressMetricCard(widget.exercise),
-                  progressMetricCard(widget.exercise)
+                  lastSetMetricsCard(widget.exercise)
                 ],
               ),
             ),
@@ -114,6 +123,64 @@ class _MetrixCardsState extends State<MetrixCards> {
                       maxY: max,
                       data: points,
                     ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget lastSetMetricsCard(Exercise exercise) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: text('Last Set',
+                  color: Theme.of(context).primaryColorDark,
+                  fontWeight: FontWeight.bold),
+            ),
+            Expanded(
+              flex: 1,
+              child: FutureBuilder(
+                future: getLastSetData(exercise),
+                builder: (context, snapshot) {
+                  // Loading
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  Response res = snapshot.data;
+                  // Error
+                  if (res.success == false) {
+                    return Center(
+                      child: text(res.errMessage,
+                          color: Theme.of(context).primaryColorDark),
+                    );
+                  }
+                  // Data
+                  Map<String, dynamic> data = res.data;
+                  SetGroup setGroup = SetGroup.fromJson(data['setGroup']);
+                  int best = data['best'];
+                  if (setGroup == null) {
+                    return Center(
+                      child: text('No data',
+                          color: Theme.of(context).primaryColorDark),
+                    );
+                  }
+                  return Center(
+                    child: text('$best',
+                        color: Theme.of(context).primaryColorDark),
                   );
                 },
               ),

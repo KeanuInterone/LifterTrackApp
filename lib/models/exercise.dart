@@ -164,6 +164,13 @@ class Exercise {
     return res;
   }
 
+  Future<Response> getLastSetData() async {
+    Response res = await API.makeApiRequest(
+      path: 'exercises/$id/last_set',
+    );
+    return res;
+  }
+
   Exercise clone() {
     return new Exercise(
         id: this.id,
