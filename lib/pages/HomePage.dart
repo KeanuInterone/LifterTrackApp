@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/components/box.dart';
 import 'package:lifter_track_app/components/navigator.dart';
+import 'package:lifter_track_app/models/Notifiers/CurrentUserNotifier.dart';
 import 'package:lifter_track_app/models/Notifiers/current_workout.dart';
 import 'package:lifter_track_app/models/response.dart';
 import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
 import 'package:lifter_track_app/components/background.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/components/button.dart';
+import 'package:lifter_track_app/models/user.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -57,6 +60,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     this.context = context;
+    User user = Provider.of<CurrentUserNotifier>(context).user;
     return background(
       context,
       child: Scaffold(
@@ -72,7 +76,26 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver {
                   workoutAndExerciseButtons(context)
                 ],
               ),
-              Positioned(top: 20, right: 20, child: IconButton(iconSize: 52, icon: Icon(Icons.portrait_rounded, color: Colors.white60,), ))
+              Positioned(
+                top: 20,
+                right: 20,
+                child: GestureDetector(
+                  child: box(
+                    height: 50,
+                    width: 50,
+                    cornerRadius: 25,
+                    child: Center(
+                      child: text(
+                        '${user.firstName[0]}${user.lastName[0]}',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    navigateTo('profile', context);
+                  },
+                ),
+              )
             ],
           ),
         ),
@@ -162,13 +185,12 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver {
             Container(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
               child: button(
-                text: 'Workouts',
-                color: Theme.of(context).primaryColor,
-                height: 56,
-                onPressed: () {
-                  navigateTo('workouts', context);
-                }
-              ),
+                  text: 'Workouts',
+                  color: Theme.of(context).primaryColor,
+                  height: 56,
+                  onPressed: () {
+                    navigateTo('workouts', context);
+                  }),
             ),
             Container(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),

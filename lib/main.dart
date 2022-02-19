@@ -16,6 +16,7 @@ import 'package:lifter_track_app/pages/AddSetPage.dart';
 import 'package:lifter_track_app/pages/ExerciseEditPage.dart';
 import 'package:lifter_track_app/pages/ExercisePage.dart';
 import 'package:lifter_track_app/pages/LoginPage.dart';
+import 'package:lifter_track_app/pages/ProfilePage.dart';
 import 'package:lifter_track_app/pages/SelectExercisePage.dart';
 import 'package:lifter_track_app/pages/SetGroupPage.dart';
 import 'package:lifter_track_app/pages/SignUpPage.dart';
@@ -60,6 +61,7 @@ class _MyAppState extends State<MyApp> {
           'login': (context) => LoginPage(),
           'sign_up': (context) => SignUpPage(),
           'home': (context) => HomePage(),
+          'profile': (context) => ProfilePage(),
           'workout': (context) => WorkoutPage(),
           'select_exercise': (context) => SelectExercisePage(),
           'set_group': (context) => SetGroupPage(),
