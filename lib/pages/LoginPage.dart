@@ -58,7 +58,7 @@ class _LoginPage extends State<LoginPage> {
 
   void validateAuthToken(BuildContext context) async {
     await API.loadAuthtoken();
-    bool validAuthToken = await API.validateToken();
+    bool validAuthToken = await API.validateToken(context);
     if (validAuthToken) {
       initializeData();
       navigateTo('home', context);
@@ -283,7 +283,7 @@ class _LoginPage extends State<LoginPage> {
     });
 
     if (_validateAndSave()) {
-      Response res = await User.login(_email, _password);
+      Response res = await User.login(_email, _password, context);
       if (res.success) {
         initializeData();
         navigateTo('home', context);

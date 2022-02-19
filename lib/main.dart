@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lifter_track_app/models/Notifiers/CurrentUserNotifier.dart';
 import 'package:lifter_track_app/models/Notifiers/current_workout.dart';
 import 'package:lifter_track_app/models/Notifiers/tags_notifier.dart';
 import 'package:lifter_track_app/models/Notifiers/workouts.dart';
-import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/Notifiers/exercises.dart';
 import 'package:lifter_track_app/models/Notifiers/exercise_notifier.dart';
-import 'package:lifter_track_app/models/set_group.dart';
-import 'package:lifter_track_app/models/set.dart';
 import 'package:lifter_track_app/models/Notifiers/workout_timer.dart';
 import 'package:lifter_track_app/pages/AddExercisePages/ExerciseNamePage.dart';
 import 'package:lifter_track_app/pages/AddExercisePages/ExerciseReviewPage.dart';
@@ -40,6 +38,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => CurrentUserNotifier()),
         ChangeNotifierProvider(create: (context) => Exercises()),
         ChangeNotifierProvider(create: (context) => WorkoutTimer()),
         ChangeNotifierProvider(create: (context) => CurrentWorkout()),

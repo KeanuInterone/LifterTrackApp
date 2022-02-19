@@ -171,7 +171,7 @@ class _SignUpPage extends State<SignUpPage> {
 
     if (_validateAndSave()) {
       Response res =
-          await User.signUp(_email, _password, _first_name, _last_name);
+          await User.signUp(_email, _password, _first_name, _last_name, context);
       if (res.success) {
         navigateTo('home', context);
       } else {
