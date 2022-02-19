@@ -4,6 +4,7 @@ import 'package:lifter_track_app/components/Metrics/Graph.dart';
 import 'package:lifter_track_app/components/text.dart';
 import 'package:lifter_track_app/models/exercise.dart';
 import 'package:lifter_track_app/models/set_group.dart';
+import 'package:lifter_track_app/models/set.dart';
 
 import '../models/response.dart';
 
@@ -54,8 +55,8 @@ class _MetrixCardsState extends State<MetrixCards> {
                   });
                 },
                 children: [
+                  lastSetMetricsCard(widget.exercise),
                   progressMetricCard(widget.exercise),
-                  lastSetMetricsCard(widget.exercise)
                 ],
               ),
             ),
@@ -178,9 +179,47 @@ class _MetrixCardsState extends State<MetrixCards> {
                           color: Theme.of(context).primaryColorDark),
                     );
                   }
-                  return Center(
-                    child: text('$best',
-                        color: Theme.of(context).primaryColorDark),
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0,0,0,10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                text('Max: '),
+                                text(
+                                  '$best',
+                                  color: Theme.of(context).focusColor,
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        VerticalDivider(
+                          color: Colors.white,
+                          width: 2,
+                          thickness: 1,
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: setGroup.sets.length,
+                              itemBuilder: (context, index) {
+                                Set set = setGroup.sets[index];
+                                return Align(
+                                    child: text('${set.weight} x ${set.reps}',
+                                        fontWeight: FontWeight.bold));
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   );
                 },
               ),

@@ -100,8 +100,8 @@ class _SetGroupPageState extends State<SetGroupPage> {
                     child: setGroup.sets.length == 0
                         ? Padding(
                             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                            child: text('No sets added, add one below',
-                                textAlign: TextAlign.center),
+                            child: text('No sets',
+                                textAlign: TextAlign.center, color: Theme.of(context).primaryColorDark),
                           )
                         : ListView.separated(
                             shrinkWrap: true,
