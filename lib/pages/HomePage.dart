@@ -65,12 +65,17 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: Stack(
             children: [
-              title(),
-              startWorkoutButton(context),
-              workoutAndExerciseButtons(context)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  title(),
+                  startWorkoutButton(context),
+                  workoutAndExerciseButtons(context)
+                ],
+              ),
+              Positioned(top: 20, right: 20, child: IconButton(iconSize: 52, icon: Icon(Icons.portrait_rounded, color: Colors.white60,), ))
             ],
           ),
         ),
