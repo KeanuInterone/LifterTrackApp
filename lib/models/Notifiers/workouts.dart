@@ -16,5 +16,9 @@ class Workouts extends ChangeNotifier {
     notifyListeners();
   } 
 
+  clear() {
+    workouts = [];
+    notifyListeners();
+  }
   
 }

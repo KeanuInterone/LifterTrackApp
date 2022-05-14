@@ -86,7 +86,7 @@ class _HomePage extends State<HomePage> with WidgetsBindingObserver {
                     cornerRadius: 25,
                     child: Center(
                       child: text(
-                        '${user.firstName[0]}${user.lastName[0]}',
+                        '${user != null ? user.firstName[0] : ''}${user != null ? user.lastName[0] : ''}',
                         fontWeight: FontWeight.bold,
                       ),
                     ),

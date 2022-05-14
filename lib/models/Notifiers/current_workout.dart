@@ -54,4 +54,10 @@ class CurrentWorkout extends ChangeNotifier {
     notifyListeners();
     return res;
   }
+
+  clear(BuildContext context) {
+    if (workout != null) {
+      finish(context);
+    }
+  }
 }

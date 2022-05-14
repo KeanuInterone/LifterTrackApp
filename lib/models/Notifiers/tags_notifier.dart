@@ -29,4 +29,10 @@ class TagsNotifier extends ChangeNotifier {
     return res;
   }
 
+  clear() {
+    tags = [];
+    tagWithId = {};
+    notifyListeners();
+  }
+
 }

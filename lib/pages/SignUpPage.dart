@@ -173,7 +173,7 @@ class _SignUpPage extends State<SignUpPage> {
       Response res =
           await User.signUp(_email, _password, _first_name, _last_name, context);
       if (res.success) {
-        navigateTo('home', context);
+        Navigator.pushNamedAndRemoveUntil(context, "home", (r) => false);
       } else {
         _errorMessage = res.errMessage;
       }

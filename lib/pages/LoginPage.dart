@@ -42,7 +42,7 @@ class _LoginPage extends State<LoginPage> {
     googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
       if (account == null) return;
       account.authentication.then((googleKey) async {
-        Response res = await User.authorizeOAuthToken(token: googleKey.idToken, provider: 'google');
+        Response res = await User.authorizeOAuthToken(token: googleKey.idToken, provider: 'google', context: context);
         if (!res.success) {
           setState(() {
             _errorMessage = res.errMessage;
@@ -51,7 +51,7 @@ class _LoginPage extends State<LoginPage> {
         }
         googleSignIn.disconnect();
         initializeData();
-        navigateTo('home', context);
+        replaceScreenWith('home', context);
       });
     });
   }
@@ -61,7 +61,7 @@ class _LoginPage extends State<LoginPage> {
     bool validAuthToken = await API.validateToken(context);
     if (validAuthToken) {
       initializeData();
-      navigateTo('home', context);
+      replaceScreenWith('home', context);
     }
   }
 
@@ -255,7 +255,7 @@ class _LoginPage extends State<LoginPage> {
           AppleIDAuthorizationScopes.fullName,
         ],
       );
-      Response res = await User.authorizeOAuthToken(token: credential.identityToken, provider: 'apple', firstName: credential.givenName, lastName: credential.familyName);
+      Response res = await User.authorizeOAuthToken(token: credential.identityToken, provider: 'apple', firstName: credential.givenName, lastName: credential.familyName, context: context);
         if (!res.success) {
           setState(() {
             _errorMessage = res.errMessage;
@@ -263,7 +263,7 @@ class _LoginPage extends State<LoginPage> {
           return;
         }
         initializeData();
-        navigateTo('home', context);
+        replaceScreenWith('home', context);
     } catch (e) {}
   }
 
@@ -286,7 +286,7 @@ class _LoginPage extends State<LoginPage> {
       Response res = await User.login(_email, _password, context);
       if (res.success) {
         initializeData();
-        navigateTo('home', context);
+        replaceScreenWith('home', context);
       } else {
         _errorMessage = res.errMessage;
       }

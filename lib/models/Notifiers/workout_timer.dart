@@ -39,5 +39,13 @@ class WorkoutTimer extends ChangeNotifier {
     String hoursString = hours == 0 ? '' : '${hours}h:';
     return '$hoursString${minutes}m:${seconds}s';
   }
+
+  clear() {
+    timeSeconds = 0;
+    time = '0m:0s';
+    timer = null;
+    startTimeStamp = null;
+    notifyListeners();
+  }
   
 }

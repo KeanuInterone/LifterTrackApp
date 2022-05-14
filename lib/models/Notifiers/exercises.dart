@@ -71,4 +71,11 @@ class Exercises extends ChangeNotifier {
       }
     }
   }
+
+  clear() {
+    exercises = [];
+    exerciseWithId = {};
+    groupedExercises = {};
+    notifyListeners();
+  }
 }

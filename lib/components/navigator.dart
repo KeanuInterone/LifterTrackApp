@@ -11,3 +11,7 @@ void replaceScreenWith(String pageName, BuildContext context, {dynamic parameter
 void pop(BuildContext context) {
   Navigator.pop(context);
 }
+
+void popTo(String pageName, BuildContext context) {
+  Navigator.popUntil(context, ModalRoute.withName(pageName));
+}

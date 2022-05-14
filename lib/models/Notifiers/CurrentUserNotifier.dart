@@ -9,4 +9,9 @@ class CurrentUserNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  clear() {
+    user = null;
+    notifyListeners();
+  }
+
 }
