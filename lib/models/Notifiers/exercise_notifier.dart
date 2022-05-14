@@ -8,6 +8,7 @@ import 'package:lifter_track_app/models/tag.dart';
 
 class ExerciseNotifier extends ChangeNotifier {
   Exercise exercise = Exercise();
+  bool addingFromWorkout = false;
 
   void setExercise(Exercise exercise) {
     this.exercise = exercise;

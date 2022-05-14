@@ -62,8 +62,10 @@ class _ExerciseSearchBarState extends State<ExerciseSearchBar> {
                             color: Colors.black, fontSize: 20),
                       ),
                       onTap: () {
-                        Provider.of<ExerciseNotifier>(context, listen: false).clearExercise();
-                        Provider.of<ExerciseNotifier>(context, listen: false).setName(value);
+                        ExerciseNotifier newExercise = Provider.of<ExerciseNotifier>(context, listen: false);
+                        newExercise.clearExercise();
+                        newExercise.setName(value);
+                        newExercise.addingFromWorkout = true;
                         navigateTo('exercise_name', context);
                         setState(() {
                           value = "";

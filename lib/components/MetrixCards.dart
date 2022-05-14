@@ -171,7 +171,7 @@ class _MetrixCardsState extends State<MetrixCards> {
                   }
                   // Data
                   Map<String, dynamic> data = res.data;
-                  SetGroup setGroup = SetGroup.fromJson(data['setGroup']);
+                  SetGroup setGroup = data['setGroup'] != null ? SetGroup.fromJson(data['setGroup']) : null;
                   int best = data['best'];
                   if (setGroup == null) {
                     return Center(

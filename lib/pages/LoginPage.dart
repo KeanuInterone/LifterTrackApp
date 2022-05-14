@@ -299,21 +299,4 @@ class _LoginPage extends State<LoginPage> {
       });
     }
   }
-
-  // Widget background({child: Widget}) {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //       gradient: LinearGradient(
-  //         begin: Alignment(-0.75, -1.25),
-  //         end: Alignment(0.1, 0.25),
-  //         colors: [
-  //           Theme.of(context).primaryColor,
-  //           //Colors.pink,
-  //           Theme.of(context).backgroundColor
-  //         ],
-  //       ),
-  //     ),
-  //     child: child,
-  //   );
-  // }
 }

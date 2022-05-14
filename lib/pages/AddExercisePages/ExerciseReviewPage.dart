@@ -127,16 +127,23 @@ class _ExerciseReviewPageState extends State<ExerciseReviewPage> {
                                         listen: false)
                                     .addExercise(newExercise.exercise);
                                 if (res.success) {
+                                  if (newExercise.addingFromWorkout) {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, "set_group", (r) {
+                                      return r.settings.name ==
+                                          'workout';
+                                    }, arguments: {
+                                      'exercise': res.data
+                                    });
+                                  } else {
+                                    Navigator.popUntil(context, (route) {
+                                      return route.settings.name ==
+                                              'exercises' ||
+                                          route.settings.name ==
+                                              'select_exercise';
+                                    });
+                                  }
                                   newExercise.clearExercise();
-                                  int count = 0;
-                                  Navigator.popUntil(context, (route) {
-                                    return route.settings.name == 'exercises' ||
-                                        route.settings.name ==
-                                            'select_exercise';
-                                  });
-                                  // Navigator.popUntil(context, (route) {
-                                  //   return ModalRoute.withName('exercises');
-                                  // });
                                 } else {
                                   setState(() {
                                     isLoading = false;
